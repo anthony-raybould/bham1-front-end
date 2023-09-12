@@ -20,7 +20,7 @@ nunjucks.configure(appViews, nunjucksConfig);
 // Configure Express.
 app.set("view engine", "html");
 
-app.use("/public", express.static(path.join(__dirname, "public")));
+app.use("/static", express.static(path.join(__dirname, "static")));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended : true}))
@@ -34,4 +34,8 @@ declare module "express-session" {
 
 app.listen(3000, () => {
     console.log("Server listening on port 3000");
+});
+
+app.get("/", (req, res) => {
+    res.render("index");
 });
