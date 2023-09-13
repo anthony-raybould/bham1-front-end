@@ -8,10 +8,12 @@ ARG API_URL
 
 ENV API_URL ${API_URL}
 
+ENV UI_PORT 8080
+
 RUN npm ci
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 8080
 
 CMD [ "npm", "start" ]
