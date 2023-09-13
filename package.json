@@ -7,7 +7,8 @@
     "test": "mocha dist/test/unit/**/*.js",
     "start": "npm run build && node dist/app.js",
     "build": "npx tsc && cp -R views dist && cp -R static dist",
-    "test-ui": "mocha --timeout 10000 **/test/ui/*.ts"
+    "test-ui": "mocha --timeout 10000 **/test/ui/*.ts",
+    "test-accessibility": "mocha --timeout 10000 **/test/accessibility/*.js"
   },
   "repository": {
     "type": "git",

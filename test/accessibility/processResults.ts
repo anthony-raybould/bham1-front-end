@@ -18,5 +18,5 @@ export const processResults = function(results : Results){
 }
 
 function isError(resultIssue : ResultIssue) {
-    return resultIssue.typeCode == 2;
+    return resultIssue.type == "error";
 }

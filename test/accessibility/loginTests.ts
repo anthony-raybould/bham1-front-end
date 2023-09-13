@@ -17,7 +17,7 @@ describe('Login Page Accessibility Tests', async () => {
 
     const results = await pa11y(baseUrl + "/login", {
       actions: [
-        "set field #username to abc",
+        "set field #email to abc",
         "set field #password to xyz",
         "click element button[type=\"submit\"]"
       ]
