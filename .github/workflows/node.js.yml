@@ -33,4 +33,4 @@ jobs:
     - name: Install ESLint and run ESLint on TypeScript files
       run: |
         npm install eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin --save-dev
-        npx eslint --ext .ts
+        npx eslint --ext ts
