@@ -1,0 +1,27 @@
+{% extends "templates/master.html" %}
+
+{% block pageTitle %}
+    Login
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if errormessage %}
+    <div class="alert alert-danger" role="alert">
+        {{ errormessage }}
+    </div>
+    {% endif %}
+    <p>Enter your credentials</p>
+    <form action="/login" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" value="{{ username }}"required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password"name="password" class="form-control" value="{{ password }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+{% endblock %}
