@@ -3,9 +3,25 @@ import express from 'express';
 import nunjucks from 'nunjucks';
 import path from 'path';
 import { authController } from './controller/authController';
-
+import cors from 'cors'
 
 const app = express();
+// app.use(cors)
+// app.use(express.json());
+
+
+// app.use((req, res, next) => {
+//   if (req.headers['x-forwarded-proto'] !== 'https') {
+//     return res.redirect(`https://${req.headers.host}${req.url}`);
+//   }
+//   return next();
+// });
+
+// const corsOptions = {
+//   methods: 'GET,PUT,POST,DELETE',
+// };
+
+// app.use(cors(corsOptions));
 
 // Configure Nunjucks.
 const appViews = path.join(__dirname, "/views/")

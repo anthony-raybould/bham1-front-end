@@ -7,7 +7,7 @@
     "test": "mocha dist/test/unit/**/*.js",
     "start": "npm run build && node dist/app.js",
     "build": "npx tsc && cp -R views dist && cp -R static dist",
-    "test-ui": "mocha --timeout 10000 **/test/ui/*.ts"
+    "test-ui": "mocha --timeout 10000 **/test/ui/*.js" 
   },
   "repository": {
     "type": "git",
@@ -35,10 +35,13 @@
     "tape": "^5.6.6"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.14",
     "@types/express": "^4.17.17",
     "@types/express-session": "^1.17.7",
     "@types/node": "^20.6.0",
     "@types/nunjucks": "^3.2.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "typescript": "^5.2.2"
   }
 }

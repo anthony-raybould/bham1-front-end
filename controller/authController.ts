@@ -12,11 +12,9 @@ export const authController = (app: Application) =>
 
         try{
             req.session.token  = await login(data)
-            console.log(req.session)
             res.redirect('/index')
         }
         catch(e){
-            console.error(e)
             res.locals.errormessage = (e as Error).message
             res.render('login', req.body)
         }
