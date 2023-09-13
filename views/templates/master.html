@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+{% set pageTitle %}{% block pageTitle %}Page title{% endblock %}{% endset %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ pageTitle }}</title>
+    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/styles/globalstyles.css">
+</head>
+
+<body>
+    <header class="bg-kainos-blue text-light">
+        <div class="container header">
+            <a href="/" alt="Link to home page">
+                <img id="kainos-logo" src="/static/images/kainos-logo.png" alt="Kainos logo" height="75">
+            </a>
+        </div>
+    </header>
+    <main class="container mt-4">
+        <h1>{{ pageTitle }}</h1>
+        {% if errorMessage %}
+        <div class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+        </div>
+        {% endif %}
+        {% block content %}
+        Override this
+        {% endblock %}
+        </section>
+    </main>
+    <footer>
+        <div class="footer">
+            <div class="container">
+                <h4>Contact us</h4> 
+                <p>
+                    <b>Address</b>
+                </p>
+                <p>
+                    5th Floor, Cornerblock,<br>
+                    2 Cornwall St,<br>
+                    Birmingham,<br>
+                    B3 2DX,<br>
+                    United Kingdom<br>
+                </p>
+                <p>
+                    <b>Telephone</b>
+                </p>
+                <p>+44 28 9057 1100</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

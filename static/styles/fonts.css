@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'Century Gothic';
+    src: url('/static/fonts/gothic.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Century Gothic';
+    src: url('/static/fonts/gothicb.ttf');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Century Gothic';
+    src: url('/static/fonts/gothici.ttf');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Century Gothic';
+    src: url('/static/fonts/gothicbi.ttf');
+    font-weight: 700;
+    font-style: italic;
+}

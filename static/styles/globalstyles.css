@@ -1,0 +1,41 @@
+@import url('/static/styles/fonts.css');
+@import url('/static/styles/kainos.css');
+
+html, body {
+    font-family: 'Century Gothic', sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    min-height: calc(100vh - 1rem - 75px);
+}
+
+footer {
+    background-color: var(--kainos-blue);
+    background-image: url('/static/images/flux.png');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: contain;
+    color: white;
+    overflow: hidden;
+}
+
+.footer {
+    padding: 1rem;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+}
+
+#kainos-logo {
+    margin-left: -8px;
+    padding: 0.5rem 0;
+}
+
+h1, h2, h3, h4 {
+    font-weight: bold;
+}
