@@ -1,6 +1,6 @@
 module.exports = {
     "env": {
-        "es2021": true,
+        "es2022": true,
         "node": true
     },
     "extends": [
@@ -22,14 +22,13 @@ module.exports = {
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": "latest",
+        "ecmaVersion": "2022",
         "sourceType": "module"
     },
     "plugins": [
         "@typescript-eslint"
     ],
     "rules": {
-        "semi": ["error", "never"],
         "max-len": ["error", { "code": 100 }], //enforce a max line length
         "indent": ["error", 4], //enforce two spaces for indentation
         "no-unused-vars": "error" //no unused variables 

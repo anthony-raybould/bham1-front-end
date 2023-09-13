@@ -33,10 +33,7 @@ app.use(expressSession({
 
 }))
 
-declare module "express-session" {
-    interface SessionData {
-    }
-}
+
 
 app.listen(3000, () => {
     console.log("Server listening on port 3000");
