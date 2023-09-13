@@ -29,4 +29,7 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm run test --if-present
-    - run: eslint --ext ts --if-present
+    
+    # Add ESLint step for TypeScript files
+    - name: ESLint TypeScript files
+      run: eslint --ext ts
