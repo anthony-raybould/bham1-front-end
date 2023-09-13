@@ -1,24 +1,29 @@
 
 import pa11y from "pa11y";
-import { Results } from "./results";
+import { processResults } from "./processResults";
 
-const baseUrl = "http://localhost:3000/";
+const baseUrl = "http://localhost:3000";
 
 describe('Login Page Accessibility Tests', async () => {
 
-  it('Login Form', async () => {
+  it('Login form', async () => {
 
-    const results = await pa11y(baseUrl + "login");
+    const results = await pa11y(baseUrl + "/login");
     processResults(results);
 
   });
 
-  it('should submit the login form with valid credentials', async () => {
+  it('Login form invalid credentials', async () => {
 
+    const results = await pa11y(baseUrl + "/login", {
+      actions: [
+        "set field #username to abc",
+        "set field #password to xyz",
+        "click element button[type=\"submit\"]"
+      ]
+    });
+
+    processResults(results);
   });
 
 });
-
-function processResults(results : Results) {
-  throw new Error("Function not implemented." + results);
-}
