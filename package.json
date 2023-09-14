@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Currently No Tests\"",
     "start": "npm run build && node dist/app.js",
-    "lint": "eslint --ext ts",
-    "build": "npx tsc && cp -R views dist && cp -R static dist"
+    "lint": "eslint --ext ts .",
+    "build": "npx tsc && cp -R views dist && cp -R static dist",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
