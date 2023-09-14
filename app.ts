@@ -2,9 +2,8 @@ import expressSession from 'express-session';
 import express from 'express';
 import nunjucks from 'nunjucks';
 import path from 'path';
-import { authController } from './controller/authController';
-
-
+import router from "./router"
+       
 const app = express();
 
 // Configure Nunjucks.
@@ -33,6 +32,7 @@ declare module "express-session" {
         token: string;
     }
 }
+app.use('/', router);
 
 app.listen(3000, () => {
     console.log("Server listening on port 3000");
@@ -42,4 +42,4 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
-authController(app);
+// authController(app);

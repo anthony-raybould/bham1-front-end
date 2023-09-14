@@ -2,24 +2,22 @@ import type {Request, Response, Application, response} from "express";
 import type { Login } from "../model/auth";
 import {login} from "../service/authService";
 
-export const authController = (app: Application) =>
+export namespace Auth
 {
-    app.get('/login', async (req:Request, res:Response) => {
+    export function get(req:Request, res:Response): void {
         res.render("login")
-    })
-    app.post('/login', async (req:Request, res:Response) => {
+    }
+
+    export async function post(req:Request, res:Response) : Promise<void>  {
         let data: Login = req.body;
 
         try{
             req.session.token  = await login(data)
-            console.log(req.session)
             res.redirect('/index')
         }
         catch(e){
-            console.error(e)
             res.locals.errormessage = (e as Error).message
             res.render('login', req.body)
         }
-
-    })
+    }
 }
