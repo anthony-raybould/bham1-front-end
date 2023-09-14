@@ -12,3 +12,8 @@ How to test
 1. Ensure that your application has been built.
 1. Run the command `npm test` for unit tests.
 1. Run the command `export UI_TEST_URL=http://localhost:3000 && npm run test-ui` for UI tests. [Ensure that your application is running locally before running this command]
+
+How to setup .env
+---
+1. Variables required, LOGIN_CRED_EMAIL, LOGIN_CRED_PWD, API_URL, JWT_SECRET
+1. Create a local file called '.env', add in the variables above. 

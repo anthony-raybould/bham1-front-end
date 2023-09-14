@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "test": "mocha dist/test/unit/**/*.js",
-    "start": "npm run build && node dist/app.js",
+    "start": "npm run build && node -r dotenv/config dist/app.js",
     "build": "npx tsc && cp -R views dist && cp -R static dist",
     "test-ui": "mocha --timeout 10000 **/test/ui/*.js",
     "test-accessibility": "mocha --timeout 10000 **/test/accessibility/*.js"

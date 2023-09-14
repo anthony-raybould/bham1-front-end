@@ -4,10 +4,9 @@ import * as dotenv from 'dotenv';
 
 export const login = async function (login: Login): Promise<string> 
 {
-    dotenv.config();
 
     try{
-        const response = await axios.post("http://localhost:8080/" + "api/login", login)
+        const response = await axios.post(process.env.API_URL + "api/login", login)
         if(response.status === 200)
         {
             return response.data
