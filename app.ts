@@ -20,7 +20,7 @@ nunjucks.configure(appViews, nunjucksConfig);
 // Configure Express.
 app.set("view engine", "html");
 
-app.use("/public", express.static(path.join(__dirname, "public")));
+app.use("/static", express.static(path.join(__dirname, "static")));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended : true}))
@@ -47,4 +47,8 @@ else {
 }
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
+});
+
+app.get("/", (req, res) => {
+    res.render("index");
 });
