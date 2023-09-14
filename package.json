@@ -33,6 +33,19 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "8.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
     "typescript": "5.1.6"
+  }, 
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint --fix",
+      "tsc --noEmit --skipLibCheck"
+    ]
   }
 }
