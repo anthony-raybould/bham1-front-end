@@ -38,8 +38,15 @@ declare module "express-session" {
     }
 }
 
-app.listen(3000, () => {
-    console.log("Server listening on port 3000");
+let port : number;
+if (!process.env.UI_PORT || isNaN(parseInt(process.env.UI_PORT))) {
+    port = 3000;
+}
+else {
+    port = parseInt(process.env.UI_PORT);
+}
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
 });
 
 app.get("/", (req, res) => {
