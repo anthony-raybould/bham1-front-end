@@ -7,7 +7,7 @@ export const login = async function (login: Login): Promise<string>
     dotenv.config();
 
     try{
-        const response = await axios.post(process.env.LOCAL_HOST_API + "/api/login", login)
+        const response = await axios.post("http://localhost:8080/" + "api/login", login)
         if(response.status === 200)
         {
             return response.data

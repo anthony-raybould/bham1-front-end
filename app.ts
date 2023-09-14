@@ -2,26 +2,9 @@ import expressSession from 'express-session';
 import express from 'express';
 import nunjucks from 'nunjucks';
 import path from 'path';
-import { authController } from './controller/authController';
-import cors from 'cors'
-
+import router from "./router"
+       
 const app = express();
-// app.use(cors)
-// app.use(express.json());
-
-
-// app.use((req, res, next) => {
-//   if (req.headers['x-forwarded-proto'] !== 'https') {
-//     return res.redirect(`https://${req.headers.host}${req.url}`);
-//   }
-//   return next();
-// });
-
-// const corsOptions = {
-//   methods: 'GET,PUT,POST,DELETE',
-// };
-
-// app.use(cors(corsOptions));
 
 // Configure Nunjucks.
 const appViews = path.join(__dirname, "/views/")
@@ -49,6 +32,7 @@ declare module "express-session" {
         token: string;
     }
 }
+app.use('/', router);
 
 app.listen(3000, () => {
     console.log("Server listening on port 3000");
@@ -58,4 +42,4 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
-authController(app);
+// authController(app);

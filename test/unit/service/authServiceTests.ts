@@ -2,7 +2,7 @@ var chai = require('chai');
 var axios = require('axios');
 var MockAdapter = require('axios-mock-adapter');
 const expect = chai.expect;
-import { login } from '../../../service/authService'; 
+import { login } from '../../../src/service/authService'; 
 
 
 describe('loginService Tests', () => {
