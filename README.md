@@ -11,4 +11,5 @@ How to test
 ---
 1. Ensure that your application has been built.
 1. Run the command `npm test` for unit tests.
-1. Run the command `export UI_TEST_URL=http://localhost:3000 && npm run test-ui` for UI tests. [Ensure that your application is running locally before running this command]
+1. Run the command `export API_URL=http://localhost:3000 && npm run test-ui` for UI tests. [Ensure that your application is running locally before running this command]
+1. Run the command `export API_URL=http://localhost:3000 && npm run test-accessibility` for accessibility tests. [Ensure that your application is running locally before running this command]
