@@ -10,9 +10,9 @@ on:
     branches: [ "main" ]
 
 env:
-  LOGIN_CRED_EMAIL : "email@emaiil.com"
-  LOGIN_CRED_PWD : "securePassword"
-  LOCAL_HOST_API : "http://localhost:8080/"
+  LOGIN_CRED_EMAIL : ${{ secrets.LOGIN_CRED_EMAIL }}
+  LOGIN_CRED_PWD : ${{ secrets.LOGIN_CRED_PWD }}
+  API_URL : "http://localhost:8080/"
     
 jobs:
   build:
