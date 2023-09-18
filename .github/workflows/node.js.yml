@@ -91,7 +91,7 @@ jobs:
 
     - name: Build and run front-end
       run:  |
-        cd ../ui
+        cd ui
         npm ci
         npm start &
 
