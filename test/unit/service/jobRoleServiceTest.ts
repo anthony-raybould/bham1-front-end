@@ -1,12 +1,16 @@
 import chai from 'chai';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { getJobRoles } from '../../../src/service/jobRoleService';
+import { jobRoleService } from '../../../src/service/jobRoleService';
 import { JobRole } from '../../../src/model/jobRole';
+import sinon from 'sinon';
 
 const expect = chai.expect;
 
 describe('jobRoleService', () => {
+    beforeEach(() => {
+        sinon.restore();
+    });
 
     it('should return job roles', async () => {
         const mock = new MockAdapter(axios);
@@ -21,7 +25,7 @@ describe('jobRoleService', () => {
         }];
         mock.onGet(`${process.env.API_URL}api/job-roles`).reply(200, jobRoles);
 
-        const result = await getJobRoles();
+        const result = await jobRoleService.getJobRoles();
 
         expect(result).to.deep.equal(jobRoles);
     });
@@ -31,7 +35,7 @@ describe('jobRoleService', () => {
         mock.onGet(`${process.env.API_URL}api/job-roles`).reply(500);
 
         try {
-            await getJobRoles();
+            await jobRoleService.getJobRoles();
             expect.fail('Expected an error to be thrown');
         } catch (e) {
             expect(e.message).to.equal('Failed to get job roles');
