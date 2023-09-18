@@ -100,7 +100,9 @@ jobs:
       run: |
         echo "Waiting for API / front-end to become ready."
         sleep 20
+        ls
         cd ui
+        ls
         npx run test-ui
         npx run test-accessibilty
 
