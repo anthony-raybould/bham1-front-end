@@ -10,12 +10,47 @@ on:
     branches: [ "main" ]
 
 env:
+  # Required for front-end operation.
+  API_URL : "http://localhost:8080/"
+
+  # Required for front-end testing.
+  UI_TEST_URL : localhost:3000
   LOGIN_CRED_EMAIL : ${{ secrets.LOGIN_CRED_EMAIL }}
   LOGIN_CRED_PWD : ${{ secrets.LOGIN_CRED_PWD }}
-  API_URL : "http://localhost:8080/"
-    
+
+  # Required for back-end (for UI and accessibility testing).
+  DB_HOST: ${{ secrets.DB_HOST }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+  DB_USER: ${{ secrets.DB_USER }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
 jobs:
-  build:
+  build-and-unit-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Build and Unit Test
+      run:  |
+        npm ci
+        npm run build --if-present
+        npm run test --if-present
+      
+  ui-accessibility-testing:
 
     runs-on: ubuntu-latest
 
@@ -25,12 +60,45 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
+
+      # Retrieves the API from the branch matching the front-end one (must exist), or main if this is not running on a PR.
+    - name: Checkout API
+      uses: actions/checkout@v3
+      with:
+        path: api
+        repository: anthony-raybould/bham1-back-end
+        ref: ${{  github.head_ref || 'main'  }}
+
+    # Only checks out the head branch of the PR (the branch the PR is being create about). This is to ensure compatibility with API repository.
+    - name: Checkout UI
+      uses: actions/checkout@v3
+      with:
+        path: ui
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm run test --if-present
+
+    - name: Build and run API
+      run: |
+        cd api
+        echo "host: $DB_HOST\nname: $DB_NAME\nuser: $DB_USER\npassword: $DB_PASSWORD" > db.properties
+        mvn clean install -DskipTests=true
+        java -jar target/bham1-backend-1.0-SNAPSHOT.jar server &
+
+    - name: Build and run front-end
+      run:  |
+        cd ../ui
+        npm ci
+        npm start &
+
+    - name: UI and Accessibility Tests
+      # Waits a reasonable amount of time for the API and UI to become ready before running tests.
+      run: |
+        echo "Waiting for API / front-end to become ready."
+        sleep 20
+        npx run test-ui
+        npx run test-accessibilty
+
