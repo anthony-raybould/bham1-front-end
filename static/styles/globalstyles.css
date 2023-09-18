@@ -50,3 +50,8 @@ th, td {
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
+
+a, a:visited {
+    color: var(--kainos-blue);
+    text-decoration: none;
+}
