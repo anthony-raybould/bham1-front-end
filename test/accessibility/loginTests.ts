@@ -18,7 +18,9 @@ describe('Login Page Accessibility Tests', async () => {
       actions: [
         "set field #email to abc",
         "set field #password to xyz",
-        "click element button[type=\"submit\"]"
+        "click element button[type=\"submit\"]",
+        "wait for element #errorMessage to be visible"
+
       ]
     });
 
