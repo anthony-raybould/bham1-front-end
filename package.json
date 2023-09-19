@@ -37,6 +37,7 @@
     "@types/node": "^20.6.0",
     "@types/nunjucks": "^3.2.3",
     "@types/pa11y": "^5.3.5",
+    "@types/selenium-webdriver": "^4.1.16",
     "axios-mock-adapter": "^1.22.0",
     "chai": "^4.3.8",
     "cors": "^2.8.5",

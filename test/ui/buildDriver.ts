@@ -1,13 +1,19 @@
-const webdriver = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
+import {Builder, Capabilities} from "selenium-webdriver";
+import {Options} from "selenium-webdriver/chrome"
 
 export const buildDriver = function() {
 
-    return new webdriver.Builder()
-      .withCapabilities(webdriver.Capabilities.chrome())
-      .setChromeOptions(new chrome.Options().addArguments(
+    const driver = new Builder()
+      .withCapabilities(Capabilities.chrome())
+      .setChromeOptions(new Options().addArguments(
         '--headless',
         "--window-size=1920,1080", 
         "--start-maximized"))
       .build();
+
+      /* Enforces a minimum wait before failing when getting elements, 
+       * else headless mode goes too fast and fails before elements can load. */
+      driver.manage().setTimeouts({implicit: 1000});
+
+      return driver;
 } 
