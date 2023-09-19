@@ -86,9 +86,10 @@ jobs:
     - name: Build and run API
       run: |
         cd api
-        echo "host: ${{ env.DB_HOST }}\nname: ${{ env.DB_NAME }}\nuser: ${{ env.DB_USER }}\npassword: ${{ env.DB_PASSWORD }}" > db.properties
-        echo "Placeholder:"
-        cat db.properties
+        echo "host: ${{ secrets.DB_HOST }}" > db.properties
+        echo "name: ${{ secrets.DB_NAME }}" >> db.properties
+        echo "user: ${{ secrets.DB_USER }}" >> db.properties
+        echo "password: ${{ secrets.DB_PASSWORD }}" >> db.properties
         mvn clean install -DskipTests=true
         java -jar target/bham1-backend-1.0-SNAPSHOT.jar server &
 
