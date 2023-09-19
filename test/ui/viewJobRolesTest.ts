@@ -9,7 +9,7 @@ describe('job-roles page', () => {
 
         await driver.get(process.env.UI_TEST_URL + '/job-roles');
 
-        const jobRole = await driver.findElement(By.css('table'));
+        const jobRole = await driver.findElement(By.id('job-roles-table'));
         expect(jobRole).to.not.be.null;
         
         await driver.quit();
