@@ -4,10 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "mocha --require ts-node/register test/unit/**/*.ts",
+    "test": "mocha --require ts-node/register --exit test/unit/**/*.ts",
     "start": "npm run build && node -r dotenv/config dist/app.js",
     "build": "npx tsc && cp -R views dist && cp -R static dist",
-    "test-ui": "mocha --require ts-node/register --timeout 10000 test/ui/*.ts"
+    "test-ui": "mocha --require ts-node/register --timeout 10000 --exit test/ui/*.ts"
   },
   "repository": {
     "type": "git",
