@@ -101,6 +101,7 @@ jobs:
       run: |
         echo "Waiting for API / front-end to become ready."
         sleep 20
+        curl -X POST "http://localhost:8080/api/login" -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"email\": \"string\", \"password\": \"string\"}"
         cd ui
         npm run test-ui
         npm run test-accessibilty
