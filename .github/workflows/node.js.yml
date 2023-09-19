@@ -87,6 +87,7 @@ jobs:
       run: |
         cd api
         echo "host: ${{ env.DB_HOST }}\nname: ${{ env.DB_NAME }}\nuser: ${{ env.DB_USER }}\npassword: ${{ env.DB_PASSWORD }}" > db.properties
+        cat db.properties
         mvn clean install -DskipTests=true
         java -jar target/bham1-backend-1.0-SNAPSHOT.jar server &
 
@@ -101,7 +102,6 @@ jobs:
       run: |
         echo "Waiting for API / front-end to become ready."
         sleep 20
-        curl http://localhost:8080/swagger
         cd ui
         npm run test-ui
         npm run test-accessibilty
