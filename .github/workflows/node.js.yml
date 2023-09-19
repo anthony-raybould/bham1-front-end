@@ -14,7 +14,7 @@ env:
   API_URL : "http://localhost:8080/"
 
   # Required for front-end testing.
-  UI_TEST_URL : localhost:3000
+  UI_TEST_URL : http://localhost:3000
   LOGIN_CRED_EMAIL : ${{ secrets.LOGIN_CRED_EMAIL }}
   LOGIN_CRED_PWD : ${{ secrets.LOGIN_CRED_PWD }}
 
@@ -75,22 +75,13 @@ jobs:
       with:
         path: ui
 
-    - name: Install Chrome
-      uses: browser-actions/setup-chrome@v1
-      with:
-        chrome-version: 116.0.5845.96
-
-    - name: Install ChromeDriver
-      uses: nanasess/setup-chromedriver@v2
-
-    - run: chrome --version
-
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: ui/package-lock.json
+
 
     - name: Build and run API
       run: |
