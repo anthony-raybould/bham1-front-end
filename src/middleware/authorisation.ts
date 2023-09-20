@@ -15,31 +15,25 @@ export function requireRole(requiredRole: string) {
     }
 }
 
-export function requireLoggedOut() {
-    return function (req: Request, res: Response, next: NextFunction) {
-        if (req.session && req.session.user) {
-            res.redirect('/');
-        } else {
-            next();
-        }
-    }
-}
-
-export function requireLoggedIn() {
-    return function (req: Request, res: Response, next: NextFunction) {
-        if (req.session && req.session.user) {
-            next();
-        } else {
-            res.redirect('/login');
-        }
-    }
-}
-
-export function user() {
-    return function (req: Request, res: Response, next: NextFunction) {
-        if (req.session && req.session.user) {
-            res.locals.user = req.session.user;
-        }
+export const requireLoggedOut = (req: Request, res: Response, next: NextFunction) => {
+    if (req.session && req.session.user) {
+        res.redirect('/');
+    } else {
         next();
     }
+}
+
+export const requireLoggedIn = (req: Request, res: Response, next: NextFunction) => {
+    if (req.session && req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
+export const user = (req: Request, res: Response, next: NextFunction) => {
+    if (req.session && req.session.user) {
+        res.locals.user = req.session.user;
+    }
+    next();
 }

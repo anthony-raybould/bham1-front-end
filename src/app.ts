@@ -36,7 +36,7 @@ declare module "express-session" {
     }
 }
 
-router.use(user());
+router.use(user);
 
 app.use('/', router);
 

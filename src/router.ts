@@ -5,12 +5,12 @@ import { requireLoggedIn, requireLoggedOut, requireRole, user } from "./middlewa
 
 const router = express.Router();
 
-router.get("/", requireLoggedIn(), (_, res) => res.render("index"));
+router.get("/", requireLoggedIn, (_, res) => res.render("index"));
 
 // Auth
-router.get("/login", requireLoggedOut(), Auth.getLogin)
-router.post("/login", requireLoggedOut(), Auth.postLogin)
-router.get("/logout", requireLoggedIn(), Auth.getLogout)
+router.get("/login", requireLoggedOut, Auth.getLogin)
+router.post("/login", requireLoggedOut, Auth.postLogin)
+router.get("/logout", requireLoggedIn, Auth.getLogout)
 
 // Job Roles
 router.get("/job-roles", requireRole("Employee"), JobRoles.get)
