@@ -106,6 +106,7 @@ jobs:
         sleep 20
         npm install -g pa11y
         curl ${{ env.UI_TEST_URL }}
+        pa11y -d https://www.gov.uk/
         pa11y -d ${{ env.UI_TEST_URL }}
         cd ui
         npm run test-ui
