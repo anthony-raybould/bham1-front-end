@@ -10,7 +10,7 @@ export const buildDriver = function() {
 
       /* Enforces a minimum wait before failing when getting elements, 
        * else headless mode goes too fast and fails before elements can load. */
-      driver.manage().setTimeouts({implicit: 5000});
+      driver.manage().setTimeouts({implicit: 500});
 
       return driver;
 } 
