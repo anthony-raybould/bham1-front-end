@@ -2,9 +2,11 @@ import axios from "axios";
 import type { JobRole } from "../model/jobRole";
 
 export const jobRoleService = {
-    async getJobRoles(): Promise<JobRole[]> {
+    async getJobRoles(token?: string): Promise<JobRole[]> {
         try {
-            const response = await axios.get(process.env.API_URL + "api/job-roles");
+            const response = await axios.get(process.env.API_URL + "api/job-roles", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             if (response.status === 200) {
                 return response.data
             }

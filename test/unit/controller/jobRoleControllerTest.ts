@@ -4,12 +4,22 @@ import express from 'express';
 import sinon from 'sinon';
 import { jobRoleService } from '../../../src/service/jobRoleService';
 import router from '../../../src/router';
+import expressSession from 'express-session';
 
 const expect = chai.expect;
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use(expressSession({ secret: "test", resave: true, cookie: { maxAge: 1000 * 60 * 60 * 24 } }))
+
+app.all('*', (req, res, next) => {
+    req.session.token = 'test';
+    req.session.user = { id: 1, email: 'test@test.com', role: 'Admin' };
+
+    next();
+});
 
 app.use(router);
 
