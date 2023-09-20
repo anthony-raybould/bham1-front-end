@@ -2,8 +2,8 @@ import expressSession from 'express-session';
 import express from 'express';
 import nunjucks from 'nunjucks';
 import path from 'path';
-
-
+import router from "./router"
+       
 const app = express();
 
 // Configure Nunjucks.
@@ -25,26 +25,17 @@ app.use("/static", express.static(path.join(__dirname, "static")));
 app.use(express.json());
 app.use(express.urlencoded({ extended : true}))
 
-app.use(expressSession({
-    secret : "NOT HARDCODED SECRET",
-    resave : true,
-    saveUninitialized : true,
-    cookie : {maxAge : 60000},
-
-}))
+app.use(expressSession({secret : "NOT HARDCODED SECRET", cookie : {maxAge : 60000}}))
 
 declare module "express-session" {
     interface SessionData {
+        token: string;
     }
 }
+app.use('/', router);
 
-let port : number;
-if (!process.env.UI_PORT || isNaN(parseInt(process.env.UI_PORT))) {
-    port = 3000;
-}
-else {
-    port = parseInt(process.env.UI_PORT);
-}
+let port = parseInt(process.env.UI_PORT) || 3000;
+
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
