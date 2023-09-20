@@ -82,12 +82,6 @@ jobs:
         cache: 'npm'
         cache-dependency-path: ui/package-lock.json
 
-    - name: Test Pa11y
-      run: |
-        npm install -g pa11y
-        curl https://www.gov.uk
-        pa11y -d https://www.gov.uk
-
     - name: Build and run API
       run: |
         cd api
@@ -110,8 +104,9 @@ jobs:
         echo "Waiting for API / front-end to become ready."
         sleep 20
         npm install -g pa11y
-        curl ${{ env.UI_TEST_URL }}
+        curl https://www.gov.uk/
         pa11y -d https://www.gov.uk/
+        curl ${{ env.UI_TEST_URL }}
         pa11y -d ${{ env.UI_TEST_URL }}
         cd ui
         npm run test-ui

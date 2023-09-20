@@ -1,1 +1,6 @@
-{ "chromeLaunchConfig" : { "ignoreHTTPSErrors": false } }
+{ "chromeLaunchConfig" : 
+    { 
+    "ignoreHTTPSErrors": false,
+    "args": ["--no-sandbox"]
+    } 
+}
