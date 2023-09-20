@@ -1,8 +1,7 @@
 
 import pa11y from "pa11y";
 import { processResults } from "./processResults";
-import {it} from "mocha"
-const _chai = require('chai');
+
 
 describe('Index Page Accessibility Tests', async () => {
 
