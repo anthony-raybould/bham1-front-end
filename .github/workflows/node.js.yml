@@ -85,6 +85,7 @@ jobs:
     - name: Test Pa11y
       run: |
         npm install -g pa11y
+        curl https://www.gov.uk
         pa11y -d https://www.gov.uk
 
     - name: Build and run API
