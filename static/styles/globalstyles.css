@@ -53,3 +53,19 @@ footer {
 h1, h2, h3, h4 {
     font-weight: bold;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+a, a:visited {
+    color: var(--kainos-blue);
+    text-decoration: none;
+}

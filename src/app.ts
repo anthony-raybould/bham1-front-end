@@ -2,8 +2,8 @@ import expressSession from 'express-session';
 import express from 'express';
 import nunjucks from 'nunjucks';
 import path from 'path';
-import router from "./router"
-import { User } from './src/model/user';
+import router from './router';
+import { User } from './model/user';
        
 const app = express();
 
@@ -37,6 +37,8 @@ declare module "express-session" {
 
 app.use('/', router);
 
-app.listen(3000, () => {
-    console.log("Server listening on port 3000");
+let port = parseInt(process.env.PORT || "3000");
+
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
 });

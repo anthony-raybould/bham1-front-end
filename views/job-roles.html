@@ -1,0 +1,25 @@
+{% extends "templates/master.html" %}
+
+{% block pageTitle %}
+    Job Roles
+{% endblock %}
+
+{% block content %}
+    <p>Current job roles at Kainos</p>
+    <table id="job-roles-table">
+        <tr>
+            <th>Role</th>
+            <th>Band</th>
+            <th>Capability</th>
+            <th>Actions</th>
+        </tr>
+        {% for jobRole in jobRoles %}
+            <tr>
+                <td>{{ jobRole.jobRoleName }}</td>
+                <td>{{ jobRole.band.bandName }}</td>
+                <td>{{ jobRole.capability.capabilityName }}</td>
+                <td><a href="/job-roles/{{ jobRole.jobRoleID }}">View</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

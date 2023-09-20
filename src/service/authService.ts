@@ -16,8 +16,8 @@ export const authService = {
             else if (e.response?.status === 500) {
                 throw new Error("Internal server error - 500")
             }
-            throw new Error("could not login - An error has occured.")
         }
+        throw new Error("could not login - An error has occured.")
     },
     
     async whoami(token: string): Promise<User> {
@@ -32,7 +32,7 @@ export const authService = {
             if (e.response?.status === 401) {
                 throw new Error("User is not logged in")
             }
-            throw new Error("Failed to fetch user")
         }
+        throw new Error("Failed to fetch user")
     }
 }
