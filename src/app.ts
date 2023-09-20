@@ -34,8 +34,10 @@ declare module "express-session" {
 }
 app.use('/', router);
 
-app.listen(3000, () => {
-    console.log("Server listening on port 3000");
+let port = parseInt(process.env.UI_PORT) || 3000;
+
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
 });
 
 app.get("/", (req, res) => {
