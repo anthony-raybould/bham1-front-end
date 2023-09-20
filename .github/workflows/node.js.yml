@@ -105,6 +105,7 @@ jobs:
         echo "Waiting for API / front-end to become ready."
         sleep 20
         cd ui
+        npm install -g pa11y
         pa11y ${{ env.UI_TEST_URL  }}
         npm run test-ui
         npm run test-accessibility
