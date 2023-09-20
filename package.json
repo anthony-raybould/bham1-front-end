@@ -4,10 +4,10 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "test": "mocha dist/test/unit/**/*.js",
+    "test": "mocha --require ts-node/register --exit test/unit/**/*.ts",
     "start": "npm run build && node -r dotenv/config dist/app.js",
     "build": "npx tsc && cp -R views dist && cp -R static dist",
-    "test-ui": "mocha --timeout 10000 **/test/ui/*.js" 
+    "test-ui": "mocha --require ts-node/register --timeout 10000 --exit test/ui/*.ts"
   },
   "repository": {
     "type": "git",
@@ -28,20 +28,26 @@
     "tape": "^5.6.6"
   },
   "devDependencies": {
-    "mocha": "^10.2.0",
-    "axios-mock-adapter": "^1.22.0",
-    "chai": "^4.3.8",
-    "selenium": "^2.20.0",
-    "selenium-webdriver": "^4.12.0",
     "@types/chai": "^4.3.6",
-    "@types/mocha": "^10.0.1",
     "@types/cors": "^2.8.14",
     "@types/express": "^4.17.17",
     "@types/express-session": "^1.17.7",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^20.6.0",
     "@types/nunjucks": "^3.2.3",
+    "@types/selenium-webdriver": "^4.1.16",
+    "@types/sinon": "^10.0.16",
+    "@types/supertest": "^2.0.12",
+    "axios-mock-adapter": "^1.22.0",
+    "chai": "^4.3.8",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "mocha": "^10.2.0",
+    "selenium": "^2.20.0",
+    "selenium-webdriver": "^4.12.0",
+    "sinon": "^16.0.0",
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
 }
