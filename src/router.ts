@@ -5,8 +5,6 @@ import { requireLoggedIn, requireLoggedOut, requireRole, user } from "./middlewa
 
 const router = express.Router();
 
-router.use(user());
-
 router.get("/", requireLoggedIn(), (_, res) => res.render("index"));
 
 // Auth

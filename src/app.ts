@@ -4,6 +4,7 @@ import nunjucks from 'nunjucks';
 import path from 'path';
 import router from './router';
 import { User } from './model/user';
+import { user } from './middleware/authorisation';
        
 const app = express();
 
@@ -34,6 +35,8 @@ declare module "express-session" {
         user: User;
     }
 }
+
+router.use(user());
 
 app.use('/', router);
 
