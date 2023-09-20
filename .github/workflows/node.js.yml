@@ -106,5 +106,5 @@ jobs:
         sleep 20
         cd ui
         npm run test-ui
-        npm run test-accessibilty
+        npm run test-accessibility
 
