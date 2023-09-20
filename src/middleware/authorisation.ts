@@ -24,7 +24,7 @@ export const requireLoggedOut = (req: Request, res: Response, next: NextFunction
 }
 
 export const requireLoggedIn = (req: Request, res: Response, next: NextFunction) => {
-    if (req.session && req.session.user) {
+    if (req.session && req.session.user && req.session.token) {
         next();
     } else {
         res.redirect('/login');
