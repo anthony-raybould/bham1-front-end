@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 export function requireRole(requiredRole: string) {
     return function (req: Request, res: Response, next: NextFunction) {
-        if (req.session && (req.session.user?.role == 'Admin' || req.session.user?.role === requiredRole)) {
+        if (req.session && (req.session.user?.role.roleName == 'Admin' || req.session.user?.role.roleName === requiredRole)) {
             return next();
         } 
 
@@ -16,7 +16,7 @@ export function requireRole(requiredRole: string) {
 }
 
 export const requireLoggedOut = (req: Request, res: Response, next: NextFunction) => {
-    if (req.session && req.session.user) {
+    if (req.session && req.session.user && req.session.token) {
         res.redirect('/');
     } else {
         next();

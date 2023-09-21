@@ -16,7 +16,14 @@ app.use(expressSession({ secret: "test", resave: true, cookie: { maxAge: 1000 * 
 
 app.all('*', (req, res, next) => {
     req.session.token = 'test';
-    req.session.user = { id: 1, email: 'test@test.com', role: 'Admin' };
+    req.session.user = {
+        userID: 1,
+        email: 'test@test.com', 
+        role: { 
+            roleID: 1, 
+            roleName: 'Admin' 
+        }
+    };
 
     next();
 });

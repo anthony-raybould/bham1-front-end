@@ -53,7 +53,7 @@ describe('authService', () => {
     it('should identify user successfully', async () => {
       const mock = new MockAdapter(axios);
       const token = 'token';
-      const responseData: User = { id: 1, email: 'test@test.com', role: 'Employee' };
+      const responseData: User = { userID: 1, email: 'test@test.com', role: { roleID: 1, roleName: 'Admin' } };
       mock.onGet(`${process.env.API_URL}api/whoami`, { headers: { Authorization: `Bearer ${token}` } }).reply(200, responseData);
         
       const result = await authService.whoami(token);

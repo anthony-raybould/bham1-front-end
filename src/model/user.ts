@@ -1,5 +1,10 @@
+export type Role = {
+    roleID: number
+    roleName: string    
+}
+
 export type User = {
-    id: number
+    userID: number
     email: string
-    role: string
+    role: Role
 }
