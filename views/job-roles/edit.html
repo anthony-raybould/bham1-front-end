@@ -1,0 +1,44 @@
+{% extends "templates/master.html" %}
+
+{% block pageTitle %}
+    Edit Job Role - {{ jobRole.jobRoleName }}
+{% endblock %}
+
+{% block content %}
+    <h2>Edit Job Role</h2>
+    <form action="/job-roles/edit/{{jobRoles.jobRoleID}}" method="POST">
+        <!-- Replace "/job-roles/{{ jobRole.jobRoleID }}/update" with your actual update route -->
+
+        <label for="jobRoleName">Role:</label>
+        <input type="text" id="jobRoleName" name="jobRoleName" value="{{ jobRoles.jobRoleName }}" required><br>
+
+        <label for="band">Band:</label>
+        <select id="band" name="band" required>
+            {% for band in bands %}
+                <option value="{{ band.bandID }}" {% if band.bandID == jobRoles.band.bandID %} selected {% endif %}>
+                    {{ band.bandName }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="capability">Capability:</label>
+        <select id="capability" name="capability" required>
+            {% for capability in capabilities %}
+                <option value="{{ capability.capabilityID }}" {% if capability.capabilityID == jobRoles.capability.capabilityID %} selected {% endif %}>
+                    {{ capability.capabilityName }}
+                </option>
+            {% endfor %}
+        </select><br>
+        <label for="jobSpecSummary">JobSpecSummary:</label>
+        <input id="jobSpecSummary" name="jobSpecSummary" value="{{ jobRoles.jobSpecSummary }}" required></input>
+
+        <label for="responsibilities">Responsibilities:</label>
+        <input id="responsibilities"  name="responsibilities" value="{{ jobRoles.responsibilities}}" required></input>
+
+        <label for="sharePoint">SharePoint:</label>
+        <input id="sharePoint"  name="sharePoint" value="{{ jobRoles.sharePoint}}" required></input>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

@@ -12,6 +12,7 @@
             <th>Band</th>
             <th>Capability</th>
             <th>Actions</th>
+            <th>Edit</th>
         </tr>
         {% for jobRole in jobRoles %}
             <tr>
@@ -19,6 +20,7 @@
                 <td>{{ jobRole.band.bandName }}</td>
                 <td>{{ jobRole.capability.capabilityName }}</td>
                 <td><a href="/job-roles/{{ jobRole.jobRoleID }}">View</a></td>
+                <td><a href="/job-roles/edit/{{ jobRole.jobRoleID }}">Edit</a></td>
             </tr>
         {% endfor %}
     </table>
