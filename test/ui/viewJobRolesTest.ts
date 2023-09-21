@@ -15,4 +15,4 @@ describe('job-roles page', () => {
         await driver.quit();
     })    
 
-});
+})
