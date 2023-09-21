@@ -11,13 +11,13 @@ export const authService = {
             }
         } catch (e) {
             if (e.response?.status === 401) {
-                throw new Error("Invalid credentials - 401")
+                throw new Error("Your email or password is incorrect")
             }
             else if (e.response?.status === 500) {
-                throw new Error("Internal server error - 500")
+                throw new Error("Internal server error")
             }
         }
-        throw new Error("could not login - An error has occured.")
+        throw new Error("Failed to login")
     },
     
     async whoami(token: string): Promise<User> {

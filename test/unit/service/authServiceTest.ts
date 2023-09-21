@@ -32,7 +32,7 @@ describe('authService', () => {
         await authService.login(loginData);
       } catch (error) {
         console.log(error.message)
-        expect(error.message).to.equal('Invalid credentials - 401');
+        expect(error.message).to.equal('Your email or password is incorrect');
       }
     });
 
@@ -44,7 +44,7 @@ describe('authService', () => {
       try {
         await authService.login(loginData);
       } catch (error) {
-        expect(error.message).to.equal('Internal server error - 500');
+        expect(error.message).to.equal('Internal server error');
       }
     });
   });

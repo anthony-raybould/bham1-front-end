@@ -17,7 +17,7 @@ export namespace Auth
 
             res.redirect('/')
         } catch (e) {
-            res.locals.errormessage = (e as Error).message;
+            res.locals.errorMessage = (e as Error).message;
             res.render('login', req.body);
         }
     }

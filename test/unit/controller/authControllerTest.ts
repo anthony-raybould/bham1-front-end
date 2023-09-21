@@ -33,53 +33,77 @@ app.all('*', (req, res, next) => {
 app.use(router);
 
 describe('jobRoleController', () => {
-    beforeEach(() => {
-        sinon.restore();
+
+    describe('getLogin', () => {
+        beforeEach(() => {
+            sinon.restore();
+        });
+
+        it('should render login template', async () => {
+            const req = {};
+            const res = { render: sinon.spy() };
+            
+            Auth.getLogin(req as any, res as any);        
+
+            expect(res.render.calledOnce).to.be.true;
+            expect(res.render.calledWith('login')).to.be.true;
+        });
     });
 
-    it('should render logintemplate', async () => {
-        const req = {};
-        const res = { render: sinon.spy() };
-        
-        Auth.getLogin(req as any, res as any);        
+    describe('postLogin', () => {
+        beforeEach(() => {
+            sinon.restore();
+        });
 
-        expect(res.render.calledOnce).to.be.true;
-        expect(res.render.calledWith('login')).to.be.true;
-    });
-
-    it('should redirect to home and set session on successful login', async () => {
-        const user: User = {
-            userID: 1,
-            email: 'test@test.com',
-            role: {
-                roleID: 1,
-                roleName: 'Admin'
+        it('should redirect to home and set session on successful login', async () => {
+            const user: User = {
+                userID: 1,
+                email: 'test@test.com',
+                role: {
+                    roleID: 1,
+                    roleName: 'Admin'
+                }
             }
-        }
-        sinon.stub(authService, 'login').resolves('test');
-        sinon.stub(authService, 'whoami').resolves(user);
+            sinon.stub(authService, 'login').resolves('test');
+            sinon.stub(authService, 'whoami').resolves(user);
 
-        const req = { body: { email: 'test@test.com', password: 'password' }, session: {} as any };
-        const res = { redirect: sinon.spy() };
+            const req = { body: { email: 'test@test.com', password: 'password' }, session: {} as any };
+            const res = { redirect: sinon.spy() };
+            
+            await Auth.postLogin(req as any, res as any);
+            
+            expect(res.redirect.calledOnce).to.be.true;
+            expect(res.redirect.calledWith('/')).to.be.true;
+            expect(req.session.token).to.equal('test');
+            expect(req.session.user).to.deep.equal(user);
+        });
         
-        await Auth.postLogin(req as any, res as any);
-        
-        expect(res.redirect.calledOnce).to.be.true;
-        expect(res.redirect.calledWith('/')).to.be.true;
-        expect(req.session.token).to.equal('test');
-        expect(req.session.user).to.deep.equal(user);
+        it('should render login template with error message on unsuccessful login', async () => {
+            sinon.stub(authService, 'login').rejects(new Error('Your username or password is incorrect'));
+
+            const req = { body: { email: 'test@test.com', password: 'password' }, session: {} as any };
+            const res = { render: sinon.spy(), locals: { errorMessage: '' } };
+            
+            await Auth.postLogin(req as any, res as any);
+            
+            expect(res.render.calledOnce).to.be.true;
+            expect(res.render.calledWith('login', req.body)).to.be.true;
+            expect(res.locals.errorMessage).to.equal('Your username or password is incorrect');
+        });
     });
     
-    it('should render login template with error message on unsuccessful login', async () => {
-        sinon.stub(authService, 'login').rejects(new Error('Invalid credentials - 401'));
+    describe('getLogout', () => {
+        beforeEach(() => {
+            sinon.restore();
+        });
 
-        const req = { body: { email: 'test@test.com', password: 'password' }, session: {} as any };
-        const res = { render: sinon.spy(), locals: { errormessage: '' } };
-        
-        await Auth.postLogin(req as any, res as any);
-        
-        expect(res.render.calledOnce).to.be.true;
-        expect(res.render.calledWith('login', req.body)).to.be.true;
-        expect(res.locals.errormessage).to.equal('Invalid credentials - 401');
+        it('should destroy session', async () => {
+            const req = { session: { destroy: sinon.spy() } };
+            
+            Auth.getLogout(req as any, {} as any);        
+
+            expect(req.session.destroy.calledOnce).to.be.true;
+        });
     });
+    
 });

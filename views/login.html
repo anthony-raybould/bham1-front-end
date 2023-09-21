@@ -5,11 +5,6 @@
 {% endblock %}
 
 {% block content %}
-    {% if errormessage %}
-    <div class="alert alert-danger" role="alert" id="errorMessage">
-        {{ errormessage }}
-    </div>
-    {% endif %}
     <p>Enter your credentials</p>
     <form action="/login" method="post">
         <div class="form-group">
