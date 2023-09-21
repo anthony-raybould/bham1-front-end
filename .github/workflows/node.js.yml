@@ -18,12 +18,6 @@ env:
   LOGIN_CRED_EMAIL : ${{ secrets.LOGIN_CRED_EMAIL }}
   LOGIN_CRED_PWD : ${{ secrets.LOGIN_CRED_PWD }}
 
-  # Required for back-end (for UI and accessibility testing).
-  DB_HOST: ${{ secrets.DB_HOST }}
-  DB_NAME: ${{ secrets.DB_NAME }}
-  DB_USER: ${{ secrets.DB_USER }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
 jobs:
   build-and-unit-test:
     runs-on: ubuntu-latest
