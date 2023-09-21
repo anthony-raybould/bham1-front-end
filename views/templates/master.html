@@ -39,6 +39,11 @@
             {{ errorMessage }}
         </div>
         {% endif %}
+        {% if successMessage %}
+        <div class="alert alert-success" role="alert">
+            {{ successMessage }}
+        </div>
+        {% endif %}
         {% block content %}
         Override this
         {% endblock %}

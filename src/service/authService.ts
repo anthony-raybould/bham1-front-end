@@ -1,6 +1,6 @@
 import type { Login } from "../model/auth";
 import axios from "axios";
-import { User } from "../model/user";
+import { Role, User } from "../model/user";
 
 export const authService = {
     async login(login: Login): Promise<string> {
@@ -18,6 +18,29 @@ export const authService = {
             }
         }
         throw new Error("Failed to login")
+    },
+    
+    async register(register: Login): Promise<void> {
+        try {
+            const response = await axios.post(process.env.API_URL + "api/register", register)
+            if (response.status === 201) {
+                return
+            }
+        } catch (e) {
+            if (e.response?.status == 409) {
+                throw new Error("User with email already exists")
+            }
+        }
+        throw new Error("Failed to register account")
+    },
+    
+    async getRoles(): Promise<Role[]> {
+        try {
+            const response = await axios.get(process.env.API_URL + "api/roles")
+            return response.data as Role[]
+        } catch (e) { 
+            throw new Error("Failed to get roles")
+        }
     },
     
     async whoami(token: string): Promise<User> {
