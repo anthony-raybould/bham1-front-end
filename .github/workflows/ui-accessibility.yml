@@ -3,11 +3,12 @@
 
 name: AWS UI and Accessibility Testing
 
-on:
+on: 
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    
+  workflow_dispatch:
+  
 
 env:
   UI_TEST_URL : ${{ secrets.AWS_UI_URL }}
