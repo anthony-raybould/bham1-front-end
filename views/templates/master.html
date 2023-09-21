@@ -35,12 +35,12 @@
     <main class="container mt-4">
         <h1>{{ pageTitle }}</h1>
         {% if errorMessage %}
-        <div class="alert alert-danger" role="alert">
+        <div id="errorMessage" class="alert alert-danger" role="alert">
             {{ errorMessage }}
         </div>
         {% endif %}
         {% if successMessage %}
-        <div class="alert alert-success" role="alert">
+        <div id="successMessage" class="alert alert-success" role="alert">
             {{ successMessage }}
         </div>
         {% endif %}
