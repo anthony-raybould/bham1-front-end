@@ -1,0 +1,22 @@
+{% extends "templates/master.html" %}
+
+{% block pageTitle %}
+    {{ jobRole.jobRoleName }}
+{% endblock %}
+
+{% block content %}
+    <h2 id="summary">Summary</h2>
+    {{ jobRole.jobSpecSummary }}
+    <h2>Band</h2>
+    {{ jobRole.band.bandName }}
+    <h2>Capability</h2>
+    {{ jobRole.capability.capabilityName }}
+    <h2>Responsibilities</h2>
+    {{ jobRole.responsibilities }}
+    <h2>Sharepoint</h2>
+    <a href="{{ jobRole.sharePoint }}">View SharePoint</a>
+    <div>
+        <a href="/delete-job-role/{{ jobRole.jobRoleID }}" class="btn btn-primary" style="margin-top: 20px;">Delete</a>
+    </div>
+{% endblock %}
+
