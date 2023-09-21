@@ -7,6 +7,7 @@ export const authService = {
         try {
             const response = await axios.post(process.env.API_URL + "api/login", login)
             if (response.status === 200) {
+                console.log(response.data)
                 return response.data
             }
         } catch (e) {
@@ -25,6 +26,7 @@ export const authService = {
             const response = await axios.get(process.env.API_URL + "api/whoami", {
                 headers: { Authorization: `Bearer ${token}` },
             })
+            console.log(response.status)
             if (response.status === 200) {
                 return response.data as User
             }

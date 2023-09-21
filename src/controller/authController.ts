@@ -10,7 +10,6 @@ export namespace Auth
 
     export async function postLogin(req: Request, res: Response): Promise<void> {
         let data: Login = req.body;
-
         try {
             req.session.token  = await authService.login(data);
             req.session.user = await authService.whoami(req.session.token);
