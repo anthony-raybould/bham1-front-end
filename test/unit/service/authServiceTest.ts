@@ -77,10 +77,11 @@ describe('authService', () => {
       const token = 'token';
       mock.onGet(`${process.env.API_URL}api/whoami`, { headers: { Authorization: `Bearer ${token}` } }).reply(500);
       
-      const whoami = async function() { await authService.whoami(token) }
-        
-      expect(true).to.be.true
-      // expect(whoami).to.throw('Failed to fetch user')
+      try {
+        await authService.whoami(token);
+      } catch (error) {
+        expect(error.message).to.equal('Failed to fetch user');
+      }
     });
   });
 
