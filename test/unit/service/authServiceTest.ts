@@ -1,88 +1,120 @@
-var chai = require('chai');
-var axios = require('axios');
-var MockAdapter = require('axios-mock-adapter');
-const expect = chai.expect;
+import MockAdapter from 'axios-mock-adapter';
 import { User } from '../../../src/model/user';
 import { authService } from '../../../src/service/authService';
+import axios from 'axios';
+import chai from 'chai';
 
+const expect = chai.expect;
 
 describe('authService', () => {
+    let mock: MockAdapter;
 
-  describe('login', () => {
-    it('should login successfully', async () => {
-      var mock = new MockAdapter(axios);
-      const loginData = { email: 'email@email.com', password: 'testpassword' };
-      const responseData = "thisIsAToken"
-      mock.onPost(`${process.env.API_URL}api/login`, loginData).reply(200, responseData);
-
-      try {
-        const result = await authService.login(loginData)
-        expect(result).to.be.equal(responseData);
-      } catch (error) {
-        throw new Error('Expected login to succeed');
-      }
+    beforeEach(() => {
+        mock = new MockAdapter(axios);
     });
 
-    it('should handle invalid login credentials', async () => {
-      var mock = new MockAdapter(axios);
-      const loginData = { email: 'email@email.com', password: 'invalidPassword' };
-      mock.onPost(`${process.env.API_URL}api/login`, loginData).reply(401);
+    describe('login', () => {
+        it('should login successfully', async () => {
+            const loginData = { email: 'email@email.com', password: 'testpassword' };
+            const responseData = "thisIsAToken"
+            mock.onPost(`${process.env.API_URL}api/login`, loginData).reply(200, responseData);
 
-      try {
-        await authService.login(loginData);
-      } catch (error) {
-        console.log(error.message)
-        expect(error.message).to.equal('Your email or password is incorrect');
-      }
+            try {
+                const result = await authService.login(loginData)
+                expect(result).to.be.equal(responseData);
+            } catch (error) {
+                throw new Error('Expected login to succeed');
+            }
+        });
+
+        it('should handle invalid login credentials', async () => {
+            const loginData = { email: 'email@email.com', password: 'invalidPassword' };
+            mock.onPost(`${process.env.API_URL}api/login`, loginData).reply(401);
+
+            try {
+                await authService.login(loginData);
+            } catch (error) {
+                console.log(error.message)
+                expect(error.message).to.equal('Your email or password is incorrect');
+            }
+        });
+
+        it('should handle server error', async () => {
+            const loginData = { email: 'email@email.com', password: 'invalidPassword' };
+            mock.onPost(`${process.env.API_URL}api/login`, loginData).reply(500, 'Internal Server Error');
+
+            try {
+                await authService.login(loginData);
+            } catch (error) {
+                expect(error.message).to.equal('Internal server error');
+            }
+        });
     });
 
-    it('should handle server error', async () => {
-      var mock = new MockAdapter(axios);
-      const loginData = { email: 'email@email.com', password: 'invalidPassword' };
-      mock.onPost(`${process.env.API_URL}api/login`, loginData).reply(500, 'Internal Server Error');
+    describe('whoami', () => {
+        it('should identify user successfully', async () => {
+            const token = 'token';
+            const responseData: User = { userID: 1, email: 'test@test.com', role: { roleID: 1, roleName: 'Admin' } };
+            mock.onGet(`${process.env.API_URL}api/whoami`, { headers: { Authorization: `Bearer ${token}` } }).reply(200, responseData);
 
-      try {
-        await authService.login(loginData);
-      } catch (error) {
-        expect(error.message).to.equal('Internal server error');
-      }
-    });
-  });
+            const result = await authService.whoami(token);
+            expect(result).to.deep.equal(responseData);
+        });
 
-  describe('whoami', () => {
-    it('should identify user successfully', async () => {
-      const mock = new MockAdapter(axios);
-      const token = 'token';
-      const responseData: User = { userID: 1, email: 'test@test.com', role: { roleID: 1, roleName: 'Admin' } };
-      mock.onGet(`${process.env.API_URL}api/whoami`, { headers: { Authorization: `Bearer ${token}` } }).reply(200, responseData);
-        
-      const result = await authService.whoami(token);
-      expect(result).to.deep.equal(responseData);
+        it('should handle error when user is not logged in', async () => {
+            const token = 'token';
+            mock.onGet(`${process.env.API_URL}api/whoami`, { headers: { Authorization: `Bearer ${token}` } }).reply(401);
+
+            try {
+                await authService.whoami(token);
+            } catch (error) {
+                expect(error.message).to.equal('User is not logged in');
+            }
+        });
+
+        it('should handle error when server error', async () => {
+            const token = 'token';
+            mock.onGet(`${process.env.API_URL}api/whoami`, { headers: { Authorization: `Bearer ${token}` } }).reply(500);
+
+            try {
+                await authService.whoami(token);
+            } catch (error) {
+                expect(error.message).to.equal('Failed to fetch user');
+            }
+        });
     });
-    
-    it('should handle error when user is not logged in', async () => {
-      const mock = new MockAdapter(axios);
-      const token = 'token';
-      mock.onGet(`${process.env.API_URL}api/whoami`, { headers: { Authorization: `Bearer ${token}` } }).reply(401);
-        
-      try {
-        await authService.whoami(token);
-      } catch (error) {
-        expect(error.message).to.equal('User is not logged in');
-      }
+
+    describe('register', () => {
+        it('should register successfully', async () => {
+            const registerData = { email: 'test@test.com', password: 'testpassword' };
+            mock.onPost(`${process.env.API_URL}api/register`, registerData).reply(201);
+
+            const result = await authService.register(registerData);
+            expect(result).to.be.undefined;
+        });
+
+        it('should handle duplicate email', async () => {
+            const registerData = { email: 'test@test.com', password: 'testpassword' };
+            mock.onPost(`${process.env.API_URL}api/register`, registerData).reply(409);
+
+            try {
+                await authService.register(registerData);
+            } catch (error) {
+                expect(error.message).to.equal('User with email already exists');
+            }
+        });
+
+        it('should handle server error', async () => {
+            const registerData = { email: 'test@test.com', password: 'testpassword' };
+            mock.onPost(`${process.env.API_URL}api/register`, registerData).reply(500);
+
+            try {
+                await authService.register(registerData);
+            } catch (error) {
+                expect(error.message).to.equal('Failed to register account');
+            }
+        });
+
     });
-    
-    it('should handle error when server error', async () => {
-      const mock = new MockAdapter(axios);
-      const token = 'token';
-      mock.onGet(`${process.env.API_URL}api/whoami`, { headers: { Authorization: `Bearer ${token}` } }).reply(500);
-      
-      try {
-        await authService.whoami(token);
-      } catch (error) {
-        expect(error.message).to.equal('Failed to fetch user');
-      }
-    });
-  });
 
 });

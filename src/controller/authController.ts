@@ -1,12 +1,12 @@
 import type {Request, Response, Application, response} from "express";
 import type { Login, Register } from "../model/auth";
 import { authService } from "../service/authService";
-import { validateEmail, validatePassword } from "../validator/registerValidator";
+import { registerValidator } from "../validator/registerValidator";
 
 export namespace Auth
 {
     export function getLogin(req: Request, res: Response): void {
-        if (req.query.registered) {
+        if (req.query?.registered) {
             res.locals.successMessage = "Account has been registered successfully. Please log in."
         }
         res.render("login")
@@ -43,13 +43,13 @@ export namespace Auth
             res.render("register");
         }
         
-        const emailError = validateEmail(data.email);
+        const emailError = registerValidator.validateEmail(data.email);
         if (emailError) {
             await rerender(`Please check your details: ${emailError}`);
             return;
         }
         
-        const passwordError = validatePassword(data.password);
+        const passwordError = registerValidator.validatePassword(data.password);
         if (passwordError) {
             await rerender(`Please check your details: ${passwordError}`);
             return;
