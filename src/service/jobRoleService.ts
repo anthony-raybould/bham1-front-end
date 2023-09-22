@@ -3,6 +3,7 @@ import type { JobBand, JobCapability, JobRole, JobRoleToUpdate } from "../model/
 import { JobRoleMatrix } from "../model/jobRoleMatrix";
 import { capabilityService } from "./capabilityService";
 import { bandService } from "./bandService";
+import { JobRoles } from "../controller/jobRoleController";
 
 export const jobRoleService = {
     async getJobRoles(): Promise<JobRole[]> {
