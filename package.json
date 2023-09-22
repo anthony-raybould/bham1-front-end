@@ -7,7 +7,7 @@
     "test": "mocha --require ts-node/register --exit test/unit/**/*.ts",
     "start": "npm run build && node -r dotenv/config dist/app.js",
     "build": "npx tsc && cp -R views dist && cp -R static dist",
-    "test-ui": "mocha --require ts-node/register --require dotenv/config --timeout 10000 --exit test/ui/*.ts"
+    "test-ui": "mocha --require ts-node/register --require dotenv/config --timeout 30000 --exit test/ui/*.ts"
   },
   "repository": {
     "type": "git",

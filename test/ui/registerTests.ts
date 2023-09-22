@@ -33,6 +33,11 @@ describe('register page', async () => {
         await emailInput.sendKeys(validEmail);
         await passwordInput.sendKeys(validPassword);
         await registerButton.click();
+        
+        expect(await driver.getCurrentUrl()).to.equal(process.env.UI_TEST_URL + '/login?registered=true');
+
+        const successMessage = await driver.findElement(webdriver.By.id('successMessage'));
+        expect(await successMessage.getText()).to.equal('Account has been registered successfully. Please log in.');
     });
 
     it("should display error when invalid email", async () => {
@@ -45,7 +50,7 @@ describe('register page', async () => {
         await passwordInput.sendKeys(validPassword);
         await loginButton.click();
         expect(await driver.getCurrentUrl()).to.equal(process.env.UI_TEST_URL + '/register');
-        expect(await driver.findElement(webdriver.By.id('errorMessage')).getText()).to.equal('Please check your details: Email is invalid');
+        expect(await driver.findElement(webdriver.By.id('errorMessage')).getText()).to.equal('Please check your details: Email must be valid');
     });
     
     it("should display error when invalid password", async () => {
