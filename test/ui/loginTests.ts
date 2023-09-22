@@ -1,5 +1,5 @@
 import webdriver from 'selenium-webdriver';
-const _chai = require('chai');
+import _chai from 'chai';
 
 describe('Login Page UI Tests', async () => {
   let driver: webdriver.WebDriver;

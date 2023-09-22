@@ -2,8 +2,8 @@ import expressSession from 'express-session';
 import express from 'express';
 import nunjucks from 'nunjucks';
 import path from 'path';
+import type { User } from './model/user';
 import router from './router';
-import { User } from './model/user';
 import { user } from './middleware/authorisation';
        
 const app = express();

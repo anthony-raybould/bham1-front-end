@@ -1,13 +1,13 @@
+import type { User } from '../../../src/model/user';
 import chai from 'chai';
 import sinon from 'sinon';
 import { authService } from '../../../src/service/authService';
 import { Auth } from '../../../src/controller/authController';
-import { User } from '../../../src/model/user';
 import { registerValidator } from '../../../src/validator/registerValidator';
 
 const expect = chai.expect;
 
-describe('jobRoleController', () => {
+describe('authController', () => {
 
     describe('getLogin', () => {
         beforeEach(() => {
@@ -122,6 +122,7 @@ describe('jobRoleController', () => {
 
         it('should render register template with error message on unsuccessful registration', async () => {
             sinon.stub(authService, 'register').rejects(new Error('Test error'));
+            sinon.stub(authService, 'getRoles').resolves([]);
 
             const req = { body: { email: 'test@test.com', password: 'password', roleID: 1 }, session: {} as any };
             const res = { render: sinon.spy(), locals: { errorMessage: '' } };

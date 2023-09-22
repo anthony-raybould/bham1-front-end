@@ -1,10 +1,8 @@
+import type { User } from '../../../src/model/user';
 import MockAdapter from 'axios-mock-adapter';
-import { User } from '../../../src/model/user';
 import { authService } from '../../../src/service/authService';
 import axios from 'axios';
-import chai from 'chai';
-
-const expect = chai.expect;
+import { expect } from 'chai';
 
 describe('authService', () => {
     let mock: MockAdapter;
