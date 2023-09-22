@@ -110,6 +110,8 @@ describe('authController', () => {
 
         it('should redirect to login page on successful registration', async () => {
             sinon.stub(authService, 'register').resolves();
+            sinon.stub(authService, 'getRoles').resolves([]);
+            sinon.stub(registerValidator, 'validateRequest').resolves(undefined);
 
             const req = { body: { email: 'test@test.com', password: 'password', roleID: 1 }, session: {} as any };
             const res = { redirect: sinon.spy() };
@@ -123,6 +125,7 @@ describe('authController', () => {
         it('should render register template with error message on unsuccessful registration', async () => {
             sinon.stub(authService, 'register').rejects(new Error('Test error'));
             sinon.stub(authService, 'getRoles').resolves([]);
+            sinon.stub(registerValidator, 'validateRequest').resolves(undefined);
 
             const req = { body: { email: 'test@test.com', password: 'password', roleID: 1 }, session: {} as any };
             const res = { render: sinon.spy(), locals: { errorMessage: '' } };

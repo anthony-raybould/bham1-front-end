@@ -43,18 +43,12 @@ export namespace Auth
             res.render("register");
         }
         
-        const emailError = registerValidator.validateEmail(data.email);
-        if (emailError) {
-            await rerender(`Please check your details: ${emailError}`);
+        const validationError = await registerValidator.validateRequest(data);
+        if (validationError) {
+            await rerender(`Please check your details: ${validationError}`);
             return;
         }
         
-        const passwordError = registerValidator.validatePassword(data.password);
-        if (passwordError) {
-            await rerender(`Please check your details: ${passwordError}`);
-            return;
-        }
-
         try {
             await authService.register(data);
             
