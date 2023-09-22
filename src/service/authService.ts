@@ -1,6 +1,6 @@
 import type { Login } from "../model/auth";
+import type { User } from "../model/user";
 import axios from "axios";
-import { User } from "../model/user";
 
 export const authService = {
     async login(login: Login): Promise<string> {
