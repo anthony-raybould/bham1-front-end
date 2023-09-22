@@ -41,5 +41,14 @@ describe('jobRoleService', () => {
             expect(e.message).to.equal('Failed to get job roles');
         }
     });
+    
+    it('should throw an error if no token is provided', async () => {
+        try {
+            await jobRoleService.getJobRoles(undefined);
+            expect.fail('Expected an error to be thrown');
+        } catch (e) {
+            expect(e.message).to.equal('You are not logged in (no token provided)');
+        }
+    });
 
 });
