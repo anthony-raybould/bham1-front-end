@@ -13,9 +13,6 @@ env:
   # Required for front-end operation.
   API_URL : "http://localhost:8080/"
 
-  # Required for front-end testing.
-  UI_TEST_URL : http://localhost:3030
-
 jobs:
   build-and-unit-test:
     runs-on: ubuntu-latest
