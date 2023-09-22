@@ -1,9 +1,8 @@
-var chai = require('chai');
-var axios = require('axios');
-var MockAdapter = require('axios-mock-adapter');
-const expect = chai.expect;
-import { User } from '../../../src/model/user';
+import type { User } from '../../../src/model/user';
+import MockAdapter from 'axios-mock-adapter';
 import { authService } from '../../../src/service/authService';
+import axios from 'axios';
+import { expect } from 'chai';
 
 
 describe('authService', () => {

@@ -1,8 +1,8 @@
+import type { User } from '../../../src/model/user';
 import chai from 'chai';
 import sinon from 'sinon';
 import { authService } from '../../../src/service/authService';
 import { Auth } from '../../../src/controller/authController';
-import { User } from '../../../src/model/user';
 
 const expect = chai.expect;
 
