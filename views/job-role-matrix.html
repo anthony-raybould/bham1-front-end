@@ -1,0 +1,39 @@
+{% extends "templates/master.html" %}
+
+{% block pageTitle %}
+    Job Roles Matrix
+{% endblock %}
+
+{% block content %}
+    <p>A matrix of how the job roles belonging to each band (row) and capability (column).</p>
+    <table id="matrix-table" class="table table-bordered">
+        <tr>
+            <th scope="col">Band</th>
+
+            {% for capability in matrix.capabilities %}
+                <th scope="col">{{ capability.capabilityName }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for band in matrix.bands %}
+            <tr>
+                <th scope="row">
+                    <p>{{ band.bandName }}</p>
+                    <p>(Band {{ band.bandID }})</p>
+                </th>
+
+                {% for roles in matrix.jobRolesGrid[loop.index0] %}
+                <td>
+                    {% for role in roles %}
+                        <p>
+                            <a href="/view-job-role/{{ role.jobRoleID }}">
+                                {{ role.jobRoleName }}
+                            </a>
+                        </p>
+                    {% endfor %}
+                </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

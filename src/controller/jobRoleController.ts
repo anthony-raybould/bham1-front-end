@@ -3,6 +3,7 @@ import type { JobBand, JobCapability, JobRole, JobRoleToUpdate } from "../model/
 import { jobRoleService } from "../service/jobRoleService";
 import { bandService } from "../service/bandService";
 import { capabilityService } from "../service/capabilityService";
+import { JobRoleMatrix } from "../model/jobRoleMatrix";
 
 export namespace JobRoles {
     export async function get(req: Request, res: Response): Promise<void> {
@@ -54,5 +55,17 @@ export namespace JobRoles {
                 errorMessage: e.message,
             });
         }
+    }
+
+    export async function getJobRoleMatrix(req: Request, res: Response): Promise<void> {
+        try {
+            // Get a 3D array of roles (by band, then capability, then roles matching)
+            const matrix : JobRoleMatrix = await jobRoleService.getJobRoleMatrix();
+            res.locals.matrix = matrix;
+        } catch (e) {
+            res.locals.errorMessage = e;
+        }
+        
+        res.render("job-role-matrix");
     }
 }
