@@ -22,6 +22,7 @@ export const jobRoleService = {
             }
         }
         catch (e) {
+            console.log("Failed to get job role:", e);
             throw new Error("Failed to get job role")
         }
     },
@@ -34,6 +35,7 @@ export const jobRoleService = {
             }
         }
         catch (e) {
+            console.log("Failed to delete job role:", e);
             throw new Error("Failed to delete job role")
         }
     }
