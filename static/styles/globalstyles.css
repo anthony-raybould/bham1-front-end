@@ -61,3 +61,8 @@ a, a:visited {
     color: var(--kainos-blue);
     text-decoration: none;
 }
+
+.btn-blue {
+    background-color: var(--kainos-blue);
+    color: white;
+}
