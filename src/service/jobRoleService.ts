@@ -24,7 +24,6 @@ export const jobRoleService = {
             }
             throw new Error('Update failed');
         } catch (e) {
-            console.log(e.message)
             throw new Error('Failed to update job role');
         }
     }

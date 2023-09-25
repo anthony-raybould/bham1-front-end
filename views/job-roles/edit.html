@@ -31,28 +31,17 @@
                     {{ capability.capabilityName }}
                 </option>
             {% endfor %}
-        </select>
-        </div>  
+        </select><br>
+        <label for="jobSpecSummary">JobSpecSummary:</label>
+        <input id="jobSpecSummary" name="jobSpecSummary" value="{{ jobRoles.jobSpecSummary }}" required></input>
 
-        <div  class="form-group">
-            <label for="jobSpecSummary"><strong>Job Spec Summary</strong></label>
-            <textarea  id="jobSpecSummary" name="jobSpecSummary" required class="form-control">{{jobRoles.jobSpecSummary}}</textarea>
-        </div>
+        <label for="responsibilities">Responsibilities:</label>
+        <input id="responsibilities"  name="responsibilities" value="{{ jobRoles.responsibilities}}" required></input>
 
-        <div  class="form-group">
-            <label for="responsibilities"><strong>Responsibilities</strong></label>
-            <textarea id="responsibilities"  name="responsibilities" required class="form-control">{{jobRoles.responsibilities}}</textarea>
-        </div>
+        <label for="sharePoint">SharePoint:</label>
+        <input id="sharePoint"  name="sharePoint" value="{{ jobRoles.sharePoint}}" required></input>
 
-        <div  class="form-group">
-            <label for="sharePoint"><strong>Sharepoint link</strong></label>
-            <input id="sharePoint"  name="sharePoint" value="{{jobRoles.sharePoint}}" required class="form-control"></input>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="bg-kainos-blue btn btn-primary">Save Changes</button>
-            <button href="/job-roles" class="bg-kainos-blue btn btn-primary">Cancel</button>
-        </div>
-
+        <button type="submit">Save Changes</button>
     </form>
 </div>
 {% endblock %}

@@ -44,7 +44,7 @@ export namespace JobRoles {
                 sharePoint: sharePoint
             }
             const updatedJobRoleData = await jobRoleService.editJobRoles(jobRoleToUpdate, id);
-            res.render('job-roles')
+            res.redirect('/job-roles')
         } catch (e) {
             res.locals.errorMessage = e;
             res.render('job-roles', {
