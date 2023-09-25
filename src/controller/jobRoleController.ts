@@ -56,6 +56,12 @@ export namespace JobRoles {
         const capabilityOrder = req.query?.capabilityOrder as string;
         const bandOrder = req.query?.bandOrder as string;
         
+        if (req.query && Object.keys(req.query).length > 1) {
+            const first = Object.keys(req.query)[0];
+            res.redirect(`/job-roles?${new URLSearchParams({ [first]: req.query[first] as string }).toString()}`);
+            return;
+        }
+        
         try {
             const jobRoles: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
             if (nameOrder) {
@@ -69,7 +75,7 @@ export namespace JobRoles {
             res.locals.getSortQueryString = (property: string) => { return getSortQueryString(req, property) };
             res.locals.getSortHTMLSymbol = (property: string) => { return getSortHTMLSymbol(req, property) };
         } catch (e) {
-            res.locals.errorMessage = e;
+            res.locals.errorMessage = e.message;
         }
 
         res.render("job-roles");
