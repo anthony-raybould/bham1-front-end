@@ -33,8 +33,7 @@ export const jobRoleService = {
 
     async getJobRoleMatrix(): Promise<JobRoleMatrix> {
         try {
-            let response = await axios.get(process.env.API_URL + "api/job-roles");
-            const unsortedRoles : JobRole[] = response.data;
+            const roles = await jobRoleService.getJobRoles();
 
             const ascendingBands = await bandService.getBands();
             ascendingBands.sort((a, b) => a.bandID - b.bandID)
@@ -42,14 +41,13 @@ export const jobRoleService = {
             const capabilities = await capabilityService.getCapabilities();
 
             const jobRolesGrid: JobRole[][][] =
-                seperateRolesByBandAndCapability(ascendingBands, capabilities, unsortedRoles);
+                seperateRolesByBandAndCapability(ascendingBands, capabilities, roles);
 
             return {
                 bands : ascendingBands,
                 capabilities : capabilities,
                 jobRolesGrid : jobRolesGrid
             }
-
 
         }
         catch (e) {
