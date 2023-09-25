@@ -67,13 +67,33 @@ describe('jobRoleService', () => {
             responsibilities: 'Test responsibilities',
             sharePoint: 'Test sharepoint'
         };
-        mock.onPut(`${process.env.API_URL}api/job-roles/edit/1`, jobRoles).reply(500);
+        mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(500);
     
         try {
             await jobRoleService.editJobRoles(jobRoles,1);
             expect.fail('Expected an error to be thrown');
         } catch (e) {
-            expect(e.message).to.equal('Failed to update job role');
+            expect(e.message).to.contain('Request failed with status code 500');
+        }
+    });
+
+        it('should throw BadRequest error if the API return 401', async () => {
+        const mock = new MockAdapter(axios);
+        const jobRoles: JobRoleToUpdate = { 
+            jobRoleName: 'Test',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+
+        };
+        mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(401, "Bad request");
+
+        try {
+            await jobRoleService.editJobRoles(jobRoles,1);
+        } catch (e) {
+            expect(e.message).to.contain('Request failed with status code 401');
         }
     });
     it('should throw an error if no token is provided', async () => {

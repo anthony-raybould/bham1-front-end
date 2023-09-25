@@ -3,6 +3,7 @@ import type { JobBand, JobCapability, JobRole, JobRoleToUpdate } from "../model/
 import { jobRoleService } from "../service/jobRoleService";
 import { bandService } from "../service/bandService";
 import { capabilityService } from "../service/capabilityService";
+import { validate } from "../validator/editJobRoleValidator";
 
 export namespace JobRoles {
     export async function get(req: Request, res: Response): Promise<void> {
@@ -33,22 +34,25 @@ export namespace JobRoles {
     export async function postEdit(req: Request, res: Response): Promise<void> {
         const id: number = parseInt(req.params.id); // Extract the jobRoleID from the URL
         const { jobRoleName, band, capability, jobSpecSummary, responsibilities, sharePoint } = req.body;
-
+        const jobRoleToUpdate: JobRoleToUpdate = {
+            jobRoleName: jobRoleName,
+            jobSpecSummary:jobSpecSummary ,
+            band: band,
+            capability: capability,
+            responsibilities: responsibilities,
+            sharePoint: sharePoint
+        }
         try {
-            const jobRoleToUpdate: JobRoleToUpdate = {
-                jobRoleName: jobRoleName,
-                jobSpecSummary:jobSpecSummary ,
-                band: band,
-                capability: capability,
-                responsibilities: responsibilities,
-                sharePoint: sharePoint
-            }
+            
+            validate(jobRoleToUpdate);
+
             const updatedJobRoleData = await jobRoleService.editJobRoles(jobRoleToUpdate, id);
             res.redirect('/job-roles')
         } catch (e) {
             res.locals.errorMessage = e;
-            res.render('job-roles', {
+            res.render('job-roles/edit', {
                 errorMessage: e.message,
+                jobRoles: jobRoleToUpdate
             });
         }
     }

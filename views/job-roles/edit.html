@@ -1,7 +1,7 @@
 {% extends "templates/master.html" %}
 
 {% block pageTitle %}
-    Edit Job Role - {{ jobRole.jobRoleName }}
+    Edit Job Role
 {% endblock %}
 
 {% block content %}
@@ -43,5 +43,6 @@
 
         <button type="submit">Save Changes</button>
     </form>
-</div>
+    <a href="/job-roles">Cancel</a>
+   </div>
 {% endblock %}
