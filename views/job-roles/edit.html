@@ -19,7 +19,7 @@
                     {{ band.bandName }}
                 </option>
             {% endfor %}
-        </select>
+        </select> <br>
 
         <label for="capability">Capability:</label>
         <select id="capability" name="capability" required>
@@ -30,15 +30,15 @@
             {% endfor %}
         </select><br>
         <label for="jobSpecSummary">JobSpecSummary:</label>
-        <input id="jobSpecSummary" name="jobSpecSummary" value="{{ jobRoles.jobSpecSummary }}" required></input>
+        <textarea id="jobSpecSummary" name="jobSpecSummary" required class="expandable-input">{{jobRoles.jobSpecSummary}}</textarea><br>
 
         <label for="responsibilities">Responsibilities:</label>
-        <input id="responsibilities"  name="responsibilities" value="{{ jobRoles.responsibilities}}" required></input>
+        <textarea id="responsibilities"  name="responsibilities" required class="expandable-input">{{jobRoles.responsibilities}}</textarea><br>
 
         <label for="sharePoint">SharePoint:</label>
-        <input id="sharePoint"  name="sharePoint" value="{{ jobRoles.sharePoint}}" required></input>
+        <input id="sharePoint"  name="sharePoint" value="{{ jobRoles.sharePoint}}" required class="expandable-input"></input><br>
 
-        <button type="submit">Save Changes</button>
+        <button type="submit">Save Changes</button><br>
     </form>
 </div>
 {% endblock %}

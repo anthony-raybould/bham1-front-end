@@ -8,7 +8,6 @@ export namespace JobRoles {
     export async function get(req: Request, res: Response): Promise<void> {
         try {
             const jobRoles: JobRole[] = await jobRoleService.getJobRoles();
-            console.log(jobRoles);
             res.locals.jobRoles = jobRoles;
         } catch (e) {
             res.locals.errorMessage = e;
@@ -35,7 +34,6 @@ export namespace JobRoles {
         const id: number = parseInt(req.params.id); // Extract the jobRoleID from the URL
         const { jobRoleName, band, capability, jobSpecSummary, responsibilities, sharePoint } = req.body;
 
-        console.log(band)
         try {
             const jobRoleToUpdate: JobRoleToUpdate = {
                 jobRoleName: jobRoleName,
@@ -45,9 +43,8 @@ export namespace JobRoles {
                 responsibilities: responsibilities,
                 sharePoint: sharePoint
             }
-            console.log(JSON.stringify(jobRoleToUpdate))    
             const updatedJobRoleData = await jobRoleService.editJobRoles(jobRoleToUpdate, id);
-            res.render('job-roles')
+            res.redirect('/job-roles')
         } catch (e) {
             res.locals.errorMessage = e;
             res.render('job-roles', {
