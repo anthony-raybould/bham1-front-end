@@ -1,19 +1,17 @@
 {% extends "templates/master.html" %}
 
 {% block pageTitle %}
-    Edit Job Role - {{ jobRole.jobRoleName }}
+    Edit Job Role
 {% endblock %}
 
 {% block content %}
-    <h2>Edit Job Role</h2>
-    <form action="/job-roles/edit/{{jobRoles.jobRoleID}}" method="POST">
-        <!-- Replace "/job-roles/{{ jobRole.jobRoleID }}/update" with your actual update route -->
+    <form action="/job-roles/edit/{{jobRoles.jobRoleID}}" method="POST" class="form-control">
 
         <label for="jobRoleName">Role:</label>
-        <input type="text" id="jobRoleName" name="jobRoleName" value="{{ jobRoles.jobRoleName }}" required><br>
+        <input type="text" id="jobRoleName" name="jobRoleName" value="{{ jobRoles.jobRoleName }}" required class="form-control"><br>
 
         <label for="band">Band:</label>
-        <select id="band" name="band" required>
+        <select  id="band" name="band" required>
             {% for band in bands %}
                 <option value="{{ band.bandID }}" {% if band.bandID == jobRoles.band.bandID %} selected {% endif %}>
                     {{ band.bandName }}
@@ -29,16 +27,18 @@
                 </option>
             {% endfor %}
         </select><br>
-        <label for="jobSpecSummary">JobSpecSummary:</label>
-        <textarea id="jobSpecSummary" name="jobSpecSummary" required class="expandable-input">{{jobRoles.jobSpecSummary}}</textarea><br>
+        <label for="jobSpecSummary">Job Spec Summary:</label>
+        <textarea  id="jobSpecSummary" name="jobSpecSummary" required class="expandable-input">{{jobRoles.jobSpecSummary}}</textarea><br>
 
         <label for="responsibilities">Responsibilities:</label>
         <textarea id="responsibilities"  name="responsibilities" required class="expandable-input">{{jobRoles.responsibilities}}</textarea><br>
 
         <label for="sharePoint">SharePoint:</label>
         <input id="sharePoint"  name="sharePoint" value="{{ jobRoles.sharePoint}}" required class="expandable-input"></input><br>
+        <br>
+        <button type="submit">Save Changes</button>
 
-        <button type="submit">Save Changes</button><br>
     </form>
-</div>
+    <a href="/job-roles">Cancel</a>
+   </div>
 {% endblock %}

@@ -8,7 +8,7 @@ describe('job-roles page', () => {
         const driver = new webdriver.Builder().forBrowser('chrome').build();
 
         await driver.get(process.env.UI_TEST_URL + '/job-roles/edit/1');
-        const pageTitle = await driver.findElement(By.css('h2')).getText();
+        const pageTitle = await driver.findElement(By.css('h1')).getText();
         expect(pageTitle).to.equal('Edit Job Role');
     
         const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
@@ -30,30 +30,57 @@ describe('job-roles page', () => {
         await driver.quit();
       });
     
-    //   it('should submit the form', async function () {
-    //     // Navigate to the edit job role page
-    //     await driver.get('http://your-website.com/job-roles/edit/1'); // Replace with your actual URL
+      it('should submit the form', async function () {
+        const driver = new webdriver.Builder().forBrowser('chrome').build();
+        await driver.get(process.env.UI_TEST_URL + '/job-roles/edit/1');
+
+        const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
+        const bandSelect = await driver.findElement(By.id('band'));
+        const capabilitySelect = await driver.findElement(By.id('capability'));
+        const jobSpecSummaryInput = await driver.findElement(By.id('jobSpecSummary'));
+        const responsibilitiesInput = await driver.findElement(By.id('responsibilities'));
+        const sharePointInput = await driver.findElement(By.id('sharePoint'));
+        const saveButton = await driver.findElement(By.css('button[type="submit"]'));
     
-    //     // Fill out the form fields
-    //     const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
-    //     const bandSelect = await driver.findElement(By.id('band'));
-    //     const capabilitySelect = await driver.findElement(By.id('capability'));
-    //     const jobSpecSummaryInput = await driver.findElement(By.id('jobSpecSummary'));
-    //     const responsibilitiesInput = await driver.findElement(By.id('responsibilities'));
-    //     const sharePointInput = await driver.findElement(By.id('sharePoint'));
-    //     const saveButton = await driver.findElement(By.css('button[type="submit"]'));
+        await jobRoleNameInput.sendKeys('Updated Role');
+        await bandSelect.sendKeys('2');
+        await capabilitySelect.sendKeys('2');
+        await jobSpecSummaryInput.sendKeys('Updated Summary');
+        await responsibilitiesInput.sendKeys('Updated Responsibilities');
+        await sharePointInput.sendKeys('https://www.something.com/');
     
-    //     await jobRoleNameInput.sendKeys('Updated Role');
-    //     await bandSelect.sendKeys('Updated Band');
-    //     await capabilitySelect.sendKeys('Updated Capability');
-    //     await jobSpecSummaryInput.sendKeys('Updated Summary');
-    //     await responsibilitiesInput.sendKeys('Updated Responsibilities');
-    //     await sharePointInput.sendKeys('Updated SharePoint');
+        // Submit the form
+        await saveButton.click();
+        await driver.quit();
+
+      });
+
+          
+      it('should get error message display when invalid form', async function () {
+        const driver = new webdriver.Builder().forBrowser('chrome').build();
+        await driver.get(process.env.UI_TEST_URL + '/job-roles/edit/1');
     
-    //     // Submit the form
-    //     await saveButton.click();
+        const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
+        const bandSelect = await driver.findElement(By.id('band'));
+        const capabilitySelect = await driver.findElement(By.id('capability'));
+        const jobSpecSummaryInput = await driver.findElement(By.id('jobSpecSummary'));
+        const responsibilitiesInput = await driver.findElement(By.id('responsibilities'));
+        const sharePointInput = await driver.findElement(By.id('sharePoint'));
+        const saveButton = await driver.findElement(By.css('button[type="submit"]'));
     
-    //     // You can add assertions here to verify that the form was submitted successfully
-    //     // For example, you can check for a success message or navigate to a confirmation page.
-    //   });
+        await jobRoleNameInput.sendKeys('Updated Role');
+        await bandSelect.sendKeys('2');
+        await capabilitySelect.sendKeys('2');
+        await jobSpecSummaryInput.sendKeys('Updated Summary');
+        await responsibilitiesInput.sendKeys('Updated Responsibilities');
+        await sharePointInput.sendKeys('this is an invalid url');
+    
+        await saveButton.click();
+        const errorMessageElement = driver.findElement(webdriver.By.css('alert-danger'));
+        errorMessageElement.getText().then(function (text) {
+          expect(text).to.equal('Share point URL is invalid. Please supply a valid URL.');
+      });
+      await driver.quit();
+
+    })
 });
