@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { JobCapability } from "../model/jobRole";
+import { CreateCapabilityRequest } from "../model/createCapabilityRequest";
 
 export const capabilityService = {
     async getCapabilities(): Promise<JobCapability[]> {
@@ -11,6 +12,21 @@ export const capabilityService = {
         }
         catch (e) {
             throw new Error("Failed to get job capabilities")
+        }
+    },
+
+    async createCapability(createCapabilityRequest : CreateCapabilityRequest): Promise<void> {
+
+        const response = await axios.post(`${process.env.API_URL}api/capabilities/`, createCapabilityRequest);
+        if (response.status === 200) {
+            return;
+        } 
+        if(response.status === 400)
+        {
+            throw new Error(`Bad request. ${response.data.errorMessage}`)
+        }
+        else{
+            throw new Error(response.data.errorMessage)
         }
     }
 }
