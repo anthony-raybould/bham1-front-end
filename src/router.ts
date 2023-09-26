@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/login", Auth.get)
 router.post("/login", Auth.post)
+router.get("/index", JobRoles.getIndex)
 
 router.get("/job-roles", JobRoles.get)
 
