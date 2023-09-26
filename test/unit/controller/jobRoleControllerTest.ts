@@ -6,6 +6,8 @@ import { jobRoleService } from '../../../src/service/jobRoleService';
 import router from '../../../src/router';
 import expressSession from 'express-session';
 
+import { bandService } from '../../../src/service/bandService';
+import { capabilityService } from '../../../src/service/capabilityService';
 const expect = chai.expect;
 
 const app = express();
