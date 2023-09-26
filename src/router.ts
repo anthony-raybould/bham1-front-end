@@ -1,11 +1,18 @@
 import express from "express";
-import { JobRoles } from "./controller/jobRoleController";
 import { Auth } from "./controller/authController";
+import { JobRoles } from "./controller/jobRoleController";
+import { requireLoggedIn, requireLoggedOut, requireRole, user } from "./middleware/authorisation";
+
 const router = express.Router();
 
-router.get("/login", Auth.get)
-router.post("/login", Auth.post)
+router.get("/", requireLoggedIn, (_, res) => res.render("index"));
 
-router.get("/job-roles", JobRoles.get)
+// Auth
+router.get("/login", requireLoggedOut, Auth.getLogin)
+router.post("/login", requireLoggedOut, Auth.postLogin)
+router.get("/logout", requireLoggedIn, Auth.getLogout)
+
+// Job Roles
+router.get("/job-roles", requireRole("Employee"), JobRoles.get)
 
 export default router;

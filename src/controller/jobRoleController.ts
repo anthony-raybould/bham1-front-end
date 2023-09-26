@@ -5,7 +5,7 @@ import { jobRoleService } from "../service/jobRoleService";
 export namespace JobRoles {
     export async function get(req: Request, res: Response): Promise<void> {
         try {
-            const jobRoles: JobRole[] = await jobRoleService.getJobRoles();
+            const jobRoles: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
             res.locals.jobRoles = jobRoles;
         } catch (e) {
             res.locals.errorMessage = e;

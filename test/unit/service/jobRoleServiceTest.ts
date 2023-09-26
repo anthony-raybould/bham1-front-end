@@ -25,7 +25,7 @@ describe('jobRoleService', () => {
         }];
         mock.onGet(`${process.env.API_URL}api/job-roles`).reply(200, jobRoles);
 
-        const result = await jobRoleService.getJobRoles();
+        const result = await jobRoleService.getJobRoles('token');
 
         expect(result).to.deep.equal(jobRoles);
     });
@@ -35,10 +35,19 @@ describe('jobRoleService', () => {
         mock.onGet(`${process.env.API_URL}api/job-roles`).reply(500);
 
         try {
-            await jobRoleService.getJobRoles();
+            await jobRoleService.getJobRoles('token');
             expect.fail('Expected an error to be thrown');
         } catch (e) {
             expect(e.message).to.equal('Failed to get job roles');
+        }
+    });
+    
+    it('should throw an error if no token is provided', async () => {
+        try {
+            await jobRoleService.getJobRoles(undefined);
+            expect.fail('Expected an error to be thrown');
+        } catch (e) {
+            expect(e.message).to.equal('You are not logged in (no token provided)');
         }
     });
 
