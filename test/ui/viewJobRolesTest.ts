@@ -52,35 +52,4 @@ describe('viewing job-roles pages', () => {
 
         await driver.quit();
     }) 
-    
-    /*it('should redirect to view all job roles page when job role successfully deleted from delete job role page', async () => {
-        const driver = new webdriver.Builder().forBrowser('chrome').build();
-        await driver.get(process.env.UI_TEST_URL + '/delete-job-role/1');
-
-        const deleteButton = await driver.findElement(webdriver.By.className('btn-primary'));
-        await deleteButton.click();
-
-        const currentUrl = await driver.getCurrentUrl();
-        const expectedJobRolesPageUrl = process.env.UI_TEST_URL + '/job-roles'
-        expect(currentUrl).to.equal(expectedJobRolesPageUrl);
-
-        await driver.quit();
-    }) 
-
-    it('should not be able to view a job role spec once it has been deleted', async () => {
-        
-        const driver = new webdriver.Builder().forBrowser('chrome').build();
-        await driver.get(process.env.UI_TEST_URL + '/delete-job-role/2');
-
-        const deleteButton = await driver.findElement(webdriver.By.className('btn-primary'));
-        await deleteButton.click();
-
-        await driver.get(process.env.UI_TEST_URL + '/view-job-role/2');
-        const error = await driver.findElement(webdriver.By.css('div.alert.alert-danger')).getText();
-        expect(error).to.equal('Error: Failed to get job role');
-
-        await driver.quit(); 
-    }) */
-    
-
 });
