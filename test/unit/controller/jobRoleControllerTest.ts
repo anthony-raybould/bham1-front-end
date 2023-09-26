@@ -122,4 +122,53 @@ describe('jobRoleController', () => {
             }
         );
     });
+    it('should render create-job-role.html template', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
+        sinon.stub(bandService, 'getBands').resolves([]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([])
+
+        request(app)
+            .get('/create-job-role')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<label for="jobRoleName" style="font-weight: bold;">Role</label>');
+            }
+        );
+    });
+
+    it('should render create-job-role.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Test error'));
+
+        request(app)
+            .get('/create-job-role')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<label for="jobRoleName" style="font-weight: bold;">Role</label>');
+                expect(res.text).to.contain('Test error');
+            }
+        );
+    });
+
+    it('should render create-job-role.html template with form', async () => {
+        sinon.stub(bandService, 'getBands').resolves([{ 
+            bandID: 1, bandName: 'Test band'        
+        }
+        ]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([{
+            capabilityID: 1, capabilityName: "Test capability"
+        }])
+
+        request(app)
+            .get('/create-job-role')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<label for="jobRoleName" style="font-weight: bold;">Role</label>');
+                expect(res.text).to.contain('Test band');
+                expect(res.text).to.contain('Text capability')
+            }
+        );
+    }); 
 });

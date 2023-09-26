@@ -52,4 +52,36 @@ export namespace JobRoles {
             });
         }
     }
+
+    export async function getCreate(req:Request, res:Response): Promise<void> {
+        const bands: JobBand[] = await bandService.getBands();
+        const capabilities: JobCapability[] = await capabilityService.getCapabilities();
+
+        res.render("create-job-role", {bands, capabilities});
+    }
+
+    export async function create(req: Request, res: Response): Promise<void> {
+        let id: Number 
+        const { jobRoleName, band, capability, jobSpecSummary, responsibilities, sharePoint } = req.body;
+
+        try {
+            const jobRoleToCreate: JobRoleToUpdate = {
+                jobRoleName: jobRoleName,
+                jobSpecSummary:jobSpecSummary ,
+                band: band,
+                capability: capability,
+                responsibilities: responsibilities,
+                sharePoint: sharePoint
+            }
+            id = await jobRoleService.createJobRole(jobRoleToCreate)
+            res.redirect('/job-roles')
+        } catch (e) {
+            const bands: JobBand[] = await bandService.getBands();
+            const capabilities: JobCapability[] = await capabilityService.getCapabilities();
+
+            console.error(e)
+            res.locals.errorMessage = e;
+            res.render('create-job-role', {...req.body, bands, capabilities})
+        }
+    }
 }

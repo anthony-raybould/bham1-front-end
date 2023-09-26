@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { JobRole, JobRoleToUpdate } from "../model/jobRole";
+import type { JobRole, JobRoleToUpdate, JobRoleToCreate } from "../model/jobRole";
 
 export const jobRoleService = {
     async getJobRoles(): Promise<JobRole[]> {
@@ -22,6 +22,18 @@ export const jobRoleService = {
             throw new Error('Update failed');
         } catch (e) {
             throw new Error('Failed to update job role');
+        }
+    }, 
+    async createJobRole(jobRole: JobRoleToCreate): Promise<number> {
+        try {
+            const response = await axios.post(`${process.env.API_URL}api/job-roles/`, jobRole)
+            if (response.status === 200) {
+                return response.data;
+            }
+            throw new Error('Create failed');
+        } catch (e) {
+            throw new Error(e.response.data);
+            //throw new Error('Failed to create job role');
         }
     }
 }
