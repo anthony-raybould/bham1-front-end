@@ -1,3 +1,3 @@
 export type CreateCapabilityRequest = {
-    capabilityName: string
+    capabilityName?: string
 }

@@ -17,16 +17,22 @@ export const capabilityService = {
 
     async createCapability(createCapabilityRequest : CreateCapabilityRequest): Promise<void> {
 
-        const response = await axios.post(`${process.env.API_URL}api/capabilities/`, createCapabilityRequest);
-        if (response.status === 200) {
-            return;
-        } 
-        if(response.status === 400)
-        {
-            throw new Error(`Bad request. ${response.data.errorMessage}`)
-        }
-        else{
-            throw new Error(response.data.errorMessage)
+        try {
+            const response = await axios.post(`${process.env.API_URL}api/capabilities/`, createCapabilityRequest);
+
+            if (response.status === 200) {
+                return;
+            } 
+            if(response.status === 400)
+            {
+                throw new Error(`Bad request. ${response.data.errorMessage}`);
+            }
+            else{
+                throw new Error(response.data.errorMessage);
+            }
+        } catch (e) {
+            console.error(e);
+            throw new Error("Failed creating capability");
         }
     }
 }
