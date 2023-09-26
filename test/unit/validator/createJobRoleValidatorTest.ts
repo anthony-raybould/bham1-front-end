@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import { JobRoleToCreate } from '../../../src/model/jobRole';
 import {ValidationException, validateCreate}  from "../../../src/validator/createJobRoleValidator";
 
-describe('UpdateJobRoleValidator Tests', () => {
+describe('CreateJobRoleValidator Tests', () => {
   let validJobRole: JobRoleToCreate;
   let axiosMock: MockAdapter;
 

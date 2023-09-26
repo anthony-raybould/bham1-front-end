@@ -3,7 +3,7 @@ import type { JobBand, JobCapability, JobRole, JobRoleToUpdate } from "../model/
 import { jobRoleService } from "../service/jobRoleService";
 import { bandService } from "../service/bandService";
 import { capabilityService } from "../service/capabilityService";
-import { validate } from "../validator/createJobRoleValidator";
+import { validateCreate } from "../validator/createJobRoleValidator";
 
 export namespace JobRoles {
     export async function get(req: Request, res: Response): Promise<void> {
@@ -78,7 +78,7 @@ export namespace JobRoles {
         }
 
         try {
-            validate(jobRoleToCreate);
+            validateCreate(jobRoleToCreate);
 
             id = await jobRoleService.createJobRole(jobRoleToCreate)
             res.redirect('/job-roles')
