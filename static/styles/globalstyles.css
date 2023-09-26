@@ -59,3 +59,7 @@ a, a:visited {
     color: var(--kainos-blue);
     text-decoration: none;
 }
+
+.white {
+    color: white !important;
+}

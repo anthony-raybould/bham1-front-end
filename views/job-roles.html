@@ -5,7 +5,19 @@
 {% endblock %}
 
 {% block content %}
-    <p>Current job roles at Kainos</p>
+    <div class="row">
+        <div class="col">
+            <p>Current job roles at Kainos</p>
+        </div>
+        <div class="col text-right gap-2 mb-2">
+            {% if filtered %}
+            <a href="/job-roles" class="white btn btn-danger">Remove Filter</a>
+            <a href="/job-roles/filter?{{ currentFilterParams }}" class="white btn btn-primary">Change Filter</a>
+            {% else %}
+            <a href="/job-roles/filter" class="white btn btn-primary">Filter</a>
+            {% endif %}
+        </div>
+    </div>
     <table id="job-roles-table">
         <tr>
             <th>Role</th>
