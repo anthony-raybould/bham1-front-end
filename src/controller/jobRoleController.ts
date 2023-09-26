@@ -3,6 +3,7 @@ import type { JobBand, JobCapability, JobRole, JobRoleToUpdate } from "../model/
 import { jobRoleService } from "../service/jobRoleService";
 import { bandService } from "../service/bandService";
 import { capabilityService } from "../service/capabilityService";
+import { validate } from "../validator/createJobRoleValidator";
 
 export namespace JobRoles {
     export async function get(req: Request, res: Response): Promise<void> {
@@ -54,25 +55,31 @@ export namespace JobRoles {
     }
 
     export async function getCreate(req:Request, res:Response): Promise<void> {
-        const bands: JobBand[] = await bandService.getBands();
-        const capabilities: JobCapability[] = await capabilityService.getCapabilities();
-
-        res.render("create-job-role", {bands, capabilities});
+        try {
+            const bands: JobBand[] = await bandService.getBands();
+            const capabilities: JobCapability[] = await capabilityService.getCapabilities();
+            res.render("create-job-role", {bands, capabilities}); 
+        } catch (e) {
+            res.locals.errorMessage = 'Failed to load create job role page';
+            res.render("create-job-role"); 
+        }
     }
 
-    export async function create(req: Request, res: Response): Promise<void> {
+    export async function postCreate(req: Request, res: Response): Promise<void> {
         let id: Number 
         const { jobRoleName, band, capability, jobSpecSummary, responsibilities, sharePoint } = req.body;
+        const jobRoleToCreate: JobRoleToUpdate = {
+            jobRoleName: jobRoleName,
+            jobSpecSummary:jobSpecSummary ,
+            band: band,
+            capability: capability,
+            responsibilities: responsibilities,
+            sharePoint: sharePoint
+        }
 
         try {
-            const jobRoleToCreate: JobRoleToUpdate = {
-                jobRoleName: jobRoleName,
-                jobSpecSummary:jobSpecSummary ,
-                band: band,
-                capability: capability,
-                responsibilities: responsibilities,
-                sharePoint: sharePoint
-            }
+            validate(jobRoleToCreate);
+
             id = await jobRoleService.createJobRole(jobRoleToCreate)
             res.redirect('/job-roles')
         } catch (e) {

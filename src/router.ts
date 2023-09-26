@@ -6,5 +6,5 @@ router.get("/job-roles", JobRoles.get)
 router.get("/job-roles/edit/:id", JobRoles.getEdit)
 router.post("/job-roles/edit/:id", JobRoles.postEdit)
 router.get("/create-job-role", JobRoles.getCreate)
-router.post("/create-job-role", JobRoles.create)
+router.post("/create-job-role", JobRoles.postCreate)
 export default router;

@@ -33,7 +33,6 @@ export const jobRoleService = {
             throw new Error('Create failed');
         } catch (e) {
             throw new Error(e.response.data);
-            //throw new Error('Failed to create job role');
         }
     }
 }
