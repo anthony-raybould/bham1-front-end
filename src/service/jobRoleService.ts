@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { JobRole, JobRoleToUpdate } from "../model/jobRole";
-import { symlinkSync } from "fs";
 
 export const jobRoleService = {
     async getJobRoles(token?: string): Promise<JobRole[]> {
