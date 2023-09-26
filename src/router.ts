@@ -10,6 +10,8 @@ router.get("/", requireLoggedIn, (_, res) => res.render("index"));
 // Auth
 router.get("/login", requireLoggedOut, Auth.getLogin)
 router.post("/login", requireLoggedOut, Auth.postLogin)
+router.get("/register", requireLoggedOut, Auth.getRegister)
+router.post("/register", requireLoggedOut, Auth.postRegister)
 router.get("/logout", requireLoggedIn, Auth.getLogout)
 
 // Job Roles
