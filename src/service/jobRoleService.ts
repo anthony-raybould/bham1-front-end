@@ -8,6 +8,7 @@ export const jobRoleService = {
             const response = await axios.get(process.env.API_URL + "api/job-roles", {
                 headers: { Authorization: `Bearer ${token}` },
             });
+            console.error(response.status)
             return response.data
         } catch (e) { 
             throw new Error("Failed to get job roles")
@@ -17,7 +18,6 @@ export const jobRoleService = {
         const response = await axios.put(`${process.env.API_URL}api/job-roles/${jobRoleID}`, jobRole, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            console.log(response.data)
         if (response.status === 200) {
             return response.data;
         }

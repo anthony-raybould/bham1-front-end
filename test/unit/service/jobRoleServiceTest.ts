@@ -2,7 +2,7 @@ import chai from 'chai';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { jobRoleService } from '../../../src/service/jobRoleService';
-import { JobRole, JobRoleToUpdate, JobRoleToUpdate } from '../../../src/model/jobRole';
+import { JobRole, JobRoleToUpdate } from '../../../src/model/jobRole';
 import sinon from 'sinon';
 
 const expect = chai.expect;

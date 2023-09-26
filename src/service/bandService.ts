@@ -8,7 +8,6 @@ export const bandService = {
             const response = await axios.get(process.env.API_URL + "api/band", {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            console.log(response.status)
             if (response.status === 200) {
                 return response.data
             }
