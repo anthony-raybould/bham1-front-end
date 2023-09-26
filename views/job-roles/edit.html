@@ -1,44 +1,56 @@
 {% extends "templates/master.html" %}
 
 {% block pageTitle %}
-    Edit Job Role - {{ jobRole.jobRoleName }}
+    Edit Job Role
 {% endblock %}
 
 {% block content %}
-    <h2>Edit Job Role</h2>
-    <form action="/job-roles/edit/{{jobRoles.jobRoleID}}" method="POST">
-        <!-- Replace "/job-roles/{{ jobRole.jobRoleID }}/update" with your actual update route -->
+    <form action="/job-roles/edit/{{jobRoles.jobRoleID}}" method="POST" class="form-control" style="border: none;">
 
-        <label for="jobRoleName">Role:</label>
-        <input type="text" id="jobRoleName" name="jobRoleName" value="{{ jobRoles.jobRoleName }}" required><br>
+        <label for="jobRoleName"><strong>Role</strong></label>
+        <input type="text" id="jobRoleName" name="jobRoleName" value="{{ jobRoles.jobRoleName }}" required class="form-control"><br>
+        
+        <div class="form-group">
+            <label for="band"><strong>Band</strong></label>
+            <select  id="band" name="band" required class="form-control">
+                {% for band in bands %}
+                    <option value="{{ band.bandID }}" {% if band.bandID == jobRoles.band.bandID %} selected {% endif %}>
+                        {{ band.bandName }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <label for="band">Band:</label>
-        <select id="band" name="band" required>
-            {% for band in bands %}
-                <option value="{{ band.bandID }}" {% if band.bandID == jobRoles.band.bandID %} selected {% endif %}>
-                    {{ band.bandName }}
-                </option>
-            {% endfor %}
-        </select> <br>
-
-        <label for="capability">Capability:</label>
-        <select id="capability" name="capability" required>
+         <div class="form-group"> 
+        <label for="capability"><strong>Capability</strong></label>
+        <select id="capability" name="capability" required class="form-control">  
             {% for capability in capabilities %}
                 <option value="{{ capability.capabilityID }}" {% if capability.capabilityID == jobRoles.capability.capabilityID %} selected {% endif %}>
                     {{ capability.capabilityName }}
                 </option>
             {% endfor %}
-        </select><br>
-        <label for="jobSpecSummary">JobSpecSummary:</label>
-        <textarea id="jobSpecSummary" name="jobSpecSummary" required class="expandable-input">{{jobRoles.jobSpecSummary}}</textarea><br>
+        </select>
+        </div>  
 
-        <label for="responsibilities">Responsibilities:</label>
-        <textarea id="responsibilities"  name="responsibilities" required class="expandable-input">{{jobRoles.responsibilities}}</textarea><br>
+        <div  class="form-group">
+            <label for="jobSpecSummary"><strong>Job Spec Summary</strong></label>
+            <textarea  id="jobSpecSummary" name="jobSpecSummary" required class="form-control">{{jobRoles.jobSpecSummary}}</textarea>
+        </div>
+        
+        <div  class="form-group">
+            <label for="responsibilities"><strong>Responsibilities</strong></label>
+            <textarea id="responsibilities"  name="responsibilities" required class="form-control">{{jobRoles.responsibilities}}</textarea>
+        </div>
+        
+        <div  class="form-group">
+            <label for="sharePoint"><strong>Sharepoint link</strong></label>
+            <input id="sharePoint"  name="sharePoint" value="{{jobRoles.sharePoint}}" required class="form-control"></input>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="bg-kainos-blue btn btn-primary">Save Changes</button>
+            <button href="/job-roles" class="bg-kainos-blue btn btn-primary">Cancel</button>
+        </div>
 
-        <label for="sharePoint">SharePoint:</label>
-        <input id="sharePoint"  name="sharePoint" value="{{ jobRoles.sharePoint}}" required class="expandable-input"></input><br>
-
-        <button type="submit">Save Changes</button><br>
     </form>
-</div>
+   </div>
 {% endblock %}

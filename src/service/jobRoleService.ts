@@ -6,26 +6,31 @@ import { bandService } from "./bandService";
 import { JobRoles } from "../controller/jobRoleController";
 
 export const jobRoleService = {
-    async getJobRoles(): Promise<JobRole[]> {
+    async getJobRoles(token?: string): Promise<JobRole[]> {
+        if (!token) throw new Error("You are not logged in (no token provided)")
         try {
-            const response = await axios.get(process.env.API_URL + "api/job-roles");
-            if (response.status === 200) {
-                return response.data
-            }
-        }
-        catch (e) {
+            const response = await axios.get(process.env.API_URL + "api/job-roles", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            console.error(response.status)
+            return response.data
+        } catch (e) { 
             throw new Error("Failed to get job roles")
         }
     },
-    async editJobRoles(jobRole: JobRoleToUpdate, jobRoleID: number): Promise<JobRole>{
-        try {
-            const response = await axios.put(`${process.env.API_URL}api/job-roles/${jobRoleID}`, jobRole);
-            if (response.status === 200) {
-                return response.data;
-            }
-            throw new Error('Update failed');
-        } catch (e) {
-            throw new Error('Failed to update job role');
+    async editJobRoles(jobRole: JobRoleToUpdate, jobRoleID: number, token?: string, ): Promise<JobRole>{
+        const response = await axios.put(`${process.env.API_URL}api/job-roles/${jobRoleID}`, jobRole, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        if (response.status === 200) {
+            return response.data;
+        }
+        else if(response.status === 401)
+        {
+            throw new Error(`Bad request. ${response.data.errorMessage}`)
+        }
+        else{
+            throw new Error(response.data.errorMessage)
         }
     },
 
@@ -51,7 +56,9 @@ export const jobRoleService = {
         catch (e) {
             throw new Error("Failed to get job roles matrix")
         }
-    }
+    },
+
+    
 }
 
 function seperateRolesByBandAndCapability(bands: JobBand[], capabilities: JobCapability[], roles: JobRole[]) {
