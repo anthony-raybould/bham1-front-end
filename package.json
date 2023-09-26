@@ -7,7 +7,8 @@
     "test": "mocha --require ts-node/register --exit test/unit/**/*.ts",
     "start": "npm run build && node -r dotenv/config dist/app.js",
     "build": "npx tsc && cp -R views dist && cp -R static dist",
-    "test-ui": "mocha --require ts-node/register --require dotenv/config --timeout 30000 --exit test/ui/*.ts"
+    "test-ui": "mocha --require ts-node/register --require dotenv/config --timeout 30000 --exit test/ui/*.ts",
+    "test-accessibility": "mocha --require ts-node/register --timeout 10000 --exit test/accessibility/*.ts"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
     "@types/supertest": "^2.0.12",
     "axios-mock-adapter": "^1.22.0",
     "chai": "^4.3.8",
+    "@types/pa11y": "^5.3.5",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "mocha": "^10.2.0",
@@ -48,6 +50,7 @@
     "sinon": "^16.0.0",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
+    "pa11y": "^6.2.3",
     "typescript": "^5.2.2"
   }
 }

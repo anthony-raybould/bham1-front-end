@@ -1,5 +1,6 @@
 import webdriver from 'selenium-webdriver';
 import { expect } from 'chai';
+import { buildDriver } from './buildDriver';
 
 describe('register page', async () => {
     const random = () => Math.random().toString(36).substring(7);
@@ -9,9 +10,7 @@ describe('register page', async () => {
     let driver: webdriver.WebDriver;
 
     beforeEach(async () => {
-        driver = new webdriver.Builder().
-            withCapabilities(webdriver.Capabilities.chrome()).
-            build();
+        driver = buildDriver();
     });
     
     afterEach(async () => {
