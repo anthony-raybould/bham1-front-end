@@ -34,14 +34,16 @@ export const jobRoleService = {
         }
     },
 
-    async getJobRoleMatrix(): Promise<JobRoleMatrix> {
+    async getJobRoleMatrix(token?: string): Promise<JobRoleMatrix> {
         try {
-            const roles = await jobRoleService.getJobRoles();
+            if (!token) throw new Error("You are not logged in (no token provided)")
 
-            const ascendingBands = await bandService.getBands();
+            const roles = await jobRoleService.getJobRoles(token);
+
+            const ascendingBands = await bandService.getBands(token);
             ascendingBands.sort((a, b) => a.bandID - b.bandID)
 
-            const capabilities = await capabilityService.getCapabilities();
+            const capabilities = await capabilityService.getCapabilities(token);
 
             const jobRolesGrid: JobRole[][][] =
                 seperateRolesByBandAndCapability(ascendingBands, capabilities, roles);

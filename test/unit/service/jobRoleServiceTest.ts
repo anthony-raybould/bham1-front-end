@@ -167,7 +167,7 @@ describe('jobRoleService', () => {
         sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Failed to get job roles'));
 
         try {
-            await jobRoleService.getJobRoleMatrix();
+            await jobRoleService.getJobRoleMatrix("token");
             expect.fail('Expected an error to be thrown');
 
         } catch(e) {
@@ -179,7 +179,7 @@ describe('jobRoleService', () => {
         sinon.stub(capabilityService, 'getCapabilities').throws(new Error('Failed to get job capabilities'));
 
         try {
-            await jobRoleService.getJobRoleMatrix();
+            await jobRoleService.getJobRoleMatrix("token");
             expect.fail('Expected an error to be thrown');
 
         } catch(e) {
@@ -191,7 +191,7 @@ describe('jobRoleService', () => {
         sinon.stub(bandService, 'getBands').throws(new Error('Failed to get job bands'));
 
         try {
-            await jobRoleService.getJobRoleMatrix();
+            await jobRoleService.getJobRoleMatrix("token");
             expect.fail('Expected an error to be thrown');
 
         } catch(e) {
@@ -217,7 +217,7 @@ describe('jobRoleService', () => {
             }
         ]);
 
-        const matrix = await jobRoleService.getJobRoleMatrix();
+        const matrix = await jobRoleService.getJobRoleMatrix("test");
         expect(matrix.bands).to.deep.equal([
             {
                 bandID : 4,
@@ -263,7 +263,7 @@ describe('jobRoleService', () => {
         sinon.stub(capabilityService, 'getCapabilities').resolves(capabilities);
         sinon.stub(bandService, 'getBands').resolves(bands);
 
-        const matrix = await jobRoleService.getJobRoleMatrix();
+        const matrix = await jobRoleService.getJobRoleMatrix("token");
         expect(matrix.bands).to.deep.equal(bands);
         expect(matrix.capabilities).to.deep.equal(capabilities);
 
@@ -327,7 +327,7 @@ describe('jobRoleService', () => {
         sinon.stub(capabilityService, 'getCapabilities').resolves(capabilities);
         sinon.stub(bandService, 'getBands').resolves(bands);
 
-        const matrix = await jobRoleService.getJobRoleMatrix();
+        const matrix = await jobRoleService.getJobRoleMatrix("token");
         expect(matrix.jobRolesGrid[0][0]).to.deep.equal([]);
         expect(matrix.jobRolesGrid[0][1]).to.deep.equal([jobRoles[1]]);
         expect(matrix.jobRolesGrid[1][0]).to.deep.equal([jobRoles[2]]);
@@ -372,7 +372,7 @@ describe('jobRoleService', () => {
         sinon.stub(capabilityService, 'getCapabilities').resolves(capabilities);
         sinon.stub(bandService, 'getBands').resolves(bands);
 
-        const matrix = await jobRoleService.getJobRoleMatrix();
+        const matrix = await jobRoleService.getJobRoleMatrix("token");
         expect(matrix.jobRolesGrid[0][0]).to.deep.equal(jobRoles);
 
     });

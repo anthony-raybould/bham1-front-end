@@ -1,11 +1,14 @@
 import { expect } from 'chai';
 import { By } from 'selenium-webdriver';
 import { buildDriver } from './buildDriver';
+import { login } from './generateCredentials';
 
 describe('Job Roles Matrix page', () => {
 
     it('should display matrix of job roles', async () => {
         const driver = buildDriver();
+
+        await login(driver);
 
         await driver.get(process.env.UI_TEST_URL + '/job-roles/matrix');
 
@@ -20,6 +23,8 @@ describe('Job Roles Matrix page', () => {
 
     it('should have link to job role in matrix', async () => {
         const driver = buildDriver();
+
+        await login(driver);
 
         await driver.get(process.env.UI_TEST_URL + '/job-roles/matrix');
 

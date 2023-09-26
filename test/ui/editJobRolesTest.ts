@@ -36,14 +36,8 @@ describe('job-roles page', () => {
     
       it('should submit the form', async function () {
         const driver = buildDriver();
-        await driver.get(process.env.UI_TEST_URL + '/login');
-        const emailInput = await driver.findElement(By.id('email'));
-        const passwordInput = await driver.findElement(By.id('password'));
-        const loginButton = await driver.findElement(By.css('button[type="submit"]'));
-    
-        await emailInput.sendKeys("test@test.com");
-        await passwordInput.sendKeys("test");
-        await loginButton.click();
+        
+        await login(driver);
 
         // -----
         await driver.get(process.env.UI_TEST_URL + '/job-roles/edit/1');

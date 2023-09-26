@@ -61,7 +61,7 @@ export namespace JobRoles {
     export async function getJobRoleMatrix(req: Request, res: Response): Promise<void> {
         try {
             // Get a 3D array of roles (by band, then capability, then roles matching)
-            const matrix : JobRoleMatrix = await jobRoleService.getJobRoleMatrix();
+            const matrix : JobRoleMatrix = await jobRoleService.getJobRoleMatrix(req.session.token);
             res.locals.matrix = matrix;
         } catch (e) {
             res.locals.errorMessage = e;
