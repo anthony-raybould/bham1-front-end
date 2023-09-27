@@ -30,9 +30,6 @@ export const capabilityService = {
             if (response.status === 200) {
                 return;
             } 
-            if(response.status === 400) {
-                throw new Error(`Bad request. ${response.data.errorMessage}`);
-            }
             else {
                 throw new Error(response.data.errorMessage);
             }
