@@ -36,16 +36,9 @@ describe('job-roles page', () => {
     
       it('should submit the form', async function () {
         const driver = buildDriver();
-        await driver.get(process.env.UI_TEST_URL + '/login');
-        const emailInput = await driver.findElement(By.id('email'));
-        const passwordInput = await driver.findElement(By.id('password'));
-        const loginButton = await driver.findElement(By.css('button[type="submit"]'));
-    
-        await emailInput.sendKeys("test@test.com");
-        await passwordInput.sendKeys("test");
-        await loginButton.click();
 
-        // -----
+        await login(driver);
+
         await driver.get(process.env.UI_TEST_URL + '/job-roles/edit/1');
 
         const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
@@ -63,15 +56,11 @@ describe('job-roles page', () => {
         await responsibilitiesInput.sendKeys('Updated Responsibilities');
         await sharePointInput.sendKeys('https://www.something.com/');
     
-        // Submit the form
         await saveButton.click();
-       await driver.quit();
-
+        await driver.quit();
       });
 
-          
       it('should get error message display when invalid form', async function () {
-        //const driver = new webdriver.Builder().forBrowser('chrome').build();
         const driver = buildDriver();
 
         await login(driver);
