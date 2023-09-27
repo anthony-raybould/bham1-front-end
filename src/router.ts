@@ -1,11 +1,12 @@
 import express from "express";
 import { Auth } from "./controller/authController";
 import { JobRoles } from "./controller/jobRoleController";
+import { Index } from "./controller/indexController";
 import { requireLoggedIn, requireLoggedOut, requireRole, user } from "./middleware/authorisation";
 
 const router = express.Router();
 
-router.get("/", requireLoggedIn, (_, res) => res.render("index"));
+
 
 // Auth
 router.get("/login", requireLoggedOut, Auth.getLogin)
@@ -22,4 +23,10 @@ router.post("/job-roles/edit/:id",requireRole("Admin"), JobRoles.postEdit)
 router.get("/view-job-role/:id", JobRoles.getJobRoleById)
 router.get("/delete-job-role/:id", JobRoles.getJobRoleByIdForDelete)
 router.post("/delete-job-role/:id", JobRoles.deleteJobRole)
-export default router;
+
+
+// Index
+router.get("/", requireLoggedIn, Index.getIndex);
+
+export default router; 
+

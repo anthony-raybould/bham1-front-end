@@ -6,12 +6,12 @@
 
 {% block content %}
     <!-- Put links to stuff here -->
-      
-    <!-- Test -->
-    <h2> Heading 2 </h2>
-    <p> Paragraph </p>
-    <h3> Heading 3 </h3>
-    <p> Paragraph </p>
-    <h4> Heading 4 </h4>
-    <p> Paragraph </p>
+    <h3> Job Roles </h3>
+    <a href="/job-roles" type="submit" class="btn btn-primary text text-white">View Job Roles</a>
+    <a href="/job-roles/matrix" type="submit" class="btn btn-primary text text-white">View Matrix</a>
+    {% if user.role.roleName == "Admin" %}
+    <h3> Capabilities </h3>
+    <a href="/capabilities/create" type="submit" class="btn btn-primary text text-white">Create Capability</a>
+    {% endif %}
 {% endblock %}
+
