@@ -2,8 +2,18 @@ import sinon from 'sinon';
 import { jobRoleService } from '../../../src/service/jobRoleService';
 import { JobRoles } from '../../../src/controller/jobRoleController';
 import chai from 'chai';
+import request from 'supertest'
+import express from 'express';
+import router from '../../../src/router';
+
 
 const expect = chai.expect;
+
+const app = express();
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+app.use(router);
 
 const bands = { 
     associate: {
