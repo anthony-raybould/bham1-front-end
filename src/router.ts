@@ -17,6 +17,6 @@ router.get("/job-roles", requireRole("Employee"), JobRoles.get)
 router.get("/job-roles/edit/:id", requireRole("Admin"),JobRoles.getEdit)
 router.post("/job-roles/edit/:id",requireRole("Admin"), JobRoles.postEdit)
 
-router.get("/capabilities/create", CapabilityController.getCreate)
-router.post("/capabilities/create", CapabilityController.postCreate)
+router.get("/capabilities/create", requireRole("Admin"), CapabilityController.getCreate)
+router.post("/capabilities/create", requireRole("Admin"), CapabilityController.postCreate)
 export default router;

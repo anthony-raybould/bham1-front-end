@@ -19,7 +19,7 @@ export namespace CapabilityController {
             
             validateCreate(createCapabilityRequest);
 
-            await capabilityService.createCapability(createCapabilityRequest);
+            await capabilityService.createCapability(createCapabilityRequest, req.session.token);
 
             res.render('create-capability-success', {
                 capabilityName: createCapabilityRequest.capabilityName.trim()

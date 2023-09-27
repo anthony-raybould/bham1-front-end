@@ -18,19 +18,22 @@ export const capabilityService = {
         }
     },
 
-    async createCapability(createCapabilityRequest : CreateCapabilityRequest): Promise<void> {
+    async createCapability(createCapabilityRequest : CreateCapabilityRequest, token? : string): Promise<void> {
+
+        if (!token) throw new Error("You are not logged in (no token provided)")
 
         try {
-            const response = await axios.post(`${process.env.API_URL}api/capabilities/`, createCapabilityRequest);
+            const response = await axios.post(`${process.env.API_URL}api/capabilities/`, createCapabilityRequest, { 
+                headers: { Authorization: `Bearer ${token}` }
+            });
 
             if (response.status === 200) {
                 return;
             } 
-            if(response.status === 400)
-            {
+            if(response.status === 400) {
                 throw new Error(`Bad request. ${response.data.errorMessage}`);
             }
-            else{
+            else {
                 throw new Error(response.data.errorMessage);
             }
         } catch (e) {
