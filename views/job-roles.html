@@ -20,9 +20,9 @@
     </div>
     <table id="job-roles-table">
         <tr>
-            <th>Role</th>
-            <th>Band</th>
-            <th>Capability</th>
+            <th><a href="/job-roles{{ getSortQueryString('nameOrder') }}">Name {{ getSortHTMLSymbol('nameOrder')|safe }}</a></th>
+            <th><a href="/job-roles{{ getSortQueryString('bandOrder') }}">Band {{ getSortHTMLSymbol('bandOrder')|safe }}</a></th>
+            <th><a href="/job-roles{{ getSortQueryString('capabilityOrder') }}">Capability {{ getSortHTMLSymbol('capabilityOrder')|safe }}</a></th>
             <th>Actions</th>
             <th>Edit</th>
         </tr>
