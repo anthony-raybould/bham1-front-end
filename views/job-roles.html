@@ -11,6 +11,7 @@
             <th><a href="/job-roles{{ getSortQueryString('nameOrder') }}">Name {{ getSortHTMLSymbol('nameOrder')|safe }}</a></th>
             <th><a href="/job-roles{{ getSortQueryString('bandOrder') }}">Band {{ getSortHTMLSymbol('bandOrder')|safe }}</a></th>
             <th><a href="/job-roles{{ getSortQueryString('capabilityOrder') }}">Capability {{ getSortHTMLSymbol('capabilityOrder')|safe }}</a></th>
+            <th>Specification</th>
             <th>Actions</th>
         </tr>
         {% for jobRole in jobRoles %}
@@ -18,7 +19,8 @@
                 <td>{{ jobRole.jobRoleName }}</td>
                 <td>{{ jobRole.band.bandName }}</td>
                 <td>{{ jobRole.capability.capabilityName }}</td>
-                <td><a href="/job-roles/{{ jobRole.jobRoleID }}">View</a></td>
+                <td><a href="/view-job-role/{{ jobRole.jobRoleID }}">View</a></td>
+                <td><a href="/delete-job-role/{{ jobRole.jobRoleID }}">Delete</a></td>
             </tr>
         {% endfor %}
     </table>
