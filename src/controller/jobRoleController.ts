@@ -148,7 +148,7 @@ export namespace JobRoles {
             
             validate(jobRoleToUpdate);
 
-            const updatedJobRoleData = await jobRoleService.editJobRoles(jobRoleToUpdate, id);
+            const updatedJobRoleData = await jobRoleService.editJobRoles(jobRoleToUpdate, id, req.session.token);
             res.redirect('/job-roles')
         } catch (e) {
             res.locals.errorMessage = e;
