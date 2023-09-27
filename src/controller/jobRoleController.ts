@@ -5,6 +5,7 @@ import { bandService } from "../service/bandService";
 import { capabilityService } from "../service/capabilityService";
 import { validateCreate } from "../validator/createJobRoleValidator";
 import { validate } from "../validator/editJobRoleValidator";
+import { decodeURLFilterParams, encodeURLFilterParams } from "./jobRoleFilterController";
 import { JobRoleMatrix } from "../model/jobRoleMatrix";
 
 
@@ -33,14 +34,16 @@ const orderJobRolesByBand = (list: JobRole[], asc: boolean) => {
 
 const getSortQueryString = (req: Request, property: string) => {
     const query = req.query[property] as string;
+    const otherQueryParams = Object.keys(req.query).filter(key => key !== property).map(key => [key, req.query[key] as string]);
+    const urlSearchParams = new URLSearchParams(otherQueryParams);
     
     if (query === "asc") {
-        return `?${new URLSearchParams({ [property]: "desc" }).toString()}`;
+        urlSearchParams.append(property, "desc");
     } else if (query === undefined) {
-        return `?${new URLSearchParams({ [property]: "asc" }).toString()}`;
+        urlSearchParams.append(property, "asc");
     } 
 
-    return '';
+    return Array.from(urlSearchParams).length === 0 ? '' : `?${urlSearchParams.toString()}`;
 };
 
 const getSortHTMLSymbol = (req: Request, property: string) => {
@@ -57,18 +60,42 @@ const getSortHTMLSymbol = (req: Request, property: string) => {
 
 export namespace JobRoles {
     export async function get(req: Request, res: Response): Promise<void> {
-        const nameOrder = req.query?.nameOrder as string;
-        const capabilityOrder = req.query?.capabilityOrder as string;
-        const bandOrder = req.query?.bandOrder as string;
-        
-        if (req.query && Object.keys(req.query).length > 1) {
-            const first = Object.keys(req.query)[0];
-            res.redirect(`/job-roles?${new URLSearchParams({ [first]: req.query[first] as string }).toString()}`);
-            return;
-        }
-        
+        res.locals.filtered = false;
+
         try {
-            const jobRoles: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
+            let jobRoles: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
+            
+            // Filter
+            const { nameFilter, bandFilter, capabilityFilter } = decodeURLFilterParams(req);
+            if (nameFilter) {
+                const lowerCaseFilter = nameFilter.toLowerCase();
+                jobRoles = jobRoles.filter(jobRole => jobRole.jobRoleName.toLowerCase().includes(lowerCaseFilter));
+                res.locals.filtered = true;
+            }
+            if (bandFilter) {
+                jobRoles = jobRoles.filter(jobRole => bandFilter.includes(jobRole.band.bandID));
+                res.locals.filtered = true;
+            }
+            if (capabilityFilter) {
+                jobRoles = jobRoles.filter(jobRole => capabilityFilter.includes(jobRole.capability.capabilityID));
+                res.locals.filtered = true;
+            }
+            
+            res.locals.currentFilterParams = encodeURLFilterParams(nameFilter, bandFilter, capabilityFilter);
+
+            // Sort
+            const mutallyExclusiveKeys = ["nameOrder", "capabilityOrder", "bandOrder"];
+            if (req.query && Object.keys(req.query).filter(key => mutallyExclusiveKeys.includes(key)).length > 1) {
+                // Redirect to first sort order if multiple are defined
+                const first = Object.keys(req.query).filter(key => mutallyExclusiveKeys.includes(key))[0];
+                res.redirect(`/job-roles?${new URLSearchParams({ [first]: req.query[first] as string }).toString()}`);
+                return;
+            }
+
+            const nameOrder = req.query?.nameOrder as string;
+            const capabilityOrder = req.query?.capabilityOrder as string;
+            const bandOrder = req.query?.bandOrder as string;
+        
             if (nameOrder) {
                 orderJobRolesByProperty(jobRoles, "jobRoleName", nameOrder === "asc");
             } else if (capabilityOrder) {
