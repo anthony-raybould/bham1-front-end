@@ -66,8 +66,8 @@ export namespace JobRolesFilter {
         res.locals.capabilityFilter = capabilityFilter || [];
 
         try {
-            const capabilities = await capabilityService.getCapabilities();
-            const bands = await bandService.getBands();
+            const capabilities = await capabilityService.getCapabilities(req.session.token);
+            const bands = await bandService.getBands(req.session.token);
             res.locals.capabilities = capabilities;
             res.locals.bands = bands;
         } catch (e) {

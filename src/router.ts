@@ -1,11 +1,26 @@
 import express from "express";
+import { Auth } from "./controller/authController";
 import { JobRoles } from "./controller/jobRoleController";
 import { JobRolesFilter } from "./controller/jobRoleFilterController";
+
+import { requireLoggedIn, requireLoggedOut, requireRole } from "./middleware/authorisation";
+
 const router = express.Router();
 
-router.get("/job-roles", JobRoles.get)
-router.get("/job-roles/filter", JobRolesFilter.getFilter)
-router.post("/job-roles/filter", JobRolesFilter.postFilter)
-router.get("/job-roles/edit/:id", JobRoles.getEdit)
-router.post("/job-roles/edit/:id", JobRoles.postEdit)
+router.get("/", requireLoggedIn, (_, res) => res.render("index"));
+
+// Auth
+router.get("/login", requireLoggedOut, Auth.getLogin)
+router.post("/login", requireLoggedOut, Auth.postLogin)
+router.get("/register", requireLoggedOut, Auth.getRegister)
+router.post("/register", requireLoggedOut, Auth.postRegister)
+router.get("/logout", requireLoggedIn, Auth.getLogout)
+
+// Job Roles
+router.get("/job-roles", requireRole("Employee"), JobRoles.get)
+router.get("/job-roles/filter", requireRole("Employee"), JobRolesFilter.getFilter)
+router.post("/job-roles/filter", requireRole("Employee"), JobRolesFilter.postFilter)
+router.get("/job-roles/edit/:id", requireRole("Admin"),JobRoles.getEdit)
+router.post("/job-roles/edit/:id",requireRole("Admin"), JobRoles.postEdit)
+
 export default router;

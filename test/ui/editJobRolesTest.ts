@@ -1,11 +1,15 @@
 import webdriver from 'selenium-webdriver';
 import { expect } from 'chai';
 import { By } from 'selenium-webdriver';
+import {buildDriver} from "./buildDriver";
+import { login } from './generateCredentials';
 
 describe('job-roles page', () => {
 
     it('should display page for edit job roles', async () => {
-        const driver = new webdriver.Builder().forBrowser('chrome').build();
+        const driver = buildDriver();
+
+        await login(driver);
 
         await driver.get(process.env.UI_TEST_URL + '/job-roles/edit/1');
         const pageTitle = await driver.findElement(By.css('h1')).getText();
@@ -31,7 +35,17 @@ describe('job-roles page', () => {
       });
     
       it('should submit the form', async function () {
-        const driver = new webdriver.Builder().forBrowser('chrome').build();
+        const driver = buildDriver();
+        await driver.get(process.env.UI_TEST_URL + '/login');
+        const emailInput = await driver.findElement(By.id('email'));
+        const passwordInput = await driver.findElement(By.id('password'));
+        const loginButton = await driver.findElement(By.css('button[type="submit"]'));
+    
+        await emailInput.sendKeys("test@test.com");
+        await passwordInput.sendKeys("test");
+        await loginButton.click();
+
+        // -----
         await driver.get(process.env.UI_TEST_URL + '/job-roles/edit/1');
 
         const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
@@ -51,15 +65,19 @@ describe('job-roles page', () => {
     
         // Submit the form
         await saveButton.click();
-        await driver.quit();
+       await driver.quit();
 
       });
 
           
       it('should get error message display when invalid form', async function () {
-        const driver = new webdriver.Builder().forBrowser('chrome').build();
+        //const driver = new webdriver.Builder().forBrowser('chrome').build();
+        const driver = buildDriver();
+
+        await login(driver);
+
         await driver.get(process.env.UI_TEST_URL + '/job-roles/edit/1');
-    
+
         const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
         const bandSelect = await driver.findElement(By.id('band'));
         const capabilitySelect = await driver.findElement(By.id('capability'));
@@ -80,7 +98,6 @@ describe('job-roles page', () => {
         errorMessageElement.getText().then(function (text) {
           expect(text).to.equal('Share point URL is invalid. Please supply a valid URL.');
       });
-      await driver.quit();
-
+    await driver.quit();
     })
 });

@@ -11,7 +11,7 @@ export namespace JobRoles {
         res.locals.filtered = false;
 
         try {
-            let jobRoles: JobRole[] = await jobRoleService.getJobRoles();
+            let jobRoles: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
             const { nameFilter, bandFilter, capabilityFilter } = decodeURLFilterParams(req);
             if (nameFilter) {
                 const lowerCaseFilter = nameFilter.toLowerCase();
@@ -37,9 +37,9 @@ export namespace JobRoles {
 
     export async function getEdit(req:Request, res:Response) : Promise<void> {
         const { id } = req.params;
-        const jobRolesService: JobRole[] = await jobRoleService.getJobRoles();
-        const bands: JobBand[] = await bandService.getBands();
-        const capabilities: JobCapability[] = await capabilityService.getCapabilities();
+        const jobRolesService: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
+        const bands: JobBand[] = await bandService.getBands(req.session.token);
+        const capabilities: JobCapability[] = await capabilityService.getCapabilities(req.session.token);
 
         const jobRoles = jobRolesService.find(i => i.jobRoleID === parseInt(id));
         

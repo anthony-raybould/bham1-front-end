@@ -2,9 +2,7 @@ import sinon from 'sinon';
 import { jobRoleService } from '../../../src/service/jobRoleService';
 import { JobRoles } from '../../../src/controller/jobRoleController';
 import chai from 'chai';
-import { capabilityService } from '../../../src/service/capabilityService';
-import { bandService } from '../../../src/service/bandService';
-import { bands, capabilities, jobRoles } from './jobRoleTestData';
+import { jobRoles } from './jobRoleTestData';
 
 const expect = chai.expect;
 
