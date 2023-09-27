@@ -13,7 +13,4 @@ export namespace JobRoles {
 
         res.render("job-roles");
     }
-    export async function getIndex(req: Request, res: Response): Promise<void> {
-        res.render("index");
-    }
 }
