@@ -25,7 +25,7 @@ describe('jobRoleService', () => {
         }];
         mock.onGet(`${process.env.API_URL}api/job-roles`).reply(200, jobRoles);
 
-        const result = await jobRoleService.getJobRoles();
+        const result = await jobRoleService.getJobRoles('token');
 
         expect(result).to.deep.equal(jobRoles);
     });
@@ -35,7 +35,7 @@ describe('jobRoleService', () => {
         mock.onGet(`${process.env.API_URL}api/job-roles`).reply(500);
 
         try {
-            await jobRoleService.getJobRoles();
+            await jobRoleService.getJobRoles('token');
             expect.fail('Expected an error to be thrown');
         } catch (e) {
             expect(e.message).to.equal('Failed to get job roles');
@@ -67,13 +67,151 @@ describe('jobRoleService', () => {
             responsibilities: 'Test responsibilities',
             sharePoint: 'Test sharepoint'
         };
-        mock.onPut(`${process.env.API_URL}api/job-roles/edit/1`, jobRoles).reply(500);
+        mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(500);
+    
+        try {
+            await jobRoleService.editJobRoles(jobRoles,1);
+            expect.fail('Expected an error to be thrown');
+        } catch (e) {
+            expect(e.message).to.contain('Request failed with status code 500');
+        }
+    });
+
+        it('should throw BadRequest error if the API return 401', async () => {
+        const mock = new MockAdapter(axios);
+        const jobRoles: JobRoleToUpdate = { 
+            jobRoleName: 'Test',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+
+        };
+        mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(401, "Bad request");
+
+        try {
+            await jobRoleService.editJobRoles(jobRoles,1);
+        } catch (e) {
+            expect(e.message).to.contain('Request failed with status code 401');
+        }
+    });
+    it('should throw an error if no token is provided', async () => {
+        try {
+            await jobRoleService.getJobRoles(undefined);
+            expect.fail('Expected an error to be thrown');
+        } catch (e) {
+            expect(e.message).to.equal('You are not logged in (no token provided)');
+        }
+    });
+    it('should return 200 and ID of updated job', async () => {
+        const mock = new MockAdapter(axios);
+        const jobRoles: JobRoleToUpdate = { 
+            jobRoleName: 'Test',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+        };
+        mock.onPut(`${process.env.API_URL}api/job-roles/1`).reply(200, 1);
+
+        const result = await jobRoleService.editJobRoles(jobRoles, 1);
+
+        expect(result).to.deep.equal(1);
+    });
+    it('should throw an error if the API call fails', async () => {
+        const mock = new MockAdapter(axios);
+        const jobRoles: JobRoleToUpdate = { 
+            jobRoleName: 'Test',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+        };
+        mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(500);
 
         try {
             await jobRoleService.editJobRoles(jobRoles,1);
             expect.fail('Expected an error to be thrown');
         } catch (e) {
-            expect(e.message).to.equal('Failed to update job role');
+            expect(e.message).to.contain('Request failed with status code 500');
+        }
+    });
+
+        it('should throw BadRequest error if the API return 401', async () => {
+        const mock = new MockAdapter(axios);
+        const jobRoles: JobRoleToUpdate = { 
+            jobRoleName: 'Test',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+
+        };
+        mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(401, "Bad request");
+
+    it('should return job role', async () => {
+        const mock = new MockAdapter(axios);
+        const jobRole: JobRole = { 
+            jobRoleID: 1,
+            jobRoleName: 'Test',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+        };
+        mock.onGet(`${process.env.API_URL}api/job-roles/1`).reply(200, jobRole);
+
+        const result = await jobRoleService.getJobRole(1);
+        expect(result).to.deep.equal(jobRole);
+    });
+
+    it('should throw an error if the API call fails', async () => {
+        const mock = new MockAdapter(axios);
+        mock.onGet(`${process.env.API_URL}api/job-roles/0`).reply(500);
+
+        try {
+            await jobRoleService.getJobRole(0);
+            expect.fail('Expected an error to be thrown');
+        } catch (e) {
+            expect(e.message).to.equal('Failed to get job role');
+        }
+    });
+
+    it('should delete a job role when valid id provided', async () => {
+        const mock = new MockAdapter(axios);
+        mock.onDelete(`${process.env.API_URL}api/job-roles/1`).reply(200, 1);
+
+        const result = await jobRoleService.deleteJobRole(1);
+        expect(result).to.equal(1);
+    
+    });
+
+    it('should return error and not delete when invalid id is provided', async () => {
+        const mock = new MockAdapter(axios);
+        var error = ""
+
+        mock.onDelete(`${process.env.API_URL}api/job-roles/-1`).reply(500);
+        
+        try {
+            await jobRoleService.deleteJobRole(-1);
+        } 
+        catch (e) {
+            error = (e as Error).message
+        }
+        
+        expect(error).to.equal('Failed to delete job role')
+    
+    }); 
+
+        try {
+            await jobRoleService.editJobRoles(jobRoles,1);
+        } catch (e) {
+            expect(e.message).to.contain('Request failed with status code 401');
         }
     });
     it('should return 200 and ID of the created job role', async () => {
