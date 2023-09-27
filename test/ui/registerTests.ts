@@ -14,7 +14,7 @@ describe('register page', async () => {
     });
     
     afterEach(async () => {
-        //await driver.quit();
+        await driver.quit();
     });
 
     it('should display the register form', async () => {
