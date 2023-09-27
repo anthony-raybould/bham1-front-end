@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import type { JobBand, JobCapability, JobRole, JobRoleToUpdate } from "../model/jobRole";
 import { jobRoleService } from "../service/jobRoleService";
+import { JobRoleMatrix } from "../model/jobRoleMatrix";
 import { bandService } from "../service/bandService";
 import { capabilityService } from "../service/capabilityService";
 import { validate } from "../validator/editJobRoleValidator";
@@ -104,8 +105,7 @@ export namespace JobRoles {
         } catch (e) {
             res.locals.errorMessage = e;
         }
-        
-        res.render("delete-job-role");
+                res.render("delete-job-role");
     }
 
     export async function deleteJobRole(req: Request, res: Response): Promise<void> {
@@ -157,6 +157,18 @@ export namespace JobRoles {
                 jobRoles: jobRoleToUpdate
             });
         }
+    }
+
+    export async function getJobRoleMatrix(req: Request, res: Response): Promise<void> {
+        try {
+            // Get a 3D array of roles (by band, then capability, then roles matching)
+            const matrix : JobRoleMatrix = await jobRoleService.getJobRoleMatrix(req.session.token);
+            res.locals.matrix = matrix;
+        } catch (e) {
+            res.locals.errorMessage = e;
+        }
+        
+        res.render("job-role-matrix");
     }
 
 }
