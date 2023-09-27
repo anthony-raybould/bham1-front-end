@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { JobBand, JobCapability, JobRole, JobRoleToUpdate } from "../model/jobRole";
+import type { JobBand, JobCapability, JobRole, JobRoleToCreate, JobRoleToUpdate } from "../model/jobRole";
 import { JobRoleMatrix } from "../model/jobRoleMatrix";
 import { capabilityService } from "./capabilityService";
 import { bandService } from "./bandService";
@@ -19,9 +19,11 @@ export const jobRoleService = {
         }
     },
 
-    async getJobRole(id: number): Promise<JobRole> {
+    async getJobRole(id: number, token?: string): Promise<JobRole> {
         try {
-            const response = await axios.get(process.env.API_URL + "api/job-roles/" + id);
+            const response = await axios.get(process.env.API_URL + "api/job-roles/" + id, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             if (response.status === 200) {
                 return response.data
             }
@@ -32,9 +34,11 @@ export const jobRoleService = {
         }
     },
 
-    async deleteJobRole(id: number): Promise<void>{
+    async deleteJobRole(id: number, token?: string): Promise<void>{
         try {
-            const response = await axios.delete(process.env.API_URL + "api/job-roles/" + id);
+            const response = await axios.delete(process.env.API_URL + "api/job-roles/" + id, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             if (response.status === 200) {
                 return response.data
             }
@@ -57,6 +61,19 @@ export const jobRoleService = {
         }
         else{
             throw new Error(response.data.errorMessage)
+        }
+    }, 
+    async createJobRole(jobRole: JobRoleToCreate, token?: string): Promise<number> {
+        try {
+            const response = await axios.post(`${process.env.API_URL}api/job-roles/`, jobRole, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.status === 200) {
+                return response.data;
+            }
+            throw new Error('Create failed');
+        } catch (e) {
+            throw new Error(e.response.data);
         }
     },
 

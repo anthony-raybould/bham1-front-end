@@ -19,10 +19,12 @@ router.get("/logout", requireLoggedIn, Auth.getLogout)
 router.get("/job-roles", requireRole("Employee"), JobRoles.get)
 router.get("/job-roles/matrix", requireRole("Employee"), JobRoles.getJobRoleMatrix)
 router.get("/job-roles/edit/:id", requireRole("Admin"),JobRoles.getEdit)
-router.post("/job-roles/edit/:id",requireRole("Admin"), JobRoles.postEdit)
-router.get("/view-job-role/:id", JobRoles.getJobRoleById)
-router.get("/delete-job-role/:id", JobRoles.getJobRoleByIdForDelete)
-router.post("/delete-job-role/:id", JobRoles.deleteJobRole)
+router.post("/job-roles/edit/:id", requireRole("Admin"), JobRoles.postEdit)
+router.get("/view-job-role/:id", requireRole("Employee"), JobRoles.getJobRoleById)
+router.get("/delete-job-role/:id", requireRole("Admin"), JobRoles.getJobRoleByIdForDelete)
+router.post("/delete-job-role/:id", requireRole("Admin"), JobRoles.deleteJobRole)
+router.get("/create-job-role", requireRole("Admin"), JobRoles.getCreate)
+router.post("/create-job-role", requireRole("Admin"), JobRoles.postCreate)
 
 
 // Index

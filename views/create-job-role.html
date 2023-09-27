@@ -1,0 +1,47 @@
+{% extends "templates/master.html" %}
+
+{% block pageTitle %}
+    Create Job Role
+{% endblock %}
+
+{% block content %}
+{% if errormessage %}
+    <div class="alert alert-danger" role="alert">
+        {{ errormessage }}
+    </div>
+    {% endif %}
+    <form action="/create-job-role" method="POST">
+
+        <label for="jobRoleName" style="font-weight: bold;">Role</label>
+        <input type="text" id="jobRoleName" name="jobRoleName" class="form-control" value="{{ jobRoleName }}" required><br>
+
+        <label for="band" style="font-weight: bold;">Band</label>
+        <select id="band" class="form-control" name="band" required>
+            {% for band in bands %}
+                <option value="{{ band.bandID }}" {% if band.bandID == band %} selected {% endif %}>
+                    {{ band.bandName }}
+                </option>
+            {% endfor %}
+        </select> <br>
+
+        <label for="capability" style="font-weight: bold;">Capability</label>
+        <select id="capability" class="form-control" name="capability" required>
+            {% for capability in capabilities %}
+                <option value="{{ capability.capabilityID }}" {% if capability.capabilityID == capability %} selected {% endif %}>
+                    {{ capability.capabilityName }}
+                </option>
+            {% endfor %}
+        </select><br>
+        <label for="jobSpecSummary" style="font-weight: bold;">Job Specification Summary</label>
+        <textarea id="jobSpecSummary" name="jobSpecSummary" class="form-control" required class="expandable-input">{{jobSpecSummary}}</textarea><br>
+
+        <label for="responsibilities" style="font-weight: bold;">Responsibilities</label>
+        <textarea id="responsibilities"  name="responsibilities" class="form-control" required class="expandable-input">{{responsibilities}}</textarea><br>
+
+        <label for="sharePoint" style="font-weight: bold;">SharePoint</label>
+        <input id="sharePoint"  name="sharePoint" value="{{ sharePoint}}" class="form-control" required class="expandable-input"></input><br>
+
+        <button type="submit" class="btn btn-primary" style="margin-bottom: 10px;">Create</button>
+    </form>
+</div>
+{% endblock %}

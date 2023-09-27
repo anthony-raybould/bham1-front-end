@@ -6,6 +6,7 @@
 
 {% block content %}
     <p>Current job roles at Kainos</p>
+    <a href="/create-job-role" class="white btn btn-primary" style="margin-bottom: 10px;">Create</a>
     <table id="job-roles-table">
         <tr>
             <th><a href="/job-roles{{ getSortQueryString('nameOrder') }}">Name {{ getSortHTMLSymbol('nameOrder')|safe }}</a></th>

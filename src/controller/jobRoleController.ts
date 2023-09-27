@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
 import type { JobBand, JobCapability, JobRole, JobRoleToUpdate } from "../model/jobRole";
 import { jobRoleService } from "../service/jobRoleService";
-import { JobRoleMatrix } from "../model/jobRoleMatrix";
 import { bandService } from "../service/bandService";
 import { capabilityService } from "../service/capabilityService";
+import { validateCreate } from "../validator/createJobRoleValidator";
 import { validate } from "../validator/editJobRoleValidator";
+import { JobRoleMatrix } from "../model/jobRoleMatrix";
 
 
 const orderJobRolesByProperty = (list: JobRole[], property: keyof JobRole, asc: boolean) => {
@@ -88,7 +89,7 @@ export namespace JobRoles {
     export async function getJobRoleById(req: Request, res: Response): Promise<void> {
         try {
             const id: number = parseInt(req.params.id)
-            const jobRole: JobRole = await jobRoleService.getJobRole(id);
+            const jobRole: JobRole = await jobRoleService.getJobRole(id, req.session.token);
             res.locals.jobRole = jobRole;
         } catch (e) {
             res.locals.errorMessage = e;
@@ -100,7 +101,7 @@ export namespace JobRoles {
     export async function getJobRoleByIdForDelete(req: Request, res: Response): Promise<void> {
         try {
             const id: number = parseInt(req.params.id)
-            const jobRole: JobRole = await jobRoleService.getJobRole(id);
+            const jobRole: JobRole = await jobRoleService.getJobRole(id, req.session.token);
             res.locals.jobRole = jobRole;
         } catch (e) {
             res.locals.errorMessage = e;
@@ -111,7 +112,7 @@ export namespace JobRoles {
     export async function deleteJobRole(req: Request, res: Response): Promise<void> {
         try {
             const id: number = parseInt(req.params.id)
-            await jobRoleService.deleteJobRole(id);
+            await jobRoleService.deleteJobRole(id, req.session.token);
             res.redirect("/job-roles");
         } catch (e) {
             res.locals.errorMessage = e;
@@ -159,6 +160,43 @@ export namespace JobRoles {
         }
     }
 
+    export async function getCreate(req:Request, res:Response): Promise<void> {
+        try {
+            const bands: JobBand[] = await bandService.getBands(req.session.token);
+            const capabilities: JobCapability[] = await capabilityService.getCapabilities(req.session.token);
+            res.render("create-job-role", {bands, capabilities}); 
+        } catch (e) {
+            res.locals.errorMessage = 'Failed to load create job role page';
+            res.render("create-job-role"); 
+        }
+    }
+
+    export async function postCreate(req: Request, res: Response): Promise<void> {
+        let id: Number 
+        const { jobRoleName, band, capability, jobSpecSummary, responsibilities, sharePoint } = req.body;
+        const jobRoleToCreate: JobRoleToUpdate = {
+            jobRoleName: jobRoleName,
+            jobSpecSummary:jobSpecSummary ,
+            band: band,
+            capability: capability,
+            responsibilities: responsibilities,
+            sharePoint: sharePoint
+        }
+
+        try {
+            validateCreate(jobRoleToCreate);
+
+            id = await jobRoleService.createJobRole(jobRoleToCreate, req.session.token)
+            res.redirect('/job-roles')
+        } catch (e) {
+            const bands: JobBand[] = await bandService.getBands(req.session.token);
+            const capabilities: JobCapability[] = await capabilityService.getCapabilities(req.session.token);
+
+            console.error(e)
+            res.locals.errorMessage = e;
+            res.render('create-job-role', {...req.body, bands, capabilities})
+        }
+    }
     export async function getJobRoleMatrix(req: Request, res: Response): Promise<void> {
         try {
             // Get a 3D array of roles (by band, then capability, then roles matching)
