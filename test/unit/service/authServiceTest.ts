@@ -32,7 +32,6 @@ describe('authService', () => {
             try {
                 await authService.login(loginData);
             } catch (error) {
-                console.log(error.message)
                 expect(error.message).to.equal('Your email or password is incorrect');
             }
         });
