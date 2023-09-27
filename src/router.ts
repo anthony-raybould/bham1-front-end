@@ -4,7 +4,7 @@ import { JobRoles } from "./controller/jobRoleController";
 import { JobRolesFilter } from "./controller/jobRoleFilterController";
 import { Index } from "./controller/indexController";
 import { requireLoggedIn, requireLoggedOut, requireRole } from "./middleware/authorisation";
-
+import { CapabilityController } from "./controller/capabilityController";
 const router = express.Router();
 
 
@@ -27,8 +27,7 @@ router.post("/job-roles/filter", requireRole("Employee"), JobRolesFilter.postFil
 router.get("/job-roles/matrix", requireRole("Employee"), JobRoles.getJobRoleMatrix)
 // Job Roles -- Edit
 router.get("/job-roles/edit/:id", requireRole("Admin"),JobRoles.getEdit)
-router.post("/job-roles/edit/:id", requireRole("Admin"), JobRoles.postEdit)
-// Job Roles -- Delete
+router.post("/job-roles/edit/:id", requireRole("Admin"), JobRoles.postEdit)// Job Roles -- Delete
 router.get("/delete-job-role/:id", requireRole("Admin"), JobRoles.getJobRoleByIdForDelete)
 router.post("/delete-job-role/:id", requireRole("Admin"), JobRoles.deleteJobRole)
 // Job Roles -- Create
@@ -38,4 +37,8 @@ router.post("/create-job-role", requireRole("Admin"), JobRoles.postCreate)
 // Index
 router.get("/", requireLoggedIn, Index.getIndex);
 
+
+router.get("/capabilities/create", requireRole("Admin"), CapabilityController.getCreate)
+router.post("/capabilities/create", requireRole("Admin"), CapabilityController.postCreate)
 export default router; 
+

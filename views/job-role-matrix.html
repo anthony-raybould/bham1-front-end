@@ -7,10 +7,10 @@
 {% block content %}
 
     {% if matrix.bands | length == 0 or matrix.capabilities | length == 0 %}
-        <h5>There are either no bands or no capabilities, thus matrix cannot be displayed. </h5>
+        <h5>There are either no bands or no capabilities, thus matrix cannot be displayed.</h5>
     {% else %}
         <p>A matrix of the job roles belonging to each band (row) and capability (column).</p>
-        
+
         <table id="matrix-table" class="table table-bordered">
             <tr>
                 <th scope="col" class="align-middle text-center">Band</th>

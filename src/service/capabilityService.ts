@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { JobCapability } from "../model/jobRole";
+import { CreateCapabilityRequest } from "../model/createCapabilityRequest";
 
 export const capabilityService = {
     async getCapabilities(token?: string): Promise<JobCapability[]> {
@@ -14,6 +15,27 @@ export const capabilityService = {
         }
         catch (e) {
             throw new Error("Failed to get job capabilities")
+        }
+    },
+
+    async createCapability(createCapabilityRequest : CreateCapabilityRequest, token? : string): Promise<void> {
+
+        if (!token) throw new Error("You are not logged in (no token provided)")
+
+        try {
+            const response = await axios.post(`${process.env.API_URL}api/capabilities/`, createCapabilityRequest, { 
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (response.status === 200) {
+                return;
+            } 
+            else {
+                throw new Error(response.data.errorMessage);
+            }
+        } catch (e) {
+            console.error(e);
+            throw new Error("Failed creating capability");
         }
     }
 }
