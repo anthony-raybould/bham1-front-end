@@ -36,11 +36,6 @@ describe('authService', () => {
                 expect(error.message).to.equal('Your email or password is incorrect');
             }
         });
-      try {
-        await authService.login(loginData);
-      } catch (error) {
-        expect(error.message).to.equal('Your email or password is incorrect');
-      }
     });
 
         it('should handle server error', async () => {
@@ -53,7 +48,6 @@ describe('authService', () => {
                 expect(error.message).to.equal('Internal server error');
             }
         });
-    });
 
     describe('whoami', () => {
         it('should identify user successfully', async () => {
