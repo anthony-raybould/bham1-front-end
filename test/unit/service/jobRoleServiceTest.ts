@@ -156,11 +156,42 @@ describe('jobRoleService', () => {
         };
         mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(401, "Bad request");
 
+    it('should return job role', async () => {
+        const mock = new MockAdapter(axios);
+        const jobRole: JobRole = { 
+            jobRoleID: 1,
+            jobRoleName: 'Test',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+        };
+        mock.onGet(`${process.env.API_URL}api/job-roles/1`).reply(200, jobRole);
+
+        const result = await jobRoleService.getJobRole(1);
+        expect(result).to.deep.equal(jobRole);
+    });
+
+    it('should throw an error if the API call fails', async () => {
+        const mock = new MockAdapter(axios);
+        mock.onGet(`${process.env.API_URL}api/job-roles/0`).reply(500);
+
         try {
-            await jobRoleService.editJobRoles(jobRoles,1);
+            await jobRoleService.getJobRole(0);
+            expect.fail('Expected an error to be thrown');
         } catch (e) {
-            expect(e.message).to.contain('Request failed with status code 401');
+            expect(e.message).to.equal('Failed to get job role');
         }
+    });
+
+    it('should delete a job role when valid id provided', async () => {
+        const mock = new MockAdapter(axios);
+        mock.onDelete(`${process.env.API_URL}api/job-roles/1`).reply(200, 1);
+
+        const result = await jobRoleService.deleteJobRole(1);
+        expect(result).to.equal(1);
+    
     });
 
     it('(getJobRoleMatrix) should throw an error if getJobRoles throws error', async () => {
@@ -341,8 +372,7 @@ describe('jobRoleService', () => {
             bandID : 4,
             bandName: "Test A"
         }];
-        
-        const capabilities = [{
+                    const capabilities = [{
             capabilityID : 1,
             capabilityName: "Capability A"
         }];
@@ -376,4 +406,4 @@ describe('jobRoleService', () => {
         expect(matrix.jobRolesGrid[0][0]).to.deep.equal(jobRoles);
 
     });
-});
+})});
