@@ -26,6 +26,11 @@
             <th>Actions</th>
             <th>Edit</th>
         </tr>
+        {% if jobRoles|length == 0 %}
+            <tr>
+                <td class="text-center" colspan="5">There are no job roles {% if filtered %}which match your query{% else %}to display{% endif %}.</td>
+            </tr>
+        {% endif %}
         {% for jobRole in jobRoles %}
             <tr>
                 <td>{{ jobRole.jobRoleName }}</td>
