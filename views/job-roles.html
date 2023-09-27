@@ -12,7 +12,8 @@
             <th><a href="/job-roles{{ getSortQueryString('bandOrder') }}">Band {{ getSortHTMLSymbol('bandOrder')|safe }}</a></th>
             <th><a href="/job-roles{{ getSortQueryString('capabilityOrder') }}">Capability {{ getSortHTMLSymbol('capabilityOrder')|safe }}</a></th>
             <th>Specification</th>
-            <th>Actions</th>
+            <th colspan="2">Actions</th>
+            <!-- <th>Edit</th> -->
         </tr>
         {% for jobRole in jobRoles %}
             <tr>
@@ -21,6 +22,7 @@
                 <td>{{ jobRole.capability.capabilityName }}</td>
                 <td><a href="/view-job-role/{{ jobRole.jobRoleID }}">View</a></td>
                 <td><a href="/delete-job-role/{{ jobRole.jobRoleID }}">Delete</a></td>
+                <td><a href="/job-roles/edit/{{jobRole.jobRoleID}}">Edit</td>
             </tr>
         {% endfor %}
     </table>
