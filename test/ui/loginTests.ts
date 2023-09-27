@@ -1,19 +1,25 @@
-import {By} from "selenium-webdriver"
-const _chai = require('chai');
-import * as dotenv from 'dotenv';
-import { Dirent } from 'fs';
+import webdriver, { By } from 'selenium-webdriver';
+import _chai from 'chai';
 import { buildDriver } from './buildDriver';
 
 describe('Login Page UI Tests', async () => {
+  let driver: webdriver.WebDriver;
+
+  beforeEach(async () => {
+      driver = buildDriver();
+  });
+
+  afterEach(async () => {
+      await driver.quit();
+  });
+
   it('should display the login form', async () => {
-    var driver = buildDriver();
     await driver.get(process.env.UI_TEST_URL + '/login');
     const form = await driver.findElement(By.tagName('form'));
     _chai.expect(await form.isDisplayed()).to.be.true;
   });
 
   it('should submit the login form with valid credentials', async () => {
-    var driver = buildDriver();
     await driver.get(process.env.UI_TEST_URL + '/login');
     const emailInput = await driver.findElement(By.id('email'));
     const passwordInput = await driver.findElement(By.id('password'));
@@ -24,7 +30,6 @@ describe('Login Page UI Tests', async () => {
     await loginButton.click();
   });
   it("should display error when invalid creds", async () => {
-    var driver = buildDriver();
     await driver.get(process.env.UI_TEST_URL + '/login');
     const emailInput = await driver.findElement(By.id('email'))
     const passwordInput = await driver.findElement(By.id('password'));
