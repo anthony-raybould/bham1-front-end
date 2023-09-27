@@ -6,7 +6,7 @@ import { requireLoggedIn, requireLoggedOut, requireRole, user } from "./middlewa
 
 const router = express.Router();
 
-router.get("/", requireLoggedIn, (_, res) => res.render("index"));
+
 
 // Auth
 router.get("/login", requireLoggedOut, Auth.getLogin)
@@ -22,6 +22,6 @@ router.get("/delete-job-role/:id", JobRoles.getJobRoleByIdForDelete)
 router.post("/delete-job-role/:id", JobRoles.deleteJobRole)
 
 // Index
-router.get("/", Index.getIndex)
+router.get("/", requireLoggedIn, Index.getIndex);
 
 export default router; 
