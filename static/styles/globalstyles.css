@@ -32,7 +32,21 @@ footer {
 
 .header {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+}
+
+.header > #navbar-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+#navbar-container > a {
+    color: white;
+    font-weight: 700;
 }
 
 #kainos-logo {
@@ -58,4 +72,9 @@ th, td {
 a, a:visited {
     color: var(--kainos-blue);
     text-decoration: none;
+}
+
+.btn-blue {
+    background-color: var(--kainos-blue);
+    color: white;
 }

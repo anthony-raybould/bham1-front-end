@@ -14,15 +14,28 @@
 <body>
     <header class="bg-kainos-blue text-light">
         <div class="container header">
-            <a href="/" alt="Link to home page">
-                <img id="kainos-logo" src="/static/images/kainos-logo.png" alt="Kainos logo" height="75">
-            </a>
+            <div id="logo-container">
+                <a href="/" alt="Link to home page">
+                    <img id="kainos-logo" src="/static/images/kainos-logo.png" alt="Kainos logo" height="75">
+                </a>
+            </div>
+            {% if user %}
+            <div id="navbar-container">
+                <span>Logged in as {{ user.email }} ({{ user.role.roleName }})</span>
+                <a href="/logout">Logout</a>
+            </div>
+            {% endif %}
+            {% if not user %}
+            <div id="navbar-container">
+                <a href="/login">Login</a>
+            </div>
+            {% endif %}
         </div>
     </header>
     <main class="container mt-4">
         <h1>{{ pageTitle }}</h1>
         {% if errorMessage %}
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger" role="alert" id="errorMessage">
             {{ errorMessage }}
         </div>
         {% endif %}

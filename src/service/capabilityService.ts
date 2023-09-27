@@ -3,9 +3,12 @@ import type { JobCapability } from "../model/jobRole";
 import { CreateCapabilityRequest } from "../model/createCapabilityRequest";
 
 export const capabilityService = {
-    async getCapabilities(): Promise<JobCapability[]> {
+    async getCapabilities(token?: string): Promise<JobCapability[]> {
         try {
-            const response = await axios.get(process.env.API_URL + "api/capabilities");
+            if (!token) throw new Error("You are not logged in (no token provided)")
+            const response = await axios.get(process.env.API_URL + "api/capabilities", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             if (response.status === 200) {
                 return response.data
             }

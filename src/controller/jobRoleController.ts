@@ -8,7 +8,7 @@ import { validate } from "../validator/editJobRoleValidator";
 export namespace JobRoles {
     export async function get(req: Request, res: Response): Promise<void> {
         try {
-            const jobRoles: JobRole[] = await jobRoleService.getJobRoles();
+            const jobRoles: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
             res.locals.jobRoles = jobRoles;
         } catch (e) {
             res.locals.errorMessage = e;
@@ -18,9 +18,9 @@ export namespace JobRoles {
 
     export async function getEdit(req:Request, res:Response) : Promise<void> {
         const { id } = req.params;
-        const jobRolesService: JobRole[] = await jobRoleService.getJobRoles();
-        const bands: JobBand[] = await bandService.getBands();
-        const capabilities: JobCapability[] = await capabilityService.getCapabilities();
+        const jobRolesService: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
+        const bands: JobBand[] = await bandService.getBands(req.session.token);
+        const capabilities: JobCapability[] = await capabilityService.getCapabilities(req.session.token);
 
         const jobRoles = jobRolesService.find(i => i.jobRoleID === parseInt(id));
         

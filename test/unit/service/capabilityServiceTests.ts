@@ -18,10 +18,11 @@ describe('capabilityService', () => {
         }];
         mock.onGet(`${process.env.API_URL}api/capabilities`).reply(200, JobCapability);
 
-        const result = await capabilityService.getCapabilities();
-
+        const result = await capabilityService.getCapabilities("token");
+                
         expect(result).to.deep.equal(JobCapability);
     });
+
     it('should throw error on non 200 response', async () => {
         const mock = new MockAdapter(axios);
         mock.onGet(`${process.env.API_URL}api/capabilities`).reply(400, "Error");
