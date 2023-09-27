@@ -3,8 +3,35 @@ import { jobRoleService } from '../../../src/service/jobRoleService';
 import { JobRoles } from '../../../src/controller/jobRoleController';
 import chai from 'chai';
 import { jobRoles } from './jobRoleTestData';
+import request from 'supertest'
+import express from 'express';
+import router from '../../../src/router';
+import { bandService } from '../../../src/service/bandService';
+import { capabilityService } from '../../../src/service/capabilityService';
+import expressSession from 'express-session';
+import { JobRole } from '../../../src/model/jobRole';
 
 const expect = chai.expect;
+
+const app = express();
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(expressSession({ secret: "test", resave: true, cookie: { maxAge: 1000 * 60 * 60 * 24 } }))
+
+app.all('*', (req, res, next) => {
+    req.session.token = 'test';
+    req.session.user = {
+        userID: 1,
+        email: 'test@test.com',
+        role: {
+            roleID: 1,
+            roleName: 'Admin'
+        }
+    };
+    next();
+});
+
+app.use(router);
 
 const callAndAssertJobRolesGetWithQuery = async (parameter: string, order: string): Promise<any> => {
     sinon.stub(jobRoleService, 'getJobRoles').resolves([...jobRoles]);
@@ -142,4 +169,509 @@ describe('jobRoleController', () => {
         expect(res.redirect.calledWith('/job-roles?nameOrder=asc')).to.be.true;
     });
     
+    it('should render view-job-roles.html template with a job role', async () => {
+        sinon.stub(jobRoleService, 'getJobRole').resolves({ 
+            jobRoleID: 1,
+            jobRoleName: 'Test job role',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+        });
+
+        request(app)
+            .get('/view-job-role/1') 
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('Test summary');
+            }
+        );
+    });
+
+    it('should render view-job-role.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRole').throws(new Error('Test error'));
+
+        request(app)
+            .get('/view-job-role/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('Test error');
+            }
+        );
+    }); 
+
+    it('should render delete-job-roles.html template with a job role to delete', async () => {
+        sinon.stub(jobRoleService, 'getJobRole').resolves({ 
+            jobRoleID: 1,
+            jobRoleName: 'Test job role',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+        });
+
+        request(app)
+            .get('/delete-job-role/1') 
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('Test band');
+            }
+        );
+    });
+
+    it('should render delete-job-role.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRole').throws(new Error('Test error'));
+
+        request(app)
+            .get('/delete-job-role/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('Test error');
+            }
+        );
+    }); 
+    it('should render job-roles/edit.html template', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
+        sinon.stub(bandService, 'getBands').resolves([]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([])
+
+        request(app)
+            .get('/job-roles/edit/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('Edit Job Role');
+            }
+        );
+    });
+    it('should render job-roles/edit.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Test error'));
+        request(app)
+            .get('/job-roles/edit/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('TypeError');
+            }
+        );
+    });
+    it('should render job-roles/edit.html template with form', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').resolves([{ 
+            jobRoleID: 1,
+            jobRoleName: 'Test job role',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+        }]);
+        sinon.stub(bandService, 'getBands').resolves([{ 
+            bandID: 1, bandName: 'Test band'        
+        }
+        ]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([{
+            capabilityID: 1, capabilityName: "Test capability"
+        }])
+
+        request(app)
+            .get('/job-roles')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('Edit Job Role');
+                expect(res.text).to.contain('Test band');
+                expect(res.text).to.contain('Text capability')
+                expect(res.text).to.contain('Test job role')
+            }
+        );
+    });
+    it('should render create-job-role.html template', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
+        sinon.stub(bandService, 'getBands').resolves([]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([])
+
+        request(app)
+            .get('/create-job-role')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<label for="jobRoleName" style="font-weight: bold;">Role</label>');
+    });
+    it('should render job-roles/edit.html template with form', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').resolves([{ 
+            jobRoleID: 1,
+            jobRoleName: 'Test job role',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+        }]);
+        sinon.stub(bandService, 'getBands').resolves([{ 
+            bandID: 1, bandName: 'Test band'        
+        }
+        ]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([{
+            capabilityID: 1, capabilityName: "Test capability"
+        }])
+
+        request(app)
+            .get('/job-roles')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('Edit Job Role');
+                expect(res.text).to.contain('Test band');
+                expect(res.text).to.contain('Text capability')
+                expect(res.text).to.contain('Test job role')
+            }
+        );
+    });
+    it('should render job-roles/edit.html template', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
+        sinon.stub(bandService, 'getBands').resolves([]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([])
+
+        request(app)
+            .get('/job-roles/edit/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<h2>Edit Job Role</h2>');
+            }
+        );
+    });
+    it('should render job-roles/edit.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Test error'));
+
+        request(app)
+            .get('/job-roles/edit/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<h1>Job Roles</h1>');
+                expect(res.text).to.contain('Test error');
+            }
+        );
+    });
+
+    it('should render job-role-matrix.html template with no job roles', async () => {
+        sinon.stub(jobRoleService, 'getJobRoleMatrix').resolves({
+            bands: [{bandID: 6, bandName: "Associate"}, {bandID: 5, bandName: "Trainee"}],
+            capabilities: [{capabilityID: 1, capabilityName: "Engineering"}, {capabilityID: 2, capabilityName: "Cyber Security"}],
+            jobRolesGrid: [[[], []], [[], []]]
+        });
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain("<h1>Job Roles Matrix</h1>");
+                expect(res.text).to.contain("Engineering");
+                expect(res.text).to.contain("Trainee")
+            }
+        );
+    });
+
+    it('should render job-role-matrix.html template with no bands', async () => {
+        sinon.stub(jobRoleService, 'getJobRoleMatrix').resolves({
+            bands: [],
+            capabilities: [{capabilityID: 1, capabilityName: "Engineering"}],
+            jobRolesGrid: []
+        });
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain("<h5>There are either no bands or no capabilities, thus matrix cannot be displayed.</h5>");
+            }
+        );
+    });
+
+    it('should render job-role-matrix.html template with no capabilities', async () => {
+        sinon.stub(jobRoleService, 'getJobRoleMatrix').resolves({
+            bands: [{bandID: 6, bandName: "Associate"}],
+            capabilities: [],
+            jobRolesGrid: [[]]
+        });
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain("<h5>There are either no bands or no capabilities, thus matrix cannot be displayed.</h5>")
+            }
+        );
+    });
+
+    it('should render job-role-matrix.html template with job roles', async () => {
+
+        const associateBand = {bandID: 6, bandName: "Associate"}
+        const engineeringCapability = {capabilityID: 1, capabilityName: "Engineering"}
+        const jobRole : JobRole = {
+            jobRoleID: 9, 
+            jobRoleName: "Associate Software Engineer", 
+            jobSpecSummary: "", 
+            band: associateBand, 
+            capability: engineeringCapability,
+            responsibilities: "",
+            sharePoint: ""
+        }
+
+        sinon.stub(jobRoleService, 'getJobRoleMatrix').resolves({
+            bands: [associateBand, {bandID: 5, bandName: "Trainee"}],
+            capabilities: [engineeringCapability, {capabilityID: 2, capabilityName: "Cyber Security"}],
+            jobRolesGrid: [[[jobRole], []], [[], []]]
+        });
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain(jobRole.jobRoleName);
+            }
+        );
+    });
+
+    it('should render create-job-role.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Test error'));
+
+        request(app)
+            .get('/create-job-role')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<label for="jobRoleName" style="font-weight: bold;">Role</label>');
+            }
+        );
+    });
+    it('should render job-role-matrix.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Test error'));
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain("<h1>Job Roles Matrix</h1>");
+                expect(res.text).to.contain('Test error');
+            }
+        );
+    });
+
+    it('should render create-job-role.html template with form', async () => {
+        sinon.stub(bandService, 'getBands').resolves([{ 
+            bandID: 1, bandName: 'Test band'        
+        }
+        ]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([{
+            capabilityID: 1, capabilityName: "Test capability"
+        }])
+
+        request(app)
+            .get('/create-job-role')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<label for="jobRoleName" style="font-weight: bold;">Role</label>');
+                expect(res.text).to.contain('Test band');
+                expect(res.text).to.contain('Text capability')
+            }
+        );
+    }); 
+    
+    it('should render job-roles/edit.html template', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
+        sinon.stub(bandService, 'getBands').resolves([]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([])
+
+        request(app)
+            .get('/job-roles/edit/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<h2>Edit Job Role</h2>');
+            }
+        );
+    });
+    it('should render job-roles/edit.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Test error'));
+
+        request(app)
+            .get('/job-roles/edit/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('<h1>Job Roles</h1>');
+                expect(res.text).to.contain('Test error');
+            }
+        );
+    });
+
+    it('should render job-role-matrix.html template with no job roles', async () => {
+        sinon.stub(jobRoleService, 'getJobRoleMatrix').resolves({
+            bands: [{bandID: 6, bandName: "Associate"}, {bandID: 5, bandName: "Trainee"}],
+            capabilities: [{capabilityID: 1, capabilityName: "Engineering"}, {capabilityID: 2, capabilityName: "Cyber Security"}],
+            jobRolesGrid: [[[], []], [[], []]]
+        });
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain("<h1>Job Roles Matrix</h1>");
+                expect(res.text).to.contain("Engineering");
+                expect(res.text).to.contain("Trainee")
+            }
+        );
+    });
+
+    it('should render job-role-matrix.html template with no bands', async () => {
+        sinon.stub(jobRoleService, 'getJobRoleMatrix').resolves({
+            bands: [],
+            capabilities: [{capabilityID: 1, capabilityName: "Engineering"}],
+            jobRolesGrid: []
+        });
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain("<h5>There are either no bands or no capabilities, thus matrix cannot be displayed.</h5>");
+            }
+        );
+    });
+
+    it('should render job-role-matrix.html template with no capabilities', async () => {
+        sinon.stub(jobRoleService, 'getJobRoleMatrix').resolves({
+            bands: [{bandID: 6, bandName: "Associate"}],
+            capabilities: [],
+            jobRolesGrid: [[]]
+        });
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain("<h5>There are either no bands or no capabilities, thus matrix cannot be displayed.</h5>")
+            }
+        );
+    });
+
+    it('should render job-role-matrix.html template with job roles', async () => {
+
+        const associateBand = {bandID: 6, bandName: "Associate"}
+        const engineeringCapability = {capabilityID: 1, capabilityName: "Engineering"}
+        const jobRole : JobRole = {
+            jobRoleID: 9, 
+            jobRoleName: "Associate Software Engineer", 
+            jobSpecSummary: "", 
+            band: associateBand, 
+            capability: engineeringCapability,
+            responsibilities: "",
+            sharePoint: ""
+        }
+
+        sinon.stub(jobRoleService, 'getJobRoleMatrix').resolves({
+            bands: [associateBand, {bandID: 5, bandName: "Trainee"}],
+            capabilities: [engineeringCapability, {capabilityID: 2, capabilityName: "Cyber Security"}],
+            jobRolesGrid: [[[jobRole], []], [[], []]]
+        });
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain(jobRole.jobRoleName);
+            }
+        );
+    });
+
+    it('should render job-role-matrix.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Test error'));
+
+        request(app)
+            .get('/job-roles/matrix')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain("<h1>Job Roles Matrix</h1>");
+                expect(res.text).to.contain('Test error');
+            }
+        );
+    });
+
+    it('should render job-roles/edit.html template', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
+        sinon.stub(bandService, 'getBands').resolves([]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([])
+
+        request(app)
+            .get('/job-roles/edit/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('Edit Job Role');
+            }
+        );
+    });
+    it('should render job-roles/edit.html template with error message', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Test error'));
+
+        request(app)
+            .get('/job-roles/edit/1')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('TypeError');
+            }
+        );
+    });
+    it('should render job-roles/edit.html template with form', async () => {
+        sinon.stub(jobRoleService, 'getJobRoles').resolves([{ 
+            jobRoleID: 1,
+            jobRoleName: 'Test job role',
+            jobSpecSummary: 'Test summary',
+            band: { bandID: 1, bandName: 'Test band' },
+            capability: { capabilityID: 2, capabilityName: 'Test capability' },
+            responsibilities: 'Test responsibilities',
+            sharePoint: 'Test sharepoint'
+        }]);
+        sinon.stub(bandService, 'getBands').resolves([{ 
+            bandID: 1, bandName: 'Test band'        
+        }
+        ]);
+        sinon.stub(capabilityService, 'getCapabilities').resolves([{
+            capabilityID: 1, capabilityName: "Test capability"
+        }])
+
+
+});
+        request(app)
+            .get('/job-roles')
+            .expect(200)
+            .expect('Content-Type', 'text/html; charset=utf-8')
+            .end((err, res) => {
+                expect(res.text).to.contain('Edit Job Role');
+                expect(res.text).to.contain('Test band');
+                expect(res.text).to.contain('Text capability')
+                expect(res.text).to.contain('Test job role')
+            }
+        );
+    });
 });

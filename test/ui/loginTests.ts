@@ -1,9 +1,9 @@
-import webdriver, { By } from 'selenium-webdriver';
+import webdriver, { By, WebDriver } from 'selenium-webdriver';
 import _chai from 'chai';
 import { buildDriver } from './buildDriver';
 
 describe('Login Page UI Tests', async () => {
-  let driver: webdriver.WebDriver;
+  let driver: WebDriver;
 
   beforeEach(async () => {
       driver = buildDriver();
