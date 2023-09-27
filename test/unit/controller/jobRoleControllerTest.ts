@@ -131,8 +131,10 @@ describe('jobRoleController', () => {
     });
     
     it('should redirect to /job-roles with one parameter if multiple parameters are passed', async () => {
-        const req = { session: {}, query: { nameOrder: 'asc', capabilityOrder: 'asc' } as any };
-        const res = { redirect: sinon.spy() };
+        sinon.stub(jobRoleService, 'getJobRoles').resolves(jobRoles);
+        
+        const req = { session: {}, query: { nameOrder: 'asc', bandOrder: 'asc' } as any };
+        const res = { redirect: sinon.spy(), render: sinon.spy(), locals: {} };
 
         await JobRoles.get(req as any, res as any);
 

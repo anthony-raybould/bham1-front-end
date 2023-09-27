@@ -41,7 +41,7 @@ const getSortQueryString = (req: Request, property: string) => {
         urlSearchParams.append(property, "asc");
     } 
 
-    return urlSearchParams.size === 0 ? '' : `?${urlSearchParams.toString()}`;
+    return Array.from(urlSearchParams).length === 0 ? '' : `?${urlSearchParams.toString()}`;
 };
 
 const getSortHTMLSymbol = (req: Request, property: string) => {
@@ -82,16 +82,17 @@ export namespace JobRoles {
             res.locals.currentFilterParams = encodeURLFilterParams(nameFilter, bandFilter, capabilityFilter);
 
             // Sort
-            const nameOrder = req.query?.nameOrder as string;
-            const capabilityOrder = req.query?.capabilityOrder as string;
-            const bandOrder = req.query?.bandOrder as string;
-            
-            if (req.query && Object.keys(req.query).filter(key => ["nameOrder", "capabilityOrder", "bandOrder"].includes(key)).length > 1) {
+            const mutallyExclusiveKeys = ["nameOrder", "capabilityOrder", "bandOrder"];
+            if (req.query && Object.keys(req.query).filter(key => mutallyExclusiveKeys.includes(key)).length > 1) {
                 // Redirect to first sort order if multiple are defined
-                const first = Object.keys(req.query).filter(key => ["nameOrder", "capabilityOrder", "bandOrder"].includes(key))[0];
+                const first = Object.keys(req.query).filter(key => mutallyExclusiveKeys.includes(key))[0];
                 res.redirect(`/job-roles?${new URLSearchParams({ [first]: req.query[first] as string }).toString()}`);
                 return;
             }
+
+            const nameOrder = req.query?.nameOrder as string;
+            const capabilityOrder = req.query?.capabilityOrder as string;
+            const bandOrder = req.query?.bandOrder as string;
         
             if (nameOrder) {
                 orderJobRolesByProperty(jobRoles, "jobRoleName", nameOrder === "asc");
