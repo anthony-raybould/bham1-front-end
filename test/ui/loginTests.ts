@@ -1,9 +1,9 @@
-import webdriver, { By } from 'selenium-webdriver';
+import webdriver, { By, WebDriver } from 'selenium-webdriver';
 import _chai from 'chai';
 import { buildDriver } from './buildDriver';
 
 describe('Login Page UI Tests', async () => {
-  let driver: webdriver.WebDriver;
+  let driver: WebDriver;
 
   beforeEach(async () => {
       driver = buildDriver();
@@ -39,6 +39,6 @@ describe('Login Page UI Tests', async () => {
     await passwordInput.sendKeys(process.env.LOGIN_CRED_PWD!);
     await loginButton.click();
     _chai.expect(await driver.getCurrentUrl()).to.equal(process.env.UI_TEST_URL + '/login');
-    _chai.expect(await driver.findElement(By.id('errorMessage')).getText()).to.equal('Invalid credentials - 401');
+    _chai.expect(await driver.findElement(By.id('errorMessage')).getText()).to.equal('Your email or password is incorrect');
   });
 });
