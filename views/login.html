@@ -1,0 +1,21 @@
+{% extends "templates/master.html" %}
+
+{% block pageTitle %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <p>Enter your credentials</p>
+    <form action="/login" method="post" autocomplete="off">
+        <div class="form-group">
+            <label for="email"><b>Email</b></label>
+            <input type="text" id="email" name="email" class="form-control" value="{{ email }}"required>
+        </div>
+        <div class="form-group">
+            <label for="password"><b>Password</b></label>
+            <input type="password" id="password" name="password" class="form-control" value="{{ password }}" required>
+        </div>
+        <button type="submit" class="btn btn-blue">Login</button>
+    </form>
+    <p class="mt-3">Need an account? Go to <a href="/register">register</a>.</p>
+{% endblock %}

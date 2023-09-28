@@ -1,0 +1,49 @@
+{% extends "templates/master.html" %}
+
+{% block pageTitle %}
+    Job Roles
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <p>Current job roles at Kainos</p>
+        </div>
+        <div class="col text-right gap-2 mb-2">
+            {% if user.role.roleName == "Admin" %}
+            <a href="/create-job-role" class="white btn btn-primary">Create</a>
+            {% endif %}
+            {% if filtered %}
+            <a href="/job-roles" class="white btn btn-danger">Remove Filter</a>
+            <a href="/job-roles/filter?{{ currentFilterParams }}" class="white btn btn-primary">Change Filter</a>
+            {% else %}
+            <a href="/job-roles/filter" class="white btn btn-primary">Filter</a>
+            {% endif %}
+        </div>
+    </div>
+    <table id="job-roles-table">
+        <tr>
+            <th><a href="/job-roles{{ getSortQueryString('nameOrder') }}">Name {{ getSortHTMLSymbol('nameOrder')|safe }}</a></th>
+            <th><a href="/job-roles{{ getSortQueryString('bandOrder') }}">Band {{ getSortHTMLSymbol('bandOrder')|safe }}</a></th>
+            <th><a href="/job-roles{{ getSortQueryString('capabilityOrder') }}">Capability {{ getSortHTMLSymbol('capabilityOrder')|safe }}</a></th>
+            <th>Specification</th>
+            <th colspan="2">Actions</th>
+            <!-- <th>Edit</th> -->
+        </tr>
+        {% if jobRoles|length == 0 %}
+            <tr>
+                <td class="text-center" colspan="5">There are no job roles {% if filtered %}which match your query{% else %}to display{% endif %}.</td>
+            </tr>
+        {% endif %}
+        {% for jobRole in jobRoles %}
+            <tr>
+                <td>{{ jobRole.jobRoleName }}</td>
+                <td>{{ jobRole.band.bandName }}</td>
+                <td>{{ jobRole.capability.capabilityName }}</td>
+                <td><a href="/view-job-role/{{ jobRole.jobRoleID }}">View</a></td>
+                <td><a href="/delete-job-role/{{ jobRole.jobRoleID }}">Delete</a></td>
+                <td><a href="/job-roles/edit/{{jobRole.jobRoleID}}">Edit</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
