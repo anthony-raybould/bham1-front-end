@@ -26,9 +26,7 @@
             <th><a href="/job-roles{{ getSortQueryString('nameOrder') }}">Name {{ getSortHTMLSymbol('nameOrder')|safe }}</a></th>
             <th><a href="/job-roles{{ getSortQueryString('bandOrder') }}">Band {{ getSortHTMLSymbol('bandOrder')|safe }}</a></th>
             <th><a href="/job-roles{{ getSortQueryString('capabilityOrder') }}">Capability {{ getSortHTMLSymbol('capabilityOrder')|safe }}</a></th>
-            <th>Specification</th>
-            <th colspan="2">Actions</th>
-            <!-- <th>Edit</th> -->
+            <th>Actions</th>
         </tr>
         {% if jobRoles|length == 0 %}
             <tr>
@@ -40,9 +38,13 @@
                 <td>{{ jobRole.jobRoleName }}</td>
                 <td>{{ jobRole.band.bandName }}</td>
                 <td>{{ jobRole.capability.capabilityName }}</td>
-                <td><a href="/view-job-role/{{ jobRole.jobRoleID }}">View</a></td>
-                <td><a href="/delete-job-role/{{ jobRole.jobRoleID }}">Delete</a></td>
-                <td><a href="/job-roles/edit/{{jobRole.jobRoleID}}">Edit</td>
+                <td class="actions-row">
+                    <a href="/view-job-role/{{ jobRole.jobRoleID }}">View</a>
+                    {% if user.role.roleName == "Admin" %}
+                    <a href="/job-roles/edit/{{jobRole.jobRoleID}}">Edit</a>
+                    <a href="/delete-job-role/{{ jobRole.jobRoleID }}">Delete</a>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>

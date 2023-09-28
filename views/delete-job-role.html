@@ -7,13 +7,20 @@
 {% block content %}
 <form action="/delete-job-role/{{ jobRole.jobRoleID }}" method="post">
     <h2>Name</h2>
-    {{ jobRole.jobRoleName }}
+    <p>
+        {{ jobRole.jobRoleName }}
+    </p>
     <h2>Band</h2>
-    {{ jobRole.band.bandName }}
+    <p>
+        {{ jobRole.band.bandName }}
+    </p>
     <h2>Capability</h2>
-    {{ jobRole.capability.capabilityName }}
+    <p>
+        {{ jobRole.capability.capabilityName }}
+    </p>
     <div>
-        <button type="submit" class="btn btn-blue" style="margin-top: 20px;">Delete</button>
+        <a href="/job-roles" class="white btn btn-primary" id="cancel">Cancel</a>
+        <button type="submit" class="btn btn-danger">Confirm Deletion</button>
     </div>
 </form>
 {% endblock %}

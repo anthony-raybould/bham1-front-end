@@ -6,17 +6,31 @@
 
 {% block content %}
     <h2 id="summary">Summary</h2>
-    {{ jobRole.jobSpecSummary }}
+    <p>
+        {{ jobRole.jobSpecSummary }}
+    </p>
     <h2>Band</h2>
-    {{ jobRole.band.bandName }}
+    <p>
+        {{ jobRole.band.bandName }}
+    </p>
     <h2>Capability</h2>
-    {{ jobRole.capability.capabilityName }}
+    <p>
+        {{ jobRole.capability.capabilityName }}
+    </p>
     <h2>Responsibilities</h2>
-    {{ jobRole.responsibilities }}
+    <p>
+        {{ jobRole.responsibilities }}
+    </p>
     <h2>Sharepoint</h2>
-    <a href="{{ jobRole.sharePoint }}">View SharePoint</a>
+    <p>
+        <a href="{{ jobRole.sharePoint }}">View SharePoint</a>
+    </p>
     <div>
-        <a href="/delete-job-role/{{ jobRole.jobRoleID }}" class="btn btn-blue text-white" style="margin-top: 20px;">Delete</a>
+        <a href="/job-roles" class="white btn btn-primary" id="cancel">Return</a>
+        {% if user.role.roleName == "Admin" %}
+        <a href="/job-roles/edit/{{ jobRole.jobRoleID }}" class="white btn btn-primary" id="cancel">Edit</a>
+        <a href="/delete-job-role/{{ jobRole.jobRoleID }}" class="btn btn-danger text-white">Delete</a>
+        {% endif %}
     </div>
 {% endblock %}
 
