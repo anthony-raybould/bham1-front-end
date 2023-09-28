@@ -39,7 +39,7 @@ describe('viewing job-roles pages', () => {
         await deleteLink.click();
 
         const currentUrl = await driver.getCurrentUrl();
-        const expectedDeletePageUrl = process.env.UI_TEST_URL + '/delete-job-role/1'
+        const expectedDeletePageUrl = process.env.UI_TEST_URL + '/delete-job-role/2'
         expect(currentUrl).to.equal(expectedDeletePageUrl);
 
         await driver.quit();
