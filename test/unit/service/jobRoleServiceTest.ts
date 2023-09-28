@@ -79,7 +79,7 @@ describe('jobRoleService', () => {
         }
     });
 
-        it('should throw BadRequest error if the API return 401', async () => {
+    it('should throw BadRequest error if the API return 401', async () => {
         const mock = new MockAdapter(axios);
         const jobRoles: JobRoleToUpdate = { 
             jobRoleName: 'Test',
@@ -142,70 +142,6 @@ describe('jobRoleService', () => {
         }
     });
 
-        it('should throw BadRequest error if the API return 401', async () => {
-        const mock = new MockAdapter(axios);
-        const jobRoles: JobRoleToUpdate = { 
-            jobRoleName: 'Test',
-            jobSpecSummary: 'Test summary',
-            band: { bandID: 1, bandName: 'Test band' },
-            capability: { capabilityID: 2, capabilityName: 'Test capability' },
-            responsibilities: 'Test responsibilities',
-            sharePoint: 'Test sharepoint'
-
-        };
-        mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(401, "Bad request");
-
-    it('should return job role', async () => {
-        const mock = new MockAdapter(axios);
-        const jobRole: JobRole = { 
-            jobRoleID: 1,
-            jobRoleName: 'Test',
-            jobSpecSummary: 'Test summary',
-            band: { bandID: 1, bandName: 'Test band' },
-            capability: { capabilityID: 2, capabilityName: 'Test capability' },
-            responsibilities: 'Test responsibilities',
-            sharePoint: 'Test sharepoint'
-        };
-        mock.onGet(`${process.env.API_URL}api/job-roles/1`).reply(200, jobRole);
-
-        const result = await jobRoleService.getJobRole(1);
-        expect(result).to.deep.equal(jobRole);
-    });
-
-    it('should throw an error if the API call fails', async () => {
-        const mock = new MockAdapter(axios);
-        mock.onGet(`${process.env.API_URL}api/job-roles/0`).reply(500);
-
-        try {
-            await jobRoleService.getJobRole(0);
-            expect.fail('Expected an error to be thrown');
-        } catch (e) {
-            expect(e.message).to.equal('Failed to get job role');
-        }
-    });
-
-    it('should delete a job role when valid id provided', async () => {
-        const mock = new MockAdapter(axios);
-        mock.onDelete(`${process.env.API_URL}api/job-roles/1`).reply(200, 1);
-
-        const result = await jobRoleService.deleteJobRole(1);
-        expect(result).to.equal(1);
-    
-    });
-
-    it('(getJobRoleMatrix) should throw an error if getJobRoles throws error', async () => {
-        sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Failed to get job roles'));
-
-        try {
-            await jobRoleService.getJobRoleMatrix("token");
-            expect.fail('Expected an error to be thrown');
-
-        } catch(e) {
-            expect(e.message).to.equal("Failed to get job roles matrix")
-        }
-    });
-
-    
     it('should throw BadRequest error if the API return 401', async () => {
         const mock = new MockAdapter(axios);
         const jobRoles: JobRoleToUpdate = { 
@@ -218,247 +154,312 @@ describe('jobRoleService', () => {
 
         };
         mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(401, "Bad request");
-        try {
-            await jobRoleService.editJobRoles(jobRoles,1);
-        } catch (e) {
-            expect(e.message).to.contain('Request failed with status code 401');
-        }
-    });
-    it('should return 200 and ID of the created job role', async () => {
-        const mock = new MockAdapter(axios);
-        const jobRole: JobRoleToCreate = { 
-            jobRoleName: 'Test',
-            jobSpecSummary: 'Test summary',
-            band: { bandID: 1, bandName: 'Test band' },
-            capability: { capabilityID: 2, capabilityName: 'Test capability' },
-            responsibilities: 'Test responsibilities',
-            sharePoint: 'Test sharepoint'
-        };
-        mock.onPost(`${process.env.API_URL}api/job-roles/`, jobRole).reply(200, 1);
 
-        const result = await jobRoleService.createJobRole(jobRole);
+        it('should return job role', async () => {
+            const mock = new MockAdapter(axios);
+            const jobRole: JobRole = { 
+                jobRoleID: 1,
+                jobRoleName: 'Test',
+                jobSpecSummary: 'Test summary',
+                band: { bandID: 1, bandName: 'Test band' },
+                capability: { capabilityID: 2, capabilityName: 'Test capability' },
+                responsibilities: 'Test responsibilities',
+                sharePoint: 'Test sharepoint'
+            };
+            mock.onGet(`${process.env.API_URL}api/job-roles/1`).reply(200, jobRole);
 
-        expect(result).to.deep.equal(1);
-    });
-    it('should throw an error if the API call fails when trying to create a job role', async () => {
-        const mock = new MockAdapter(axios);
-        const jobRole: JobRoleToCreate = { 
-            jobRoleName: 'Test',
-            jobSpecSummary: 'Test summary',
-            band: { bandID: 1, bandName: 'Test band' },
-            capability: { capabilityID: 2, capabilityName: 'Test capability' },
-            responsibilities: 'Test responsibilities',
-            sharePoint: 'Test sharepoint'
-        };
-        mock.onPost(`${process.env.API_URL}api/job-roles/`, jobRole).reply(500);
+            const result = await jobRoleService.getJobRole(1);
+            expect(result).to.deep.equal(jobRole);
+        });
 
-        try {
-            await jobRoleService.createJobRole(jobRole);
-            expect.fail('Expected an error to be thrown');
-        } catch (e) {
-            expect(e.message).to.equal(''); //expect e.message to be empty as in this test, the createJobRole method is throwing an error without
-                                            //the custom error message
-        }
-    }); 
+        it('should throw an error if the API call fails', async () => {
+            const mock = new MockAdapter(axios);
+            mock.onGet(`${process.env.API_URL}api/job-roles/0`).reply(500);
 
-    it('(getJobRoleMatrix) should throw an error if getCapabilities throws error', async () => {
-        sinon.stub(capabilityService, 'getCapabilities').throws(new Error('Failed to get job capabilities'));
-
-        try {
-            await jobRoleService.getJobRoleMatrix("token");
-            expect.fail('Expected an error to be thrown');
-
-        } catch(e) {
-            expect(e.message).to.equal("Failed to get job roles matrix")
-        }
-    });
-
-    it('(getJobRoleMatrix) should throw an error if getBands throws error', async () => {
-        sinon.stub(bandService, 'getBands').throws(new Error('Failed to get job bands'));
-
-        try {
-            await jobRoleService.getJobRoleMatrix("token");
-            expect.fail('Expected an error to be thrown');
-
-        } catch(e) {
-            expect(e.message).to.equal("Failed to get job roles matrix")
-        }
-    });
-
-    it('(getJobRoleMatrix) should order job bands by ID correctly', async () => {
-        sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
-        sinon.stub(capabilityService, 'getCapabilities').resolves([]);
-        sinon.stub(bandService, 'getBands').resolves([
-            {
-                bandID : 7,
-                bandName: "Test X"
-            },
-            {
-                bandID : 4,
-                bandName: "Test A"
-            },
-            {
-                bandID : 9,
-                bandName: "Test Q"
+            try {
+                await jobRoleService.getJobRole(0);
+                expect.fail('Expected an error to be thrown');
+            } catch (e) {
+                expect(e.message).to.equal('Failed to get job role');
             }
-        ]);
+        });
 
-        const matrix = await jobRoleService.getJobRoleMatrix("test");
-        expect(matrix.bands).to.deep.equal([
-            {
-                bandID : 4,
-                bandName: "Test A"
-            },
-            {
-                bandID : 7,
-                bandName: "Test X"
-            },
+        it('should delete a job role when valid id provided', async () => {
+            const mock = new MockAdapter(axios);
+            mock.onDelete(`${process.env.API_URL}api/job-roles/1`).reply(200, 1);
 
-            {
-                bandID : 9,
-                bandName: "Test Q"
+            const result = await jobRoleService.deleteJobRole(1);
+            expect(result).to.equal(1);
+    
+        });
+
+        it('(getJobRoleMatrix) should throw an error if getJobRoles throws error', async () => {
+            sinon.stub(jobRoleService, 'getJobRoles').throws(new Error('Failed to get job roles'));
+
+            try {
+                await jobRoleService.getJobRoleMatrix("token");
+                expect.fail('Expected an error to be thrown');
+
+            } catch(e) {
+                expect(e.message).to.equal("Failed to get job roles matrix")
             }
-        ]);
-    });
+        });
 
-    it('(getJobRoleMatrix) should return matrix with correct bands and capabilities', async () => {
+    
+        it('should throw BadRequest error if the API return 401', async () => {
+            const mock = new MockAdapter(axios);
+            const jobRoles: JobRoleToUpdate = { 
+                jobRoleName: 'Test',
+                jobSpecSummary: 'Test summary',
+                band: { bandID: 1, bandName: 'Test band' },
+                capability: { capabilityID: 2, capabilityName: 'Test capability' },
+                responsibilities: 'Test responsibilities',
+                sharePoint: 'Test sharepoint'
 
-        const bands = [
-            {
-                bandID : 4,
-                bandName: "Test A"
-            },
-            {
-                bandID : 7,
-                bandName: "Test X"
+            };
+            mock.onPut(`${process.env.API_URL}api/job-roles/1`, jobRoles).reply(401, "Bad request");
+            try {
+                await jobRoleService.editJobRoles(jobRoles,1);
+            } catch (e) {
+                expect(e.message).to.contain('Request failed with status code 401');
             }
-        ];
+        });
+        it('should return 200 and ID of the created job role', async () => {
+            const mock = new MockAdapter(axios);
+            const jobRole: JobRoleToCreate = { 
+                jobRoleName: 'Test',
+                jobSpecSummary: 'Test summary',
+                band: { bandID: 1, bandName: 'Test band' },
+                capability: { capabilityID: 2, capabilityName: 'Test capability' },
+                responsibilities: 'Test responsibilities',
+                sharePoint: 'Test sharepoint'
+            };
+            mock.onPost(`${process.env.API_URL}api/job-roles/`, jobRole).reply(200, 1);
+
+            const result = await jobRoleService.createJobRole(jobRole);
+
+            expect(result).to.deep.equal(1);
+        });
+        it('should throw an error if the API call fails when trying to create a job role', async () => {
+            const mock = new MockAdapter(axios);
+            const jobRole: JobRoleToCreate = { 
+                jobRoleName: 'Test',
+                jobSpecSummary: 'Test summary',
+                band: { bandID: 1, bandName: 'Test band' },
+                capability: { capabilityID: 2, capabilityName: 'Test capability' },
+                responsibilities: 'Test responsibilities',
+                sharePoint: 'Test sharepoint'
+            };
+            mock.onPost(`${process.env.API_URL}api/job-roles/`, jobRole).reply(500);
+
+            try {
+                await jobRoleService.createJobRole(jobRole);
+                expect.fail('Expected an error to be thrown');
+            } catch (e) {
+                //expect e.message to be empty as in this test, the createJobRole method is throwing an error without
+                expect(e.message).to.equal(''); 
+                //the custom error message
+            }
+        }); 
+
+        it('(getJobRoleMatrix) should throw an error if getCapabilities throws error', async () => {
+            sinon.stub(capabilityService, 'getCapabilities').throws(new Error('Failed to get job capabilities'));
+
+            try {
+                await jobRoleService.getJobRoleMatrix("token");
+                expect.fail('Expected an error to be thrown');
+
+            } catch(e) {
+                expect(e.message).to.equal("Failed to get job roles matrix")
+            }
+        });
+
+        it('(getJobRoleMatrix) should throw an error if getBands throws error', async () => {
+            sinon.stub(bandService, 'getBands').throws(new Error('Failed to get job bands'));
+
+            try {
+                await jobRoleService.getJobRoleMatrix("token");
+                expect.fail('Expected an error to be thrown');
+
+            } catch(e) {
+                expect(e.message).to.equal("Failed to get job roles matrix")
+            }
+        });
+
+        it('(getJobRoleMatrix) should order job bands by ID correctly', async () => {
+            sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
+            sinon.stub(capabilityService, 'getCapabilities').resolves([]);
+            sinon.stub(bandService, 'getBands').resolves([
+                {
+                    bandID : 7,
+                    bandName: "Test X"
+                },
+                {
+                    bandID : 4,
+                    bandName: "Test A"
+                },
+                {
+                    bandID : 9,
+                    bandName: "Test Q"
+                }
+            ]);
+
+            const matrix = await jobRoleService.getJobRoleMatrix("test");
+            expect(matrix.bands).to.deep.equal([
+                {
+                    bandID : 4,
+                    bandName: "Test A"
+                },
+                {
+                    bandID : 7,
+                    bandName: "Test X"
+                },
+
+                {
+                    bandID : 9,
+                    bandName: "Test Q"
+                }
+            ]);
+        });
+
+        it('(getJobRoleMatrix) should return matrix with correct bands and capabilities', async () => {
+
+            const bands = [
+                {
+                    bandID : 4,
+                    bandName: "Test A"
+                },
+                {
+                    bandID : 7,
+                    bandName: "Test X"
+                }
+            ];
         
-        const capabilities = [
-            {
+            const capabilities = [
+                {
+                    capabilityID : 1,
+                    capabilityName: "Capability A"
+                },
+                {
+                    capabilityID : 3,
+                    capabilityName: "Capability C"
+                }
+            ];
+
+            sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
+            sinon.stub(capabilityService, 'getCapabilities').resolves(capabilities);
+            sinon.stub(bandService, 'getBands').resolves(bands);
+
+            const matrix = await jobRoleService.getJobRoleMatrix("token");
+            expect(matrix.bands).to.deep.equal(bands);
+            expect(matrix.capabilities).to.deep.equal(capabilities);
+
+        });
+
+        it('(getJobRoleMatrix) should only assign job roles to their correct matrix cells', async () => {
+
+            const bands = [
+                {
+                    bandID : 4,
+                    bandName: "Test A"
+                },
+                {
+                    bandID : 7,
+                    bandName: "Test X"
+                }
+            ];
+        
+            const capabilities = [
+                {
+                    capabilityID : 1,
+                    capabilityName: "Capability A"
+                },
+                {
+                    capabilityID : 3,
+                    capabilityName: "Capability C"
+                }
+            ];
+
+            const jobRoles : JobRole[] = [
+                {
+                    jobRoleID : 1,
+                    jobRoleName: "Test",
+                    jobSpecSummary: "",
+                    band: bands[1],
+                    capability: capabilities[1],
+                    responsibilities: "",
+                    sharePoint: ""
+                },
+                {
+                    jobRoleID : 2,
+                    jobRoleName: "Test 2",
+                    jobSpecSummary: "",
+                    band: bands[0],
+                    capability: capabilities[1],
+                    responsibilities: "",
+                    sharePoint: ""
+                },
+                {
+                    jobRoleID : 3,
+                    jobRoleName: "Test 3",
+                    jobSpecSummary: "",
+                    band: bands[1],
+                    capability: capabilities[0],
+                    responsibilities: "",
+                    sharePoint: ""
+                }
+            ];
+
+            sinon.stub(jobRoleService, 'getJobRoles').resolves(jobRoles);
+            sinon.stub(capabilityService, 'getCapabilities').resolves(capabilities);
+            sinon.stub(bandService, 'getBands').resolves(bands);
+
+            const matrix = await jobRoleService.getJobRoleMatrix("token");
+            expect(matrix.jobRolesGrid[0][0]).to.deep.equal([]);
+            expect(matrix.jobRolesGrid[0][1]).to.deep.equal([jobRoles[1]]);
+            expect(matrix.jobRolesGrid[1][0]).to.deep.equal([jobRoles[2]]);
+            expect(matrix.jobRolesGrid[1][1]).to.deep.equal([jobRoles[0]]);
+
+        });
+
+        it('(getJobRoleMatrix) should be able to assign multiple job roles to the same matrix cell', async () => {
+
+            const bands = [{
+                bandID : 4,
+                bandName: "Test A"
+            }];
+            const capabilities = [{
                 capabilityID : 1,
                 capabilityName: "Capability A"
-            },
-            {
-                capabilityID : 3,
-                capabilityName: "Capability C"
-            }
-        ];
+            }];
 
-        sinon.stub(jobRoleService, 'getJobRoles').resolves([]);
-        sinon.stub(capabilityService, 'getCapabilities').resolves(capabilities);
-        sinon.stub(bandService, 'getBands').resolves(bands);
+            const jobRoles : JobRole[] = [
+                {
+                    jobRoleID : 1,
+                    jobRoleName: "Test",
+                    jobSpecSummary: "",
+                    band: bands[0],
+                    capability: capabilities[0],
+                    responsibilities: "",
+                    sharePoint: ""
+                },
+                {
+                    jobRoleID : 2,
+                    jobRoleName: "Test 2",
+                    jobSpecSummary: "",
+                    band: bands[0],
+                    capability: capabilities[0],
+                    responsibilities: "",
+                    sharePoint: ""
+                }
+            ];
 
-        const matrix = await jobRoleService.getJobRoleMatrix("token");
-        expect(matrix.bands).to.deep.equal(bands);
-        expect(matrix.capabilities).to.deep.equal(capabilities);
+            sinon.stub(jobRoleService, 'getJobRoles').resolves(jobRoles);
+            sinon.stub(capabilityService, 'getCapabilities').resolves(capabilities);
+            sinon.stub(bandService, 'getBands').resolves(bands);
 
-    });
+            const matrix = await jobRoleService.getJobRoleMatrix("token");
+            expect(matrix.jobRolesGrid[0][0]).to.deep.equal(jobRoles);
 
-    it('(getJobRoleMatrix) should only assign job roles to their correct matrix cells', async () => {
-
-        const bands = [
-            {
-                bandID : 4,
-                bandName: "Test A"
-            },
-            {
-                bandID : 7,
-                bandName: "Test X"
-            }
-        ];
-        
-        const capabilities = [
-            {
-                capabilityID : 1,
-                capabilityName: "Capability A"
-            },
-            {
-                capabilityID : 3,
-                capabilityName: "Capability C"
-            }
-        ];
-
-        const jobRoles : JobRole[] = [
-            {
-                jobRoleID : 1,
-                jobRoleName: "Test",
-                jobSpecSummary: "",
-                band: bands[1],
-                capability: capabilities[1],
-                responsibilities: "",
-                sharePoint: ""
-            },
-            {
-                jobRoleID : 2,
-                jobRoleName: "Test 2",
-                jobSpecSummary: "",
-                band: bands[0],
-                capability: capabilities[1],
-                responsibilities: "",
-                sharePoint: ""
-            },
-            {
-                jobRoleID : 3,
-                jobRoleName: "Test 3",
-                jobSpecSummary: "",
-                band: bands[1],
-                capability: capabilities[0],
-                responsibilities: "",
-                sharePoint: ""
-            }
-        ];
-
-        sinon.stub(jobRoleService, 'getJobRoles').resolves(jobRoles);
-        sinon.stub(capabilityService, 'getCapabilities').resolves(capabilities);
-        sinon.stub(bandService, 'getBands').resolves(bands);
-
-        const matrix = await jobRoleService.getJobRoleMatrix("token");
-        expect(matrix.jobRolesGrid[0][0]).to.deep.equal([]);
-        expect(matrix.jobRolesGrid[0][1]).to.deep.equal([jobRoles[1]]);
-        expect(matrix.jobRolesGrid[1][0]).to.deep.equal([jobRoles[2]]);
-        expect(matrix.jobRolesGrid[1][1]).to.deep.equal([jobRoles[0]]);
-
-    });
-
-    it('(getJobRoleMatrix) should be able to assign multiple job roles to the same matrix cell', async () => {
-
-        const bands = [{
-            bandID : 4,
-            bandName: "Test A"
-        }];
-                    const capabilities = [{
-            capabilityID : 1,
-            capabilityName: "Capability A"
-        }];
-
-        const jobRoles : JobRole[] = [
-            {
-                jobRoleID : 1,
-                jobRoleName: "Test",
-                jobSpecSummary: "",
-                band: bands[0],
-                capability: capabilities[0],
-                responsibilities: "",
-                sharePoint: ""
-            },
-            {
-                jobRoleID : 2,
-                jobRoleName: "Test 2",
-                jobSpecSummary: "",
-                band: bands[0],
-                capability: capabilities[0],
-                responsibilities: "",
-                sharePoint: ""
-            }
-        ];
-
-        sinon.stub(jobRoleService, 'getJobRoles').resolves(jobRoles);
-        sinon.stub(capabilityService, 'getCapabilities').resolves(capabilities);
-        sinon.stub(bandService, 'getBands').resolves(bands);
-
-        const matrix = await jobRoleService.getJobRoleMatrix("token");
-        expect(matrix.jobRolesGrid[0][0]).to.deep.equal(jobRoles);
-
-    });
-})});
+        });
+    })});

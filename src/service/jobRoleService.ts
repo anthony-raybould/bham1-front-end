@@ -3,7 +3,6 @@ import type { JobBand, JobCapability, JobRole, JobRoleToCreate, JobRoleToUpdate 
 import { JobRoleMatrix } from "../model/jobRoleMatrix";
 import { capabilityService } from "./capabilityService";
 import { bandService } from "./bandService";
-import { JobRoles } from "../controller/jobRoleController";
 
 export const jobRoleService = {
     async getJobRoles(token?: string): Promise<JobRole[]> {
@@ -50,8 +49,8 @@ export const jobRoleService = {
     },
     async editJobRoles(jobRole: JobRoleToUpdate, jobRoleID: number, token?: string, ): Promise<JobRole>{
         const response = await axios.put(`${process.env.API_URL}api/job-roles/${jobRoleID}`, jobRole, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            headers: { Authorization: `Bearer ${token}` }
+        });
         if (response.status === 200) {
             return response.data;
         }

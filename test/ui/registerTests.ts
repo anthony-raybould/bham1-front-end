@@ -49,7 +49,8 @@ describe('register page', async () => {
         await passwordInput.sendKeys(validPassword);
         await loginButton.click();
         expect(await driver.getCurrentUrl()).to.equal(process.env.UI_TEST_URL + '/register');
-        expect(await driver.findElement(webdriver.By.id('errorMessage')).getText()).to.equal('Please check your details: Email must be valid');
+        expect(await driver.findElement(webdriver.By.id('errorMessage')).getText())
+            .to.equal('Please check your details: Email must be valid');
     });
     
     it("should display error when invalid password", async () => {
@@ -63,6 +64,7 @@ describe('register page', async () => {
         await loginButton.click();
 
         expect(await driver.getCurrentUrl()).to.equal(process.env.UI_TEST_URL + '/register');
-        expect(await driver.findElement(webdriver.By.id('errorMessage')).getText()).to.equal('Please check your details: Password must be at least 8 characters');
+        expect(await driver.findElement(webdriver.By.id('errorMessage')).getText())
+            .to.equal('Please check your details: Password must be at least 8 characters');
     });
 });

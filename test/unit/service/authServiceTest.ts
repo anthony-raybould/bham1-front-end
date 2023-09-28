@@ -17,13 +17,13 @@ describe('authService', () => {
             const responseData = "thisIsAToken"
             mock.onPost(`${process.env.API_URL}api/login`, loginData).reply(200, responseData);
 
-      try {
-        const result = await authService.login(loginData)
-        expect(result).to.be.equal(responseData);
-      } catch (error) {
-        throw new Error('Expected login to succeed');
-      }
-    });
+            try {
+                const result = await authService.login(loginData)
+                expect(result).to.be.equal(responseData);
+            } catch (error) {
+                throw new Error('Expected login to succeed');
+            }
+        });
 
         it('should handle invalid login credentials', async () => {
             const loginData = { email: 'email@email.com', password: 'invalidPassword' };
@@ -37,16 +37,16 @@ describe('authService', () => {
         });
     });
 
-        it('should handle server error', async () => {
-            const loginData = { email: 'email@email.com', password: 'invalidPassword' };
-            mock.onPost(`${process.env.API_URL}api/login`, loginData).reply(500, 'Internal Server Error');
+    it('should handle server error', async () => {
+        const loginData = { email: 'email@email.com', password: 'invalidPassword' };
+        mock.onPost(`${process.env.API_URL}api/login`, loginData).reply(500, 'Internal Server Error');
 
-            try {
-                await authService.login(loginData);
-            } catch (error) {
-                expect(error.message).to.equal('Internal server error');
-            }
-        });
+        try {
+            await authService.login(loginData);
+        } catch (error) {
+            expect(error.message).to.equal('Internal server error');
+        }
+    });
 
     describe('whoami', () => {
         it('should identify user successfully', async () => {

@@ -32,9 +32,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-
+    
     - name: Build and Unit Test
       run:  |
         npm ci
         npm run build --if-present
         npm run test --if-present
+
+    - name: Install ESLint and run ESLint on TypeScript files
+      run: npx eslint --ext ts .

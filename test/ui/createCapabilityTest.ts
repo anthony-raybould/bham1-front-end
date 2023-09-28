@@ -1,4 +1,3 @@
-import webdriver from 'selenium-webdriver';
 import { expect } from 'chai';
 import { By } from 'selenium-webdriver';
 import {buildDriver} from "./buildDriver";
@@ -22,9 +21,9 @@ describe('create capability page', () => {
         expect(saveButton).to.exist;
 
         await driver.quit();
-      });
+    });
 
-      it('should show validation error on invalid input', async () => {
+    it('should show validation error on invalid input', async () => {
         const driver = buildDriver();
 
         await login(driver);
@@ -40,9 +39,9 @@ describe('create capability page', () => {
         expect(errorMessageText).to.equal("Invalid: capability name is empty");
 
         await driver.quit();
-      });
+    });
 
-      it('should go to success page on valid input', async () => {
+    it('should go to success page on valid input', async () => {
         const driver = buildDriver();
 
         await login(driver);
@@ -58,6 +57,6 @@ describe('create capability page', () => {
         expect(successMessage).to.equal('Capability "UI Test Capability" created successfully')
 
         await driver.quit();
-      });
+    });
 
 });

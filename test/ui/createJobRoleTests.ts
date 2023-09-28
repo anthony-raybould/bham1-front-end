@@ -12,15 +12,15 @@ describe('create-job-role page', () => {
         await login(driver);
 
         await driver.get(process.env.UI_TEST_URL + '/create-job-role');
-        
+
         const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
-        const bandSelect = await driver.findElement(By.id('band')); 
+        const bandSelect = await driver.findElement(By.id('band'));
         const capabilitySelect = await driver.findElement(By.id('capability'));
         const jobSpecSummaryInput = await driver.findElement(By.id('jobSpecSummary'));
         const responsibilitiesInput = await driver.findElement(By.id('responsibilities'));
         const sharePointInput = await driver.findElement(By.id('sharePoint'));
         const saveButton = await driver.findElement(By.css('button[type="submit"]'));
-    
+
         expect(jobRoleNameInput).to.exist;
         expect(bandSelect).to.exist;
         expect(capabilitySelect).to.exist;
@@ -30,9 +30,9 @@ describe('create-job-role page', () => {
         expect(saveButton).to.exist;
 
         await driver.quit();
-      });
+    });
 
-      it('should submit the create job role form', async function () {
+    it('should submit the create job role form', async function () {
         const driver = buildDriver()
 
         await login(driver);
@@ -57,9 +57,9 @@ describe('create-job-role page', () => {
         await createButton.click();
         await driver.quit();
 
-      });
+    });
 
-      it('should get error message display when invalid form', async function () {
+    it('should get error message display when invalid form', async function () {
         const driver = buildDriver();
 
         await login(driver);
@@ -84,9 +84,9 @@ describe('create-job-role page', () => {
         await createButton.click();
         const errorMessageElement = driver.findElement(webdriver.By.css('alert alert-danger'));
         errorMessageElement.getText().then(function (text) {
-          expect(text).to.equal('Invalid sharepoint link.');
-      });
-      await driver.quit();
+            expect(text).to.equal('Invalid sharepoint link.');
+        });
+        await driver.quit();
     })
-    
+
 });

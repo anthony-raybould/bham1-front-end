@@ -17,7 +17,7 @@ const filter = (filterString: string): (number[] | undefined) => {
         return undefined;
     }
 
-    let filters = JSON.parse(decodeURIComponent(filterString));
+    const filters = JSON.parse(decodeURIComponent(filterString));
     if (!filters) {
         return undefined;
     }
@@ -31,7 +31,10 @@ const filter = (filterString: string): (number[] | undefined) => {
     return filteredList;
 }
  
-export const encodeURLFilterParams = (name: string | undefined, band: number | number[] | undefined, capability: number | number[] | undefined): string => {
+export const encodeURLFilterParams = (
+    name: string | undefined, 
+    band: number | number[] | undefined, 
+    capability: number | number[] | undefined): string => {
     const searchParams = new URLSearchParams();
     appendURLParams(searchParams, "nameFilter", name);
     appendURLParams(searchParams, "bandFilter", band);
@@ -42,14 +45,12 @@ export const encodeURLFilterParams = (name: string | undefined, band: number | n
 
 export const decodeURLFilterParams = (req: Request): { nameFilter?: string, bandFilter?: number[], capabilityFilter?: number[] } => {
     let nameFilter: string | undefined;
-    let bandFilter: number[] | undefined;
-    let capabilityFilter: number[] | undefined;
 
     if (req.query?.nameFilter) {
         nameFilter = decodeURIComponent(req.query.nameFilter as string);
     }
-    bandFilter = filter(req.query?.bandFilter as string);
-    capabilityFilter = filter(req.query?.capabilityFilter as string);
+    const bandFilter = filter(req.query?.bandFilter as string);
+    const capabilityFilter = filter(req.query?.capabilityFilter as string);
     
     return {
         ...(nameFilter && { nameFilter }),

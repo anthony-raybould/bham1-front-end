@@ -32,9 +32,9 @@ describe('job-roles page', () => {
         expect(saveButton).to.exist;
 
         await driver.quit();
-      });
+    });
     
-      it('should submit the form', async function () {
+    it('should submit the form', async function () {
         const driver = buildDriver();
 
         await login(driver);
@@ -58,9 +58,9 @@ describe('job-roles page', () => {
     
         await saveButton.click();
         await driver.quit();
-      });
+    });
 
-      it('should get error message display when invalid form', async function () {
+    it('should get error message display when invalid form', async function () {
         const driver = buildDriver();
 
         await login(driver);
@@ -85,8 +85,8 @@ describe('job-roles page', () => {
         await saveButton.click();
         const errorMessageElement = driver.findElement(webdriver.By.css('alert-danger'));
         errorMessageElement.getText().then(function (text) {
-          expect(text).to.equal('Share point URL is invalid. Please supply a valid URL.');
-      });
-    await driver.quit();
+            expect(text).to.equal('Share point URL is invalid. Please supply a valid URL.');
+        });
+        await driver.quit();
     })
 });
