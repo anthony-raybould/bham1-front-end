@@ -1,22 +1,19 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { expect } from 'chai';
-import { JobRoleToUpdate } from '../../../src/model/jobRole';
 import { validateCreate } from '../../../src/validator/capabilityValidator';
-import { CreateCapabilityRequest } from '../../../src/model/createCapabilityRequest';
 
 describe('capabilityValidator Tests', () => {
-  let validJobRole: JobRoleToUpdate;
-  let axiosMock: MockAdapter;
+    let axiosMock: MockAdapter;
 
-  beforeEach(() => {
+    beforeEach(() => {
 
-    axiosMock = new MockAdapter(axios);
-  });
+        axiosMock = new MockAdapter(axios);
+    });
 
-  afterEach(() => {
-    axiosMock.restore();
-  });
+    afterEach(() => {
+        axiosMock.restore();
+    });
 
     it('should throw ValidationException when null capability name', () => {
 

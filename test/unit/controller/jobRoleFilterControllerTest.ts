@@ -20,7 +20,12 @@ describe('jobRoleFilterController', () => {
         sinon.stub(bandService, 'getBands').resolves([bands.associate, bands.trainee]);
 
         const req = { session: {} as any};
-        const res = { render: sinon.spy(), locals: { jobRoles: undefined as any, nameFilter: undefined as any, bandFilter: undefined as any, capabilityFilter: undefined as any } };
+        const res = { render: sinon.spy(), locals: { 
+            jobRoles: undefined as any, 
+            nameFilter: undefined as any, 
+            bandFilter: undefined as any, 
+            capabilityFilter: undefined as any 
+        } };
 
         await JobRolesFilter.getFilter(req as any, res as any);
 
@@ -37,7 +42,12 @@ describe('jobRoleFilterController', () => {
         sinon.stub(bandService, 'getBands').resolves([bands.associate, bands.trainee]);
 
         const req = { session: {} as any, query: { nameFilter: 'Thinker', bandFilter: [1], capabilityFilter: [1] }};
-        const res = { render: sinon.spy(), locals: { jobRoles: undefined as any, nameFilter: undefined as any, bandFilter: undefined as any, capabilityFilter: undefined as any } };
+        const res = { render: sinon.spy(), locals: { 
+            jobRoles: undefined as any, 
+            nameFilter: undefined as any, 
+            bandFilter: undefined as any, 
+            capabilityFilter: undefined as any 
+        } };
 
         await JobRolesFilter.getFilter(req as any, res as any);
 
@@ -52,7 +62,12 @@ describe('jobRoleFilterController', () => {
         sinon.stub(jobRoleService, 'getJobRoles').resolves(jobRoles);
 
         const req = { session: {} as any, query: { nameFilter: 'Thinker', bandFilter: [1], capabilityFilter: [1] }};
-        const res = { render: sinon.spy(), locals: { jobRoles: undefined as any, nameFilter: undefined as any, bandFilter: undefined as any, capabilityFilter: undefined as any } };
+        const res = { render: sinon.spy(), locals: { 
+            jobRoles: undefined as any, 
+            nameFilter: undefined as any, 
+            bandFilter: undefined as any, 
+            capabilityFilter: undefined as any 
+        } };
 
         await JobRoles.get(req as any, res as any);
 

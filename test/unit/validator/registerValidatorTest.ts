@@ -30,21 +30,25 @@ describe('registerValidator', () => {
         
         it('should return error if password does not contain lowercase letter', () => {
             const result = registerValidator.validatePassword('TEST123!');
+            // eslint-disable-next-line max-len
             expect(result).to.equal('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character');  
         });
 
         it('should return error if password does not contain uppercase letter', () => {
             const result = registerValidator.validatePassword('test123!');
+            // eslint-disable-next-line max-len
             expect(result).to.equal('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character');  
         });
 
         it('should return error if password does not contain number', () => {
             const result = registerValidator.validatePassword('Test!!!!');
+            // eslint-disable-next-line max-len
             expect(result).to.equal('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character');  
         });
 
         it('should return error if password does not contain special character', () => {
             const result = registerValidator.validatePassword('Test1234');
+            // eslint-disable-next-line max-len
             expect(result).to.equal('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character');  
         });
     });

@@ -40,7 +40,7 @@ app.use(user);
 
 app.use('/', router);
 
-let port = parseInt(process.env.PORT || "3000");
+const port = parseInt(process.env.PORT || "3000");
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

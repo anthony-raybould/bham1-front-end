@@ -3,18 +3,18 @@ import { ResultIssue } from "./resultIssue";
 
 export const processResults = function(results : Results){
 
-   const accessibilityErrors = results.issues.filter(isError)
+    const accessibilityErrors = results.issues.filter(isError)
 
-   if (accessibilityErrors.length == 0) {
-    return;
-   }
+    if (accessibilityErrors.length == 0) {
+        return;
+    }
 
-   console.log("Accessibility Errors:")
-   for (const issue of accessibilityErrors) {
-    console.log(issue);
-   }
+    console.log("Accessibility Errors:")
+    for (const issue of accessibilityErrors) {
+        console.log(issue);
+    }
 
-   throw new Error("Accessibility errors.")
+    throw new Error("Accessibility errors.")
 }
 
 function isError(resultIssue : ResultIssue) {

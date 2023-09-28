@@ -49,7 +49,7 @@ describe('capabilityController', () => {
             .end((err, res) => {
                 expect(res.text).to.contain('<h1>Create Capability</h1>');
             }
-        );
+            );
     });
 
     it('(postCreate) should render create-capability template with error message', async () => {
@@ -64,7 +64,7 @@ describe('capabilityController', () => {
                 expect(res.text).to.contain('<h1>Create Capabiltity</h1>');
                 expect(res.text).to.contain('Test error');
             }
-        );
+            );
     });
 
     it('(postCreate) should render create-capability-success template when successful', async () => {
@@ -79,6 +79,6 @@ describe('capabilityController', () => {
                 expect(res.text).to.contain('<h1>Create Capabiltity</h1>');
                 expect(res.text).to.contain('created successfully');
             }
-        );
+            );
     });
 });

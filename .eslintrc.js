@@ -29,8 +29,17 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        "max-len": ["error", { "code": 100 }], //enforce a max line length
+        "max-len": ["error", { "code": 140 }], //enforce a max line length
         "indent": ["error", 4], //enforce two spaces for indentation
-        "no-unused-vars": "error" //no unused variables 
+        "@typescript-eslint/no-unused-vars": [
+            "error", // or "error"
+            {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
+            }
+        ],
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/ban-ts-comment": "warn",
     }
 }

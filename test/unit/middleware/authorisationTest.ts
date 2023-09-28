@@ -66,9 +66,9 @@ describe('authorisation middleware', () => {
         it('should redirect to home page if user is logged in', () => {
             const req = { session: { token: 'token', user: { userID: 1, email: 'email', role: { roleID: 1, roleName: 'Admin' } } } };
             const res = { redirect: sinon.spy() };
-            const nextFunction = () => {};
 
-            requireLoggedOut(req as any, res as any, nextFunction);
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            requireLoggedOut(req as any, res as any, () => {});
 
             expect(res.redirect.calledOnce).to.be.true;
             expect(res.redirect.calledWith('/')).to.be.true;
@@ -101,9 +101,9 @@ describe('authorisation middleware', () => {
         it('should redirect to login page if user is not logged in', () => {
             const req = { session: {} };
             const res = { redirect: sinon.spy() };
-            const nextFunction = () => {};
 
-            requireLoggedIn(req as any, res as any, nextFunction);
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            requireLoggedIn(req as any, res as any, () => {});
 
             expect(res.redirect.calledOnce).to.be.true;
             expect(res.redirect.calledWith('/login')).to.be.true;

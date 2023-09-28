@@ -12,23 +12,23 @@ import { JobRoleMatrix } from "../model/jobRoleMatrix";
 const orderJobRolesByProperty = (list: JobRole[], property: keyof JobRole, asc: boolean) => {
     if (typeof list[0][property] === "string") {
         list.sort((a, b) => asc ?
-                (a[property] as string).localeCompare(b[property] as string) :
-                (b[property] as string).localeCompare(a[property] as string)
+            (a[property] as string).localeCompare(b[property] as string) :
+            (b[property] as string).localeCompare(a[property] as string)
         );
     }
 };
 
 const orderJobRolesByCapability = (list: JobRole[], asc: boolean) => {
     list.sort((a, b) => asc ?
-            (a.capability.capabilityName).localeCompare(b.capability.capabilityName) :
-            (b.capability.capabilityName).localeCompare(a.capability.capabilityName)
+        (a.capability.capabilityName).localeCompare(b.capability.capabilityName) :
+        (b.capability.capabilityName).localeCompare(a.capability.capabilityName)
     );
 };
 
 const orderJobRolesByBand = (list: JobRole[], asc: boolean) => {
     list.sort((a, b) => asc ?
-            (a.band.bandName).localeCompare(b.band.bandName) :
-            (b.band.bandName).localeCompare(a.band.bandName)
+        (a.band.bandName).localeCompare(b.band.bandName) :
+        (b.band.bandName).localeCompare(a.band.bandName)
     );
 };
 
@@ -133,7 +133,7 @@ export namespace JobRoles {
         } catch (e) {
             res.locals.errorMessage = e;
         }
-                res.render("delete-job-role");
+        res.render("delete-job-role");
     }
 
     export async function deleteJobRole(req: Request, res: Response): Promise<void> {
@@ -176,7 +176,7 @@ export namespace JobRoles {
             
             validate(jobRoleToUpdate);
 
-            const updatedJobRoleData = await jobRoleService.editJobRoles(jobRoleToUpdate, id);
+            await jobRoleService.editJobRoles(jobRoleToUpdate, id);
             res.redirect('/job-roles')
         } catch (e) {
             res.locals.errorMessage = e;
@@ -199,7 +199,6 @@ export namespace JobRoles {
     }
 
     export async function postCreate(req: Request, res: Response): Promise<void> {
-        let id: Number 
         const { jobRoleName, band, capability, jobSpecSummary, responsibilities, sharePoint } = req.body;
         const jobRoleToCreate: JobRoleToUpdate = {
             jobRoleName: jobRoleName,
@@ -213,7 +212,7 @@ export namespace JobRoles {
         try {
             validateCreate(jobRoleToCreate);
 
-            id = await jobRoleService.createJobRole(jobRoleToCreate, req.session.token)
+            await jobRoleService.createJobRole(jobRoleToCreate, req.session.token)
             res.redirect('/job-roles')
         } catch (e) {
             const bands: JobBand[] = await bandService.getBands(req.session.token);
