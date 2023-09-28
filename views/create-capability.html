@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block content %}
-    <form action="/capabilities/create" method="POST" class="form-control" style="border: none;">
-        <div  class="form-group"></div>
-            <label for="capabilityName"><strong>Capability Name</strong></label>
+    <form action="/capabilities/create" method="POST">
+        <div class="form-group">
+            <label for="capabilityName"><b>Capability Name</b></label>
             <input type="text" id="capabilityName" name="capabilityName" value="{{ capabilityName }}" required class="form-control"><br>
         </div>
 
-        <button type="submit" class="bg-kainos-blue btn btn-primary">Create</button>
-        <a href="/" class="bg-kainos-blue btn btn-primary text-white">Cancel</button>
+        <a href="/" class="bg-kainos-blue btn btn-primary text-white">Cancel</a>
+        <button type="submit" class="bg-kainos-blue btn btn-success">Create</button>
     </form>
 {% endblock %}
