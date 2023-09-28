@@ -1,22 +1,26 @@
 import webdriver from 'selenium-webdriver';
 import { expect } from 'chai';
 import { By } from 'selenium-webdriver';
+import { buildDriver } from './buildDriver';
+import { login } from './generateCredentials';
 
 describe('create-job-role page', () => {
 
     it('should display page for create job roles', async () => {
-        const driver = new webdriver.Builder().forBrowser('chrome').build();
+        const driver = buildDriver();
+
+        await login(driver);
 
         await driver.get(process.env.UI_TEST_URL + '/create-job-role');
-        
+
         const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
-        const bandSelect = await driver.findElement(By.id('band')); 
+        const bandSelect = await driver.findElement(By.id('band'));
         const capabilitySelect = await driver.findElement(By.id('capability'));
         const jobSpecSummaryInput = await driver.findElement(By.id('jobSpecSummary'));
         const responsibilitiesInput = await driver.findElement(By.id('responsibilities'));
         const sharePointInput = await driver.findElement(By.id('sharePoint'));
         const saveButton = await driver.findElement(By.css('button[type="submit"]'));
-    
+
         expect(jobRoleNameInput).to.exist;
         expect(bandSelect).to.exist;
         expect(capabilitySelect).to.exist;
@@ -29,7 +33,10 @@ describe('create-job-role page', () => {
     });
 
     it('should submit the create job role form', async function () {
-        const driver = new webdriver.Builder().forBrowser('chrome').build();
+        const driver = buildDriver()
+
+        await login(driver);
+
         await driver.get(process.env.UI_TEST_URL + '/create-job-role');
 
         const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
@@ -53,7 +60,10 @@ describe('create-job-role page', () => {
     });
 
     it('should get error message display when invalid form', async function () {
-        const driver = new webdriver.Builder().forBrowser('chrome').build();
+        const driver = buildDriver();
+
+        await login(driver);
+
         await driver.get(process.env.UI_TEST_URL + '/create-job-role');
 
         const jobRoleNameInput = await driver.findElement(By.id('jobRoleName'));
@@ -78,5 +88,5 @@ describe('create-job-role page', () => {
         });
         await driver.quit();
     })
-    
+
 });
