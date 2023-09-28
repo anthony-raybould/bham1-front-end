@@ -74,6 +74,10 @@ a, a:visited {
     text-decoration: none;
 }
 
+.white {
+    color: white !important;
+}
+
 th > a, th > a:visited {
     color: black;
 }

@@ -27,10 +27,40 @@ describe('capabilityService', () => {
         const mock = new MockAdapter(axios);
         mock.onGet(`${process.env.API_URL}api/capabilities`).reply(400, "Error");
         try{
-            const result = await capabilityService.getCapabilities();
+            await capabilityService.getCapabilities();
         }
         catch(e){
             expect(e.message).to.be.equal("Failed to get job capabilities");
         }
     });
+
+    it('(createCapability) should throw error on non 200 response', async () => {
+
+        const createCapabilityRequest = {
+            capabilityName: "Test"
+        }
+
+        const mock = new MockAdapter(axios);
+        mock.onPost(`${process.env.API_URL}api/capabilities/`, createCapabilityRequest).reply(400, "Error");
+        try{
+            await capabilityService.createCapability(createCapabilityRequest, "token");
+        }
+        catch(e){
+            expect(e.message).to.be.equal("Failed creating capability");
+        }
+    });
+
+    it('(createCapability) should not throw error on 200 response', async () => {
+
+        const createCapabilityRequest = {
+            capabilityName: "Test"
+        }
+
+        const mock = new MockAdapter(axios);
+        mock.onPost(`${process.env.API_URL}api/capabilities/`,createCapabilityRequest).reply(200);
+        await capabilityService.createCapability({
+            capabilityName: "Test"
+        }, "token");
+    });
+
 })

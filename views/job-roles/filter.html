@@ -1,0 +1,34 @@
+{% extends "templates/master.html" %}
+
+{% block pageTitle %}
+    Filter Job Roles
+{% endblock %}
+
+{% block content %}
+    <form action="/job-roles/filter" method="POST">
+        <p>All fields are case-insensitive.</p>
+
+        <div class="form-group">
+            <label for="name"><b>By name</b></label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Software Engineer" value="{{ nameFilter }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="band"><b>By band</b></label><br>
+            {% for band in bands %}
+                <input type="checkbox" id="band-{{ band.bandID }}" name="band" value="{{ band.bandID }}" {% if band.bandID in bandFilter %}checked{% endif %}>
+                <label for="band-{{ band.bandID }}">{{ band.bandName }}</label><br>
+            {% endfor %}
+        </div>
+        
+        <div class="form-group">
+            <label for="capability"><b>By capability</b></label><br>
+            {% for capability in capabilities %}
+                <input type="checkbox" id="capability-{{ capability.capabilityID }}" name="capability" value="{{ capability.capabilityID }}" {% if capability.capabilityID in capabilityFilter %}checked{% endif %}>
+                <label for="capability-{{ capability.capabilityID }}">{{ capability.capabilityName }}</label><br>
+            {% endfor %}
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+{% endblock %}

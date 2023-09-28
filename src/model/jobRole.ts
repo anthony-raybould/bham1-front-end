@@ -26,3 +26,12 @@ export type JobRoleToUpdate = {
     responsibilities: string
     sharePoint: string
 }
+
+export type JobRoleToCreate = {
+    jobRoleName: string
+    jobSpecSummary: string
+    band: JobBand
+    capability: JobCapability
+    responsibilities: string
+    sharePoint: string
+}

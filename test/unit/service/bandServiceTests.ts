@@ -1,8 +1,7 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import sinon from "sinon";
-import { JobBand, JobCapability } from "../../../src/model/jobRole";
-import { capabilityService } from "../../../src/service/capabilityService";
+import { JobBand } from "../../../src/model/jobRole";
 import { expect } from "chai";
 import { bandService } from "../../../src/service/bandService";
 
@@ -27,7 +26,7 @@ describe('bandService', () => {
         const mock = new MockAdapter(axios);
         mock.onGet(`${process.env.API_URL}api/band`).reply(400);
         try{
-            const result = await bandService.getBands();
+            await bandService.getBands();
         }
         catch(e)
         {

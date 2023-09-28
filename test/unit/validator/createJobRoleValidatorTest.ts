@@ -1,11 +1,11 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { expect } from 'chai';
-import { JobRoleToUpdate } from '../../../src/model/jobRole';
-import {ValidationException, validate}  from "../../../src//validator/editJobRoleValidator";
+import { JobRoleToCreate } from '../../../src/model/jobRole';
+import {ValidationException, validateCreate}  from "../../../src/validator/createJobRoleValidator";
 
-describe('UpdateJobRoleValidator Tests', () => {
-    let validJobRole: JobRoleToUpdate;
+describe('CreateJobRoleValidator Tests', () => {
+    let validJobRole: JobRoleToCreate;
     let axiosMock: MockAdapter;
 
     beforeEach(() => {
@@ -27,17 +27,17 @@ describe('UpdateJobRoleValidator Tests', () => {
     it('should throw ValidationException for null JobRoleName', () => {
         validJobRole.jobRoleName = "";
         try{
-            validate(validJobRole);
+            validateCreate(validJobRole);
         }
         catch(e){
             expect(e.message).to.contain("Job role name is null or length is greater than 64.")}
     });
 
     it('should throw ValidationException for long JobRoleName', () => {
-        // eslint-disable-next-line max-len
-        validJobRole.jobRoleName = 'ThisIsAReallyLongJobRoleNameThatExceedsTheMaximumAllowedLength ThisIsALongSharePointLinkThatExceedsTheMaximumAllowedLength';
+        validJobRole.jobRoleName = 
+        'ThisIsAReallyLongJobRoleNameThatExceedsTheMaximumAllowedLength ThisIsALongSharePointLinkThatExceedsTheMaximumAllowedLength';
         try{
-            validate(validJobRole);
+            validateCreate(validJobRole);
         }
         catch(e){
             expect(e.message).to.contain("Job role name is null or length is greater than 64.")}
@@ -46,7 +46,7 @@ describe('UpdateJobRoleValidator Tests', () => {
     it('should throw ValidationException for null JobSpecSummary', () => {
         validJobRole.jobSpecSummary = "";
         try{
-            validate(validJobRole);
+            validateCreate(validJobRole);
         }
         catch(e){
             expect(e.message).to.contain("Job role spec summary is null.")
@@ -56,7 +56,7 @@ describe('UpdateJobRoleValidator Tests', () => {
     it('should throw ValidationException for BandIDGreaterThanMax', () => {
         validJobRole.band.bandID = 32768;
         try{
-            validate(validJobRole);
+            validateCreate(validJobRole);
         }
         catch(e){
             expect(e.message).to.contain("Job role band exceeds size limit.")
@@ -65,7 +65,7 @@ describe('UpdateJobRoleValidator Tests', () => {
     it('should throw ValidationException for CapabilityIDGreaterThanMax', () => {
         validJobRole.capability.capabilityID = 32768;
         try{
-            validate(validJobRole);
+            validateCreate(validJobRole);
         }
         catch(e){
             expect(e.message).to.contain("Job role capability exceeds size limit.")
@@ -74,7 +74,7 @@ describe('UpdateJobRoleValidator Tests', () => {
     it('should throw ValidationException for null Responsibilities', () => {
         validJobRole.responsibilities = "";
         try{
-            validate(validJobRole);
+            validateCreate(validJobRole);
         }
         catch(e){
             expect(e.message).to.contain("Job role responsibilities is null.")
@@ -85,7 +85,7 @@ describe('UpdateJobRoleValidator Tests', () => {
         // eslint-disable-next-line max-len
         validJobRole.sharePoint = 'ThisIsALongSharePointLinkThatExceedsTheMaximumAllowedLength ThisIsALongSharePointLinkThatExceedsTheMaximumAllowedLength ThisIsALongSharePointLinkThatExceedsTheMaximumAllowedLength ThisIsALongSharePointLinkThatExceedsTheMaximumAllowedLength ThisIsALongSharePointLinkThatExceedsTheMaximumAllowedLength ThisIsALongSharePointLinkThatExceedsTheMaximumAllowedLength';
         try{
-            validate(validJobRole);
+            validateCreate(validJobRole);
         }
         catch(e){
             expect(e.message).to.contain("Share point URL is invalid. Please supply a valid URL.")
@@ -104,7 +104,7 @@ describe('UpdateJobRoleValidator Tests', () => {
         for (const url of invalidUrls) {
             validJobRole.sharePoint = url;
             try{
-                validate(validJobRole);
+                validateCreate(validJobRole);
             }
             catch(e){
                 expect(e.message).to.contain("Share point URL is invalid. Please supply a valid URL.")
@@ -125,11 +125,11 @@ describe('UpdateJobRoleValidator Tests', () => {
 
         for (const url of validUrls) {
             validJobRole.sharePoint = url;
-            expect(() => validate(validJobRole)).to.not.throw(ValidationException);
+            expect(() => validateCreate(validJobRole)).to.not.throw(ValidationException);
         }
     });
 
     it('should not throw ValidationException for valid object', () => {
-        expect(() => validate(validJobRole)).to.not.throw(ValidationException);
+        expect(() => validateCreate(validJobRole)).to.not.throw(ValidationException);
     });
 });

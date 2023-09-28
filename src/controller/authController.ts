@@ -1,4 +1,4 @@
-import type {Request, Response, Application, response} from "express";
+import type {Request, Response } from "express";
 import type { Login, Register } from "../model/auth";
 import { authService } from "../service/authService";
 import { registerValidator } from "../validator/registerValidator";
@@ -13,7 +13,7 @@ export namespace Auth
     }
 
     export async function postLogin(req: Request, res: Response): Promise<void> {
-        let data: Login = req.body;
+        const data: Login = req.body;
         try {
             req.session.token  = await authService.login(data);
             req.session.user = await authService.whoami(req.session.token);
@@ -32,7 +32,7 @@ export namespace Auth
     }
     
     export async function postRegister(req: Request, res: Response): Promise<void> {
-        let data: Register = req.body;
+        const data: Register = req.body;
         
         const rerender = async (error: string) => {
             res.locals.errorMessage = error;

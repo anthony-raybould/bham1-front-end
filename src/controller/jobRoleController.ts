@@ -3,42 +3,47 @@ import type { JobBand, JobCapability, JobRole, JobRoleToUpdate } from "../model/
 import { jobRoleService } from "../service/jobRoleService";
 import { bandService } from "../service/bandService";
 import { capabilityService } from "../service/capabilityService";
+import { validateCreate } from "../validator/createJobRoleValidator";
 import { validate } from "../validator/editJobRoleValidator";
+import { decodeURLFilterParams, encodeURLFilterParams } from "./jobRoleFilterController";
+import { JobRoleMatrix } from "../model/jobRoleMatrix";
 
 
 const orderJobRolesByProperty = (list: JobRole[], property: keyof JobRole, asc: boolean) => {
     if (typeof list[0][property] === "string") {
         list.sort((a, b) => asc ?
-                (a[property] as string).localeCompare(b[property] as string) :
-                (b[property] as string).localeCompare(a[property] as string)
+            (a[property] as string).localeCompare(b[property] as string) :
+            (b[property] as string).localeCompare(a[property] as string)
         );
     }
 };
 
 const orderJobRolesByCapability = (list: JobRole[], asc: boolean) => {
     list.sort((a, b) => asc ?
-            (a.capability.capabilityName).localeCompare(b.capability.capabilityName) :
-            (b.capability.capabilityName).localeCompare(a.capability.capabilityName)
+        (a.capability.capabilityName).localeCompare(b.capability.capabilityName) :
+        (b.capability.capabilityName).localeCompare(a.capability.capabilityName)
     );
 };
 
 const orderJobRolesByBand = (list: JobRole[], asc: boolean) => {
     list.sort((a, b) => asc ?
-            (a.band.bandName).localeCompare(b.band.bandName) :
-            (b.band.bandName).localeCompare(a.band.bandName)
+        (a.band.bandName).localeCompare(b.band.bandName) :
+        (b.band.bandName).localeCompare(a.band.bandName)
     );
 };
 
 const getSortQueryString = (req: Request, property: string) => {
     const query = req.query[property] as string;
+    const otherQueryParams = Object.keys(req.query).filter(key => key !== property).map(key => [key, req.query[key] as string]);
+    const urlSearchParams = new URLSearchParams(otherQueryParams);
     
     if (query === "asc") {
-        return `?${new URLSearchParams({ [property]: "desc" }).toString()}`;
+        urlSearchParams.append(property, "desc");
     } else if (query === undefined) {
-        return `?${new URLSearchParams({ [property]: "asc" }).toString()}`;
+        urlSearchParams.append(property, "asc");
     } 
 
-    return '';
+    return Array.from(urlSearchParams).length === 0 ? '' : `?${urlSearchParams.toString()}`;
 };
 
 const getSortHTMLSymbol = (req: Request, property: string) => {
@@ -55,18 +60,42 @@ const getSortHTMLSymbol = (req: Request, property: string) => {
 
 export namespace JobRoles {
     export async function get(req: Request, res: Response): Promise<void> {
-        const nameOrder = req.query?.nameOrder as string;
-        const capabilityOrder = req.query?.capabilityOrder as string;
-        const bandOrder = req.query?.bandOrder as string;
-        
-        if (req.query && Object.keys(req.query).length > 1) {
-            const first = Object.keys(req.query)[0];
-            res.redirect(`/job-roles?${new URLSearchParams({ [first]: req.query[first] as string }).toString()}`);
-            return;
-        }
-        
+        res.locals.filtered = false;
+
         try {
-            const jobRoles: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
+            let jobRoles: JobRole[] = await jobRoleService.getJobRoles(req.session.token);
+            
+            // Filter
+            const { nameFilter, bandFilter, capabilityFilter } = decodeURLFilterParams(req);
+            if (nameFilter) {
+                const lowerCaseFilter = nameFilter.toLowerCase();
+                jobRoles = jobRoles.filter(jobRole => jobRole.jobRoleName.toLowerCase().includes(lowerCaseFilter));
+                res.locals.filtered = true;
+            }
+            if (bandFilter) {
+                jobRoles = jobRoles.filter(jobRole => bandFilter.includes(jobRole.band.bandID));
+                res.locals.filtered = true;
+            }
+            if (capabilityFilter) {
+                jobRoles = jobRoles.filter(jobRole => capabilityFilter.includes(jobRole.capability.capabilityID));
+                res.locals.filtered = true;
+            }
+            
+            res.locals.currentFilterParams = encodeURLFilterParams(nameFilter, bandFilter, capabilityFilter);
+
+            // Sort
+            const mutallyExclusiveKeys = ["nameOrder", "capabilityOrder", "bandOrder"];
+            if (req.query && Object.keys(req.query).filter(key => mutallyExclusiveKeys.includes(key)).length > 1) {
+                // Redirect to first sort order if multiple are defined
+                const first = Object.keys(req.query).filter(key => mutallyExclusiveKeys.includes(key))[0];
+                res.redirect(`/job-roles?${new URLSearchParams({ [first]: req.query[first] as string }).toString()}`);
+                return;
+            }
+
+            const nameOrder = req.query?.nameOrder as string;
+            const capabilityOrder = req.query?.capabilityOrder as string;
+            const bandOrder = req.query?.bandOrder as string;
+        
             if (nameOrder) {
                 orderJobRolesByProperty(jobRoles, "jobRoleName", nameOrder === "asc");
             } else if (capabilityOrder) {
@@ -87,7 +116,7 @@ export namespace JobRoles {
     export async function getJobRoleById(req: Request, res: Response): Promise<void> {
         try {
             const id: number = parseInt(req.params.id)
-            const jobRole: JobRole = await jobRoleService.getJobRole(id);
+            const jobRole: JobRole = await jobRoleService.getJobRole(id, req.session.token);
             res.locals.jobRole = jobRole;
         } catch (e) {
             res.locals.errorMessage = e;
@@ -99,19 +128,18 @@ export namespace JobRoles {
     export async function getJobRoleByIdForDelete(req: Request, res: Response): Promise<void> {
         try {
             const id: number = parseInt(req.params.id)
-            const jobRole: JobRole = await jobRoleService.getJobRole(id);
+            const jobRole: JobRole = await jobRoleService.getJobRole(id, req.session.token);
             res.locals.jobRole = jobRole;
         } catch (e) {
             res.locals.errorMessage = e;
         }
-        
         res.render("delete-job-role");
     }
 
     export async function deleteJobRole(req: Request, res: Response): Promise<void> {
         try {
             const id: number = parseInt(req.params.id)
-            await jobRoleService.deleteJobRole(id);
+            await jobRoleService.deleteJobRole(id, req.session.token);
             res.redirect("/job-roles");
         } catch (e) {
             res.locals.errorMessage = e;
@@ -149,6 +177,7 @@ export namespace JobRoles {
             validate(jobRoleToUpdate);
 
             const updatedJobRoleData = await jobRoleService.editJobRoles(jobRoleToUpdate, id, req.session.token);
+
             res.redirect('/job-roles')
         } catch (e) {
             res.locals.errorMessage = e;
@@ -157,6 +186,54 @@ export namespace JobRoles {
                 jobRoles: jobRoleToUpdate
             });
         }
+    }
+
+    export async function getCreate(req:Request, res:Response): Promise<void> {
+        try {
+            const bands: JobBand[] = await bandService.getBands(req.session.token);
+            const capabilities: JobCapability[] = await capabilityService.getCapabilities(req.session.token);
+            res.render("create-job-role", {bands, capabilities}); 
+        } catch (e) {
+            res.locals.errorMessage = 'Failed to load create job role page';
+            res.render("create-job-role"); 
+        }
+    }
+
+    export async function postCreate(req: Request, res: Response): Promise<void> {
+        const { jobRoleName, band, capability, jobSpecSummary, responsibilities, sharePoint } = req.body;
+        const jobRoleToCreate: JobRoleToUpdate = {
+            jobRoleName: jobRoleName,
+            jobSpecSummary:jobSpecSummary ,
+            band: band,
+            capability: capability,
+            responsibilities: responsibilities,
+            sharePoint: sharePoint
+        }
+
+        try {
+            validateCreate(jobRoleToCreate);
+
+            await jobRoleService.createJobRole(jobRoleToCreate, req.session.token)
+            res.redirect('/job-roles')
+        } catch (e) {
+            const bands: JobBand[] = await bandService.getBands(req.session.token);
+            const capabilities: JobCapability[] = await capabilityService.getCapabilities(req.session.token);
+
+            console.error(e)
+            res.locals.errorMessage = e;
+            res.render('create-job-role', {...req.body, bands, capabilities})
+        }
+    }
+    export async function getJobRoleMatrix(req: Request, res: Response): Promise<void> {
+        try {
+            // Get a 3D array of roles (by band, then capability, then roles matching)
+            const matrix : JobRoleMatrix = await jobRoleService.getJobRoleMatrix(req.session.token);
+            res.locals.matrix = matrix;
+        } catch (e) {
+            res.locals.errorMessage = e;
+        }
+        
+        res.render("job-role-matrix");
     }
 
 }

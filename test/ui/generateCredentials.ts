@@ -1,5 +1,4 @@
-import axios from "axios"
-import { By, WebDriver } from "selenium-webdriver";
+import { By } from "selenium-webdriver";
 import webdriver from 'selenium-webdriver';
 
 export const login = async function(driver : webdriver.ThenableWebDriver) {

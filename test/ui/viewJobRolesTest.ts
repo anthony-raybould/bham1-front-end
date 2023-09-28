@@ -39,7 +39,23 @@ describe('viewing job-roles pages', () => {
         await deleteLink.click();
 
         const currentUrl = await driver.getCurrentUrl();
-        const expectedDeletePageUrl = process.env.UI_TEST_URL + '/delete-job-role/1'
+        const expectedDeletePageUrl = process.env.UI_TEST_URL + '/delete-job-role/2'
+        expect(currentUrl).to.equal(expectedDeletePageUrl);
+
+        await driver.quit();
+    }) 
+
+    it('should redirect to delete job role page when delete selected on view a single job role page', async () => {
+        const driver = buildDriver();
+        await login(driver);
+
+        await driver.get(process.env.UI_TEST_URL + '/view-job-role/2');
+
+        const deleteLink = await driver.findElement(By.className('btn btn-blue'));
+        await deleteLink.click();
+
+        const currentUrl = await driver.getCurrentUrl();
+        const expectedDeletePageUrl = process.env.UI_TEST_URL + '/delete-job-role/2'
         expect(currentUrl).to.equal(expectedDeletePageUrl);
 
         await driver.quit();
