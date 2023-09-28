@@ -8,6 +8,8 @@
     <title>{{ pageTitle }}</title>
     <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/styles/kainos.css">
+    <link rel="stylesheet" href="/static/styles/fonts.css">
     <link rel="stylesheet" href="/static/styles/globalstyles.css">
 </head>
 
@@ -32,7 +34,7 @@
             {% endif %}
         </div>
     </header>
-    <main class="container mt-4">
+    <main class="container mt-4 mb-1">
         <h1>{{ pageTitle }}</h1>
         {% if errorMessage %}
         <div id="errorMessage" class="alert alert-danger" role="alert" id="errorMessage">

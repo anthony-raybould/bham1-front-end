@@ -38,10 +38,13 @@
         <label for="responsibilities" style="font-weight: bold;">Responsibilities</label>
         <textarea id="responsibilities"  name="responsibilities" class="form-control" required class="expandable-input">{{responsibilities}}</textarea><br>
 
-        <label for="sharePoint" style="font-weight: bold;">SharePoint</label>
+        <label for="sharePoint" style="font-weight: bold;">SharePoint Link</label>
         <input id="sharePoint"  name="sharePoint" value="{{ sharePoint}}" class="form-control" required class="expandable-input"></input><br>
 
-        <button type="submit" class="btn btn-primary" style="margin-bottom: 10px;">Create</button>
+        <div>
+            <a href="/job-roles" class="white btn btn-primary" id="cancel">Cancel</a>
+        <button type="submit" class="btn btn-success">Create</button>
+        </div>
     </form>
 </div>
 {% endblock %}
